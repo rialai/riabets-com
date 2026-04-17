@@ -3,17 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>riabets.com | Точки онлайн</title>
-  <meta name="description" content="Онлайн-игра Точки: ходят владелец сайта и гости по очереди.">
+  <title>Точки онлайн</title>
+  <meta name="description" content="Бесконечное поле для игры в Точки.">
   <style>
     :root {
-      --bg: #f2efe9;
-      --card: #fffcf7;
-      --ink: #1e2724;
-      --line: #cfd5cd;
-      --owner: #111;
-      --guest: #ff6a33;
-      --accent: #234131;
+      --bg: #f3f0ea;
+      --panel: #fffcf8;
+      --ink: #1f2925;
+      --grid: #d4dbd2;
+      --owner: #111111;
+      --accent: #284835;
     }
 
     * {
@@ -22,282 +21,199 @@
       padding: 0;
     }
 
+    html,
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background: radial-gradient(1300px 700px at 100% 0%, #e8f0e8 0%, transparent 55%), var(--bg);
-      min-height: 100vh;
-      padding: 18px;
-    }
-
-    .container {
-      max-width: 1080px;
-      margin: 0 auto;
-      background: var(--card);
-      border: 1px solid #d9dfd7;
-      border-radius: 18px;
-      box-shadow: 0 14px 45px rgba(20, 30, 24, 0.08);
+      width: 100%;
+      height: 100%;
       overflow: hidden;
     }
 
-    header {
-      padding: 18px 20px;
-      border-bottom: 1px solid #e0e5de;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: radial-gradient(1000px 620px at 100% 0%, #e4efe7 0%, transparent 55%), var(--bg);
+    }
+
+    .hud {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 5;
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 12px;
+      gap: 10px;
+      pointer-events: none;
     }
 
-    h1 {
-      font-size: clamp(1.2rem, 2vw, 1.8rem);
-      letter-spacing: 0.01em;
+    .chip {
+      pointer-events: auto;
+      background: rgba(255, 252, 248, 0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid #d8dfd6;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.86rem;
+      line-height: 1.35;
+      box-shadow: 0 8px 25px rgba(20, 30, 24, 0.08);
+      min-width: 170px;
     }
 
-    .status {
-      font-size: 0.92rem;
-      color: #516257;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 0;
-    }
-
-    .panel {
-      border-right: 1px solid #e0e5de;
-      padding: 16px;
-    }
-
-    .field {
-      margin-bottom: 12px;
-    }
-
-    label {
-      display: block;
-      font-size: 0.82rem;
-      color: #54695d;
-      margin-bottom: 5px;
-      font-weight: 600;
-    }
-
-    input,
-    select,
-    button {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid #cfd6ce;
-      font: inherit;
-      padding: 10px 11px;
-      background: #fff;
-    }
-
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    button {
-      cursor: pointer;
+    .chip b {
       font-weight: 700;
-      background: #fff;
     }
 
-    button.primary {
+    .chip .line + .line {
+      margin-top: 3px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid #cfd7cd;
+      background: #fff;
+      color: #1f2925;
+      border-radius: 9px;
+      padding: 6px 9px;
+      cursor: pointer;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .btn.primary {
       background: var(--accent);
-      color: #fff;
       border-color: var(--accent);
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.55;
-    }
-
-    .hint {
-      font-size: 0.82rem;
-      color: #5f6e65;
-      line-height: 1.45;
-      margin-top: 10px;
-    }
-
-    .board-wrap {
-      padding: 16px;
-    }
-
-    #board {
-      width: 100%;
-      max-width: 700px;
-      aspect-ratio: 1 / 1;
-      border: 1px solid #d5ddd3;
-      border-radius: 10px;
-      background: #fff;
-      touch-action: manipulation;
-      display: block;
-      margin: 0 auto;
+      color: #fff;
     }
 
     .legend {
-      margin-top: 10px;
+      position: fixed;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      background: rgba(255, 252, 248, 0.92);
+      border: 1px solid #d8dfd6;
+      border-radius: 999px;
+      padding: 8px 14px;
       display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      font-size: 0.88rem;
+      gap: 14px;
+      font-size: 0.83rem;
+      box-shadow: 0 8px 24px rgba(20, 30, 24, 0.08);
     }
 
     .dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
       display: inline-block;
-      margin-right: 6px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-right: 5px;
       vertical-align: middle;
     }
 
-    .owner-dot { background: var(--owner); }
-    .guest-dot { background: var(--guest); }
-
-    #moves {
-      margin-top: 12px;
-      max-height: 190px;
-      overflow: auto;
-      border: 1px solid #d7ded6;
-      border-radius: 10px;
-      padding: 8px;
-      font-size: 0.85rem;
-      background: #fff;
+    #board {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      touch-action: none;
+      cursor: crosshair;
     }
 
-    .move {
-      padding: 4px 2px;
-      border-bottom: 1px dashed #e2e7e1;
-      color: #4b5d52;
-    }
-
-    .move:last-child {
-      border-bottom: 0;
-    }
-
-    @media (max-width: 920px) {
-      .layout {
-        grid-template-columns: 1fr;
+    @media (max-width: 820px) {
+      .hud {
+        flex-direction: column;
+        align-items: flex-start;
       }
 
-      .panel {
-        border-right: 0;
-        border-bottom: 1px solid #e0e5de;
+      .chip {
+        width: min(96vw, 560px);
+      }
+
+      .legend {
+        font-size: 0.78rem;
+        gap: 10px;
+        padding: 7px 11px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Точки онлайн</h1>
-      <div id="status" class="status">Подключение не выполнено</div>
-    </header>
-
-    <div class="layout">
-      <aside class="panel">
-        <div class="field">
-          <label for="room">Комната (общий код)</label>
-          <input id="room" value="riabets-main-room" autocomplete="off">
-        </div>
-
-        <div class="field">
-          <label for="role">Роль</label>
-          <select id="role">
-            <option value="owner">Я владелец (черные точки)</option>
-            <option value="guest">Я гость (оранжевые точки)</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="visitorName">Анонимный ник</label>
-          <input id="visitorName" maxlength="28" autocomplete="off">
-        </div>
-
-        <div class="field">
-          <label for="visitorId">Анонимный ID</label>
-          <input id="visitorId" readonly>
-        </div>
-
-        <div class="field row">
-          <button id="connect" class="primary">Подключиться</button>
-          <button id="newRoom">Новая комната</button>
-        </div>
-
-        <div class="field row">
-          <button id="notify">Разрешить уведомления</button>
-          <button id="copyLink">Копировать ссылку</button>
-        </div>
-
-        <div class="field">
-          <button id="sync">Обновить ходы</button>
-        </div>
-
-        <div class="hint">
-          Правило хода: сначала ходит владелец, затем любой из гостей, потом снова владелец.
-          <br><br>
-          Посетитель создается автоматически: локальный анонимный ID сохраняется в браузере.
-          <br><br>
-          Важно: офлайн пуш в телефон возможен через подписку на тему в приложении ntfy. В браузере уведомление приходит, пока вкладка открыта.
-        </div>
-
-        <div id="moves"></div>
-      </aside>
-
-      <section class="board-wrap">
-        <canvas id="board" width="700" height="700"></canvas>
-        <div class="legend">
-          <span><span class="dot owner-dot"></span>Владелец</span>
-          <span><span class="dot guest-dot"></span>Гости</span>
-          <span id="turnLabel">Ход: владелец</span>
-        </div>
-      </section>
+  <div class="hud">
+    <div class="chip" id="statusChip">
+      <div class="line"><b>Точки</b>: бесконечное поле</div>
+      <div class="line" id="statusLine">Подключение...</div>
+      <div class="line" id="turnLine">Ход: ...</div>
+    </div>
+    <div class="chip">
+      <div class="line"><b>Вы</b>: <span id="meLine"></span></div>
+      <div class="line">Комната: <span id="roomLine"></span></div>
+      <div class="actions">
+        <button class="btn primary" id="notifyBtn">Уведомления</button>
+        <button class="btn" id="copyBtn">Ссылка гостю</button>
+        <button class="btn" id="centerBtn">В центр</button>
+      </div>
     </div>
   </div>
 
+  <canvas id="board"></canvas>
+
+  <div class="legend">
+    <span><span class="dot" style="background:#111"></span>владелец</span>
+    <span><span class="dot" style="background:#ff6a33"></span>гости</span>
+    <span>ЛКМ: ход | drag: панорама | wheel: масштаб</span>
+  </div>
+
   <script>
-    const SIZE = 15;
-    const MARGIN = 28;
-    const CLICK_RADIUS = 16;
-    const canvas = document.getElementById("board");
-    const ctx = canvas.getContext("2d");
-    const statusEl = document.getElementById("status");
-    const turnLabel = document.getElementById("turnLabel");
-    const movesEl = document.getElementById("moves");
-    const roomEl = document.getElementById("room");
-    const roleEl = document.getElementById("role");
-    const visitorIdEl = document.getElementById("visitorId");
-    const visitorNameEl = document.getElementById("visitorName");
+    const ROLE_OWNER = "owner";
+    const ROLE_GUEST = "guest";
 
     const VISITOR_STORAGE_KEY = "riabets-dots-visitor-v1";
     const VISITOR_NAME_KEY = "riabets-dots-visitor-name-v1";
 
+    const canvas = document.getElementById("board");
+    const ctx = canvas.getContext("2d");
+
+    const statusLine = document.getElementById("statusLine");
+    const turnLine = document.getElementById("turnLine");
+    const meLine = document.getElementById("meLine");
+    const roomLine = document.getElementById("roomLine");
+
+    const notifyBtn = document.getElementById("notifyBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const centerBtn = document.getElementById("centerBtn");
+
     let topic = "";
     let eventSource = null;
+    let connected = false;
     let moves = [];
     let pieces = new Map();
     let seen = new Set();
-    let connected = false;
 
-    const gridSizePx = () => canvas.width - MARGIN * 2;
-    const stepPx = () => gridSizePx() / (SIZE - 1);
-    const currentTurn = () => (moves.length % 2 === 0 ? "owner" : "guest");
-    const roleLabel = (role) => (role === "owner" ? "владелец" : "гости");
-    const keyOf = (x, y) => `${x}:${y}`;
-    const inBounds = (x, y) => x >= 0 && x < SIZE && y >= 0 && y < SIZE;
-    const oppositeRole = (role) => (role === "owner" ? "guest" : "owner");
+    let cameraX = 0;
+    let cameraY = 0;
+    let cellPx = 36;
+
+    let pointerDown = false;
+    let dragged = false;
+    let panStartX = 0;
+    let panStartY = 0;
+    let cameraStartX = 0;
+    let cameraStartY = 0;
 
     function randomId() {
       if (window.crypto && crypto.randomUUID) {
         return crypto.randomUUID();
       }
       return `id-${Math.random().toString(36).slice(2)}-${Date.now().toString(36)}`;
+    }
+
+    function shortId(id) {
+      return (id || "anon").replace(/-/g, "").slice(0, 6);
     }
 
     function getOrCreateVisitor() {
@@ -309,23 +225,61 @@
             return parsed;
           }
         } catch {
-          // Ignore malformed storage and recreate visitor.
+          // malformed storage
         }
       }
-      const id = randomId();
-      const visitor = {
-        id,
-        createdAt: Date.now()
-      };
+      const visitor = { id: randomId(), createdAt: Date.now() };
       localStorage.setItem(VISITOR_STORAGE_KEY, JSON.stringify(visitor));
       return visitor;
     }
 
-    function shortId(id) {
-      if (!id) {
-        return "anon";
-      }
-      return id.replace(/-/g, "").slice(0, 6);
+    const visitor = getOrCreateVisitor();
+    const params = new URLSearchParams(location.search);
+    const myRole = params.get("as") === "owner" ? ROLE_OWNER : ROLE_GUEST;
+
+    const storedName = localStorage.getItem(VISITOR_NAME_KEY);
+    const visitorName = (storedName && storedName.trim()) || `гость-${shortId(visitor.id)}`;
+    localStorage.setItem(VISITOR_NAME_KEY, visitorName);
+
+    function roleLabel(role) {
+      return role === ROLE_OWNER ? "владелец" : "гости";
+    }
+
+    function oppositeRole(role) {
+      return role === ROLE_OWNER ? ROLE_GUEST : ROLE_OWNER;
+    }
+
+    function keyOf(x, y) {
+      return `${x}:${y}`;
+    }
+
+    function keyToCoords(key) {
+      const [x, y] = key.split(":").map(Number);
+      return { x, y };
+    }
+
+    function getNeighbors(x, y) {
+      return [
+        { x: x - 1, y },
+        { x: x + 1, y },
+        { x, y: y - 1 },
+        { x, y: y + 1 }
+      ];
+    }
+
+    function currentTurn() {
+      return moves.length % 2 === 0 ? ROLE_OWNER : ROLE_GUEST;
+    }
+
+    function roomFromUrl() {
+      const hash = location.hash.replace(/^#/, "");
+      const hashParams = new URLSearchParams(hash);
+      const room = hashParams.get("room") || "riabets-main-room";
+      return room.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "-");
+    }
+
+    function roomToTopic(room) {
+      return `riabets-dots-${room}`;
     }
 
     function colorForVisitor(id) {
@@ -339,20 +293,108 @@
       return `hsl(${h}, 78%, 53%)`;
     }
 
-    const visitor = getOrCreateVisitor();
-
-    function keyToCoords(key) {
-      const [xStr, yStr] = key.split(":");
-      return { x: Number(xStr), y: Number(yStr) };
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      const w = Math.floor(window.innerWidth * dpr);
+      const h = Math.floor(window.innerHeight * dpr);
+      canvas.width = w;
+      canvas.height = h;
+      draw();
     }
 
-    function getNeighbors(x, y) {
-      return [
-        { x: x - 1, y },
-        { x: x + 1, y },
-        { x, y: y - 1 },
-        { x, y: y + 1 }
-      ].filter((p) => inBounds(p.x, p.y));
+    function worldToScreen(wx, wy) {
+      return {
+        x: canvas.width / 2 + (wx - cameraX) * cellPx,
+        y: canvas.height / 2 + (wy - cameraY) * cellPx
+      };
+    }
+
+    function screenToWorld(sx, sy) {
+      return {
+        x: (sx - canvas.width / 2) / cellPx + cameraX,
+        y: (sy - canvas.height / 2) / cellPx + cameraY
+      };
+    }
+
+    function nearestCell(screenX, screenY) {
+      const w = screenToWorld(screenX, screenY);
+      const gx = Math.round(w.x);
+      const gy = Math.round(w.y);
+      const center = worldToScreen(gx, gy);
+      const dist = Math.hypot(center.x - screenX, center.y - screenY);
+      if (dist > 12 * (window.devicePixelRatio || 1)) {
+        return null;
+      }
+      return { x: gx, y: gy };
+    }
+
+    function drawGrid() {
+      const leftWorld = cameraX - canvas.width / (2 * cellPx);
+      const rightWorld = cameraX + canvas.width / (2 * cellPx);
+      const topWorld = cameraY - canvas.height / (2 * cellPx);
+      const bottomWorld = cameraY + canvas.height / (2 * cellPx);
+
+      const xStart = Math.floor(leftWorld) - 1;
+      const xEnd = Math.ceil(rightWorld) + 1;
+      const yStart = Math.floor(topWorld) - 1;
+      const yEnd = Math.ceil(bottomWorld) + 1;
+
+      ctx.strokeStyle = "#d4dbd2";
+      ctx.lineWidth = 1;
+
+      for (let gx = xStart; gx <= xEnd; gx += 1) {
+        const p1 = worldToScreen(gx, yStart);
+        const p2 = worldToScreen(gx, yEnd);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+
+      for (let gy = yStart; gy <= yEnd; gy += 1) {
+        const p1 = worldToScreen(xStart, gy);
+        const p2 = worldToScreen(xEnd, gy);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+    }
+
+    function drawPieces() {
+      for (const [key, piece] of pieces.entries()) {
+        const { x, y } = keyToCoords(key);
+        const p = worldToScreen(x, y);
+        if (p.x < -20 || p.y < -20 || p.x > canvas.width + 20 || p.y > canvas.height + 20) {
+          continue;
+        }
+        ctx.beginPath();
+        ctx.fillStyle = piece.side === ROLE_OWNER ? "#111111" : colorForVisitor(piece.pid);
+        ctx.arc(p.x, p.y, Math.max(4, cellPx * 0.23), 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function drawAxes() {
+      const zeroX = worldToScreen(0, 0).x;
+      const zeroY = worldToScreen(0, 0).y;
+      ctx.strokeStyle = "#bcc5bb";
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(0, zeroY);
+      ctx.lineTo(canvas.width, zeroY);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(zeroX, 0);
+      ctx.lineTo(zeroX, canvas.height);
+      ctx.stroke();
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawGrid();
+      drawAxes();
+      drawPieces();
     }
 
     function getGroup(startX, startY, role) {
@@ -362,7 +404,6 @@
       }
       const stack = [startKey];
       const visited = new Set([startKey]);
-
       while (stack.length) {
         const key = stack.pop();
         const { x, y } = keyToCoords(key);
@@ -374,7 +415,7 @@
           }
         }
       }
-      return Array.from(visited);
+      return [...visited];
     }
 
     function groupHasLiberty(groupKeys) {
@@ -393,7 +434,6 @@
       const opponent = oppositeRole(piece.side);
       const checked = new Set();
       let captured = 0;
-
       for (const n of getNeighbors(x, y)) {
         const nk = keyOf(n.x, n.y);
         if (pieces.get(nk)?.side !== opponent || checked.has(nk)) {
@@ -413,86 +453,25 @@
       return captured;
     }
 
-    function roomToTopic(room) {
-      return `riabets-dots-${room.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "-")}`;
-    }
-
-    function drawBoard() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      ctx.strokeStyle = "#d5ddd3";
-      ctx.lineWidth = 1;
-      for (let i = 0; i < SIZE; i += 1) {
-        const p = MARGIN + i * stepPx();
-        ctx.beginPath();
-        ctx.moveTo(MARGIN, p);
-        ctx.lineTo(canvas.width - MARGIN, p);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.moveTo(p, MARGIN);
-        ctx.lineTo(p, canvas.height - MARGIN);
-        ctx.stroke();
-      }
-
-      for (const [key, by] of pieces.entries()) {
-        const { x, y } = keyToCoords(key);
-        const cx = MARGIN + x * stepPx();
-        const cy = MARGIN + y * stepPx();
-        ctx.beginPath();
-        ctx.fillStyle = by.side === "owner" ? "#111" : colorForVisitor(by.pid);
-        ctx.arc(cx, cy, 8.6, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function updateUi() {
+    function updateHud() {
       const turn = currentTurn();
-      const myRole = roleEl.value;
       const canMove = connected && myRole === turn;
-      turnLabel.textContent = `Ход: ${roleLabel(turn)}`;
-      statusEl.textContent = connected
-        ? `Подключено к комнате ${roomEl.value}. Сейчас ход: ${roleLabel(turn)}.`
-        : "Подключение не выполнено";
-      statusEl.style.color = canMove ? "#1b6b40" : "#516257";
-      document.title = canMove ? "Ваш ход в Точки" : "Точки онлайн";
+      const roleHuman = myRole === ROLE_OWNER ? "владелец" : `гость (${visitorName})`;
 
-      movesEl.innerHTML = "";
-      if (!moves.length) {
-        const empty = document.createElement("div");
-        empty.className = "move";
-        empty.textContent = "Пока ходов нет.";
-        movesEl.appendChild(empty);
-      } else {
-        moves.slice(-80).forEach((m, idx) => {
-          const el = document.createElement("div");
-          el.className = "move";
-          const cap = m.captured ? `, захват: ${m.captured}` : "";
-          const actor = m.by === "owner" ? "владелец" : (m.name || `гость-${shortId(m.pid)}`);
-          el.textContent = `${moves.length - (moves.slice(-80).length - idx - 1)}. ${actor}: (${m.x + 1}, ${m.y + 1})${cap}`;
-          movesEl.appendChild(el);
-        });
-      }
-      drawBoard();
+      meLine.textContent = `${roleHuman}, id ${shortId(visitor.id)}`;
+      roomLine.textContent = topic || "...";
+      statusLine.textContent = connected ? `подключено` : `переподключение...`;
+      turnLine.textContent = `Ход: ${roleLabel(turn)}${canMove ? " (ваш)" : ""}`;
+      document.title = canMove ? "Ваш ход в Точки" : "Точки онлайн";
     }
 
     function notifyTurn() {
       if (Notification.permission === "granted") {
         new Notification("Точки: ваш ход", {
-          body: "Гость сделал ход. Пора ответить.",
+          body: "Соперник походил, можно отвечать.",
           tag: "dots-your-turn"
         });
       }
-      const osc = new (window.AudioContext || window.webkitAudioContext)();
-      const o = osc.createOscillator();
-      const g = osc.createGain();
-      o.type = "sine";
-      o.frequency.value = 880;
-      g.gain.value = 0.06;
-      o.connect(g);
-      g.connect(osc.destination);
-      o.start();
-      o.stop(osc.currentTime + 0.12);
     }
 
     function hasMoveAt(x, y) {
@@ -512,19 +491,22 @@
       if (hasMoveAt(payload.x, payload.y)) {
         return false;
       }
+
       const piece = {
         side: payload.by,
         pid: payload.pid || "legacy",
         name: payload.name || "гость"
       };
       pieces.set(keyOf(payload.x, payload.y), piece);
-      const captured = captureAfterMove(payload.x, payload.y, piece);
-      payload.captured = captured;
+      payload.captured = captureAfterMove(payload.x, payload.y, piece);
       moves.push(payload);
+
       if (externalId) {
         seen.add(externalId);
       }
-      updateUi();
+
+      updateHud();
+      draw();
       return true;
     }
 
@@ -548,36 +530,32 @@
       if (!topic) {
         return;
       }
-      try {
-        const res = await fetch(`https://ntfy.sh/${topic}/json?since=all`);
-        if (!res.ok) {
-          return;
+      const res = await fetch(`https://ntfy.sh/${topic}/json?since=all`);
+      if (!res.ok) {
+        return;
+      }
+      const text = await res.text();
+      const lines = text.split("\n").filter(Boolean);
+      for (const line of lines) {
+        let msg;
+        try {
+          msg = JSON.parse(line);
+        } catch {
+          continue;
         }
-        const text = await res.text();
-        const lines = text.split("\n").filter(Boolean);
-        for (const line of lines) {
-          let msg;
-          try {
-            msg = JSON.parse(line);
-          } catch {
-            continue;
-          }
-          if (msg.event !== "message" || !msg.message || seen.has(msg.id)) {
-            continue;
-          }
-          let payload;
-          try {
-            payload = JSON.parse(msg.message);
-          } catch {
-            continue;
-          }
-          const before = currentTurn();
-          if (applyMove(payload, msg.id) && roleEl.value === currentTurn() && roleEl.value !== before) {
-            notifyTurn();
-          }
+        if (msg.event !== "message" || !msg.message || seen.has(msg.id)) {
+          continue;
         }
-      } catch {
-        statusEl.textContent = "Проблема синхронизации ходов";
+        let payload;
+        try {
+          payload = JSON.parse(msg.message);
+        } catch {
+          continue;
+        }
+        const before = currentTurn();
+        if (applyMove(payload, msg.id) && myRole === currentTurn() && myRole !== before) {
+          notifyTurn();
+        }
       }
     }
 
@@ -603,12 +581,17 @@
           return;
         }
         const before = currentTurn();
-        if (applyMove(payload, msg.id) && roleEl.value === currentTurn() && roleEl.value !== before) {
+        if (applyMove(payload, msg.id) && myRole === currentTurn() && myRole !== before) {
           notifyTurn();
         }
       };
       eventSource.onerror = () => {
-        statusEl.textContent = "Связь прервалась, переподключаемся...";
+        connected = false;
+        updateHud();
+      };
+      eventSource.onopen = () => {
+        connected = true;
+        updateHud();
       };
     }
 
@@ -616,111 +599,141 @@
       moves = [];
       pieces = new Map();
       seen = new Set();
-      topic = roomToTopic(roomEl.value || "main");
+      topic = roomToTopic(roomFromUrl());
       connected = true;
-      updateUi();
+      updateHud();
       await syncMoves();
       connectSse();
-      updateUi();
+      updateHud();
+      draw();
     }
 
-    function pointerToCell(evt) {
-      const rect = canvas.getBoundingClientRect();
-      const x = (evt.clientX - rect.left) * (canvas.width / rect.width);
-      const y = (evt.clientY - rect.top) * (canvas.height / rect.height);
-      const gx = Math.round((x - MARGIN) / stepPx());
-      const gy = Math.round((y - MARGIN) / stepPx());
-      if (gx < 0 || gx >= SIZE || gy < 0 || gy >= SIZE) {
-        return null;
-      }
-      const cx = MARGIN + gx * stepPx();
-      const cy = MARGIN + gy * stepPx();
-      const dist = Math.hypot(cx - x, cy - y);
-      if (dist > CLICK_RADIUS) {
-        return null;
-      }
-      return { x: gx, y: gy };
-    }
-
-    canvas.addEventListener("click", async (evt) => {
+    function onCanvasClick(evt) {
       if (!connected) {
-        statusEl.textContent = "Сначала подключитесь к комнате";
         return;
       }
-      const myRole = roleEl.value;
+      if (dragged) {
+        return;
+      }
       if (myRole !== currentTurn()) {
-        statusEl.textContent = `Сейчас ход: ${roleLabel(currentTurn())}`;
         return;
       }
-      const cell = pointerToCell(evt);
+
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const sx = (evt.clientX - rect.left) * dpr;
+      const sy = (evt.clientY - rect.top) * dpr;
+      const cell = nearestCell(sx, sy);
       if (!cell || hasMoveAt(cell.x, cell.y)) {
         return;
       }
+
       const payload = {
         type: "move",
         x: cell.x,
         y: cell.y,
         by: myRole,
         pid: visitor.id,
-        name: visitorNameEl.value.trim() || `гость-${shortId(visitor.id)}`,
+        name: visitorName,
         ply: moves.length,
         ts: Date.now()
       };
-      const applied = applyMove(payload);
-      if (!applied) {
+
+      if (!applyMove(payload)) {
         return;
       }
-      try {
-        await sendMove(payload);
-      } catch (err) {
-        statusEl.textContent = err.message;
-      }
-    });
-
-    document.getElementById("connect").addEventListener("click", connect);
-
-    document.getElementById("newRoom").addEventListener("click", () => {
-      roomEl.value = `room-${Math.random().toString(36).slice(2, 8)}`;
-    });
-
-    document.getElementById("sync").addEventListener("click", syncMoves);
-
-    document.getElementById("notify").addEventListener("click", async () => {
-      if (!("Notification" in window)) {
-        statusEl.textContent = "Этот браузер не поддерживает уведомления";
-        return;
-      }
-      const result = await Notification.requestPermission();
-      statusEl.textContent = result === "granted"
-        ? "Уведомления включены"
-        : "Уведомления отключены";
-    });
-
-    document.getElementById("copyLink").addEventListener("click", async () => {
-      const url = `${location.origin}${location.pathname}#room=${encodeURIComponent(roomEl.value)}`;
-      await navigator.clipboard.writeText(url);
-      statusEl.textContent = "Ссылка скопирована";
-    });
-
-    visitorNameEl.addEventListener("input", () => {
-      localStorage.setItem(VISITOR_NAME_KEY, visitorNameEl.value.trim());
-    });
-
-    function restoreRoomFromHash() {
-      const hash = location.hash.replace(/^#/, "");
-      const params = new URLSearchParams(hash);
-      const room = params.get("room");
-      if (room) {
-        roomEl.value = room;
-      }
+      sendMove(payload).catch(() => {
+        statusLine.textContent = "ошибка отправки хода";
+      });
     }
 
-    restoreRoomFromHash();
-    const storedName = localStorage.getItem(VISITOR_NAME_KEY);
-    visitorIdEl.value = shortId(visitor.id);
-    visitorNameEl.value = storedName || `гость-${shortId(visitor.id)}`;
-    drawBoard();
-    updateUi();
+    canvas.addEventListener("pointerdown", (evt) => {
+      pointerDown = true;
+      dragged = false;
+      panStartX = evt.clientX;
+      panStartY = evt.clientY;
+      cameraStartX = cameraX;
+      cameraStartY = cameraY;
+      canvas.setPointerCapture(evt.pointerId);
+    });
+
+    canvas.addEventListener("pointermove", (evt) => {
+      if (!pointerDown) {
+        return;
+      }
+      const dx = evt.clientX - panStartX;
+      const dy = evt.clientY - panStartY;
+      if (Math.hypot(dx, dy) > 4) {
+        dragged = true;
+      }
+      cameraX = cameraStartX - dx / cellPx;
+      cameraY = cameraStartY - dy / cellPx;
+      draw();
+    });
+
+    canvas.addEventListener("pointerup", (evt) => {
+      if (!pointerDown) {
+        return;
+      }
+      pointerDown = false;
+      canvas.releasePointerCapture(evt.pointerId);
+      if (!dragged) {
+        onCanvasClick(evt);
+      }
+      setTimeout(() => {
+        dragged = false;
+      }, 0);
+    });
+
+    canvas.addEventListener("wheel", (evt) => {
+      evt.preventDefault();
+      const oldCell = cellPx;
+      const next = evt.deltaY < 0 ? cellPx * 1.1 : cellPx / 1.1;
+      cellPx = Math.max(14, Math.min(88, next));
+
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      const sx = (evt.clientX - rect.left) * dpr;
+      const sy = (evt.clientY - rect.top) * dpr;
+
+      const wxBefore = (sx - canvas.width / 2) / oldCell + cameraX;
+      const wyBefore = (sy - canvas.height / 2) / oldCell + cameraY;
+      const wxAfter = (sx - canvas.width / 2) / cellPx + cameraX;
+      const wyAfter = (sy - canvas.height / 2) / cellPx + cameraY;
+      cameraX += wxBefore - wxAfter;
+      cameraY += wyBefore - wyAfter;
+
+      draw();
+    }, { passive: false });
+
+    notifyBtn.addEventListener("click", async () => {
+      if (!("Notification" in window)) {
+        statusLine.textContent = "уведомления не поддерживаются";
+        return;
+      }
+      const p = await Notification.requestPermission();
+      statusLine.textContent = p === "granted" ? "уведомления включены" : "уведомления отключены";
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      const guestUrl = `${location.origin}${location.pathname}#room=${encodeURIComponent(roomFromUrl())}`;
+      await navigator.clipboard.writeText(guestUrl);
+      statusLine.textContent = "ссылка скопирована";
+    });
+
+    centerBtn.addEventListener("click", () => {
+      cameraX = 0;
+      cameraY = 0;
+      draw();
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+
+    resizeCanvas();
+    updateHud();
+    connect().catch(() => {
+      statusLine.textContent = "ошибка подключения";
+    });
   </script>
 </body>
 </html>
