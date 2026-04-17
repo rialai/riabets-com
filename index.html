@@ -25,7 +25,7 @@
       box-sizing: border-box;
     }
 
-    .window {
+    .retro-card {
       width: min(860px, 100%);
       background: #c0c0c0;
       border-top: 2px solid #ffffff;
@@ -35,48 +35,8 @@
       box-shadow: 2px 2px 0 #000000;
     }
 
-    .title-bar {
-      background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 6px 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #7f7f7f;
-    }
-
-    .title-label {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding-right: 8px;
-    }
-
-    .title-actions {
-      display: flex;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-
-    .title-action {
-      width: 18px;
-      height: 16px;
-      background: #c0c0c0;
-      color: #000000;
-      font-size: 12px;
-      line-height: 13px;
-      text-align: center;
-      border-top: 1px solid #ffffff;
-      border-left: 1px solid #ffffff;
-      border-right: 1px solid #3f3f3f;
-      border-bottom: 1px solid #3f3f3f;
-      user-select: none;
-    }
-
     .content {
-      padding: 22px 18px 12px;
+      padding: 18px;
       background: #c0c0c0;
       text-align: center;
     }
@@ -143,28 +103,6 @@
       transform: translate(1px, 1px);
     }
 
-    .status-bar {
-      display: flex;
-      gap: 8px;
-      padding: 8px;
-      border-top: 1px solid #7f7f7f;
-      background: #c0c0c0;
-    }
-
-    .status-item {
-      flex: 1;
-      min-height: 20px;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-top: 1px solid #7f7f7f;
-      border-left: 1px solid #7f7f7f;
-      border-right: 1px solid #ffffff;
-      border-bottom: 1px solid #ffffff;
-      background: #c0c0c0;
-    }
-
     a {
       color: #000080;
     }
@@ -190,16 +128,7 @@
   </style>
 </head>
 <body>
-  <div class="window" role="application" aria-label="Windows 98 style window">
-    <div class="title-bar">
-      <span class="title-label">riabets.com - internet explorer</span>
-      <div class="title-actions" aria-hidden="true">
-        <span class="title-action">_</span>
-        <span class="title-action">o</span>
-        <span class="title-action">x</span>
-      </div>
-    </div>
-
+  <div class="retro-card" role="region" aria-label="Windows 98 style card">
     <div class="content">
       <div class="content-panel">
         <main>
@@ -208,12 +137,6 @@
           <p id="contactLine"></p>
         </main>
       </div>
-    </div>
-
-    <div class="status-bar" aria-hidden="true">
-      <span class="status-item">HTML document</span>
-      <span class="status-item">done</span>
-      <span class="status-item">win98 mode</span>
     </div>
   </div>
 
