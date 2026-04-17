@@ -215,6 +215,16 @@
           </select>
         </div>
 
+        <div class="field">
+          <label for="visitorName">Анонимный ник</label>
+          <input id="visitorName" maxlength="28" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label for="visitorId">Анонимный ID</label>
+          <input id="visitorId" readonly>
+        </div>
+
         <div class="field row">
           <button id="connect" class="primary">Подключиться</button>
           <button id="newRoom">Новая комната</button>
@@ -231,6 +241,8 @@
 
         <div class="hint">
           Правило хода: сначала ходит владелец, затем любой из гостей, потом снова владелец.
+          <br><br>
+          Посетитель создается автоматически: локальный анонимный ID сохраняется в браузере.
           <br><br>
           Важно: офлайн пуш в телефон возможен через подписку на тему в приложении ntfy. В браузере уведомление приходит, пока вкладка открыта.
         </div>
@@ -260,6 +272,11 @@
     const movesEl = document.getElementById("moves");
     const roomEl = document.getElementById("room");
     const roleEl = document.getElementById("role");
+    const visitorIdEl = document.getElementById("visitorId");
+    const visitorNameEl = document.getElementById("visitorName");
+
+    const VISITOR_STORAGE_KEY = "riabets-dots-visitor-v1";
+    const VISITOR_NAME_KEY = "riabets-dots-visitor-name-v1";
 
     let topic = "";
     let eventSource = null;
@@ -275,6 +292,54 @@
     const keyOf = (x, y) => `${x}:${y}`;
     const inBounds = (x, y) => x >= 0 && x < SIZE && y >= 0 && y < SIZE;
     const oppositeRole = (role) => (role === "owner" ? "guest" : "owner");
+
+    function randomId() {
+      if (window.crypto && crypto.randomUUID) {
+        return crypto.randomUUID();
+      }
+      return `id-${Math.random().toString(36).slice(2)}-${Date.now().toString(36)}`;
+    }
+
+    function getOrCreateVisitor() {
+      const raw = localStorage.getItem(VISITOR_STORAGE_KEY);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.id) {
+            return parsed;
+          }
+        } catch {
+          // Ignore malformed storage and recreate visitor.
+        }
+      }
+      const id = randomId();
+      const visitor = {
+        id,
+        createdAt: Date.now()
+      };
+      localStorage.setItem(VISITOR_STORAGE_KEY, JSON.stringify(visitor));
+      return visitor;
+    }
+
+    function shortId(id) {
+      if (!id) {
+        return "anon";
+      }
+      return id.replace(/-/g, "").slice(0, 6);
+    }
+
+    function colorForVisitor(id) {
+      if (!id) {
+        return "#ff6a33";
+      }
+      let h = 0;
+      for (let i = 0; i < id.length; i += 1) {
+        h = (h * 31 + id.charCodeAt(i)) % 360;
+      }
+      return `hsl(${h}, 78%, 53%)`;
+    }
+
+    const visitor = getOrCreateVisitor();
 
     function keyToCoords(key) {
       const [xStr, yStr] = key.split(":");
@@ -292,7 +357,7 @@
 
     function getGroup(startX, startY, role) {
       const startKey = keyOf(startX, startY);
-      if (pieces.get(startKey) !== role) {
+      if (pieces.get(startKey)?.side !== role) {
         return [];
       }
       const stack = [startKey];
@@ -303,7 +368,7 @@
         const { x, y } = keyToCoords(key);
         for (const n of getNeighbors(x, y)) {
           const nk = keyOf(n.x, n.y);
-          if (!visited.has(nk) && pieces.get(nk) === role) {
+          if (!visited.has(nk) && pieces.get(nk)?.side === role) {
             visited.add(nk);
             stack.push(nk);
           }
@@ -324,14 +389,14 @@
       return false;
     }
 
-    function captureAfterMove(x, y, role) {
-      const opponent = oppositeRole(role);
+    function captureAfterMove(x, y, piece) {
+      const opponent = oppositeRole(piece.side);
       const checked = new Set();
       let captured = 0;
 
       for (const n of getNeighbors(x, y)) {
         const nk = keyOf(n.x, n.y);
-        if (pieces.get(nk) !== opponent || checked.has(nk)) {
+        if (pieces.get(nk)?.side !== opponent || checked.has(nk)) {
           continue;
         }
         const group = getGroup(n.x, n.y, opponent);
@@ -340,7 +405,7 @@
         }
         if (!groupHasLiberty(group)) {
           for (const gk of group) {
-            pieces.set(gk, role);
+            pieces.set(gk, { ...piece });
             captured += 1;
           }
         }
@@ -375,7 +440,7 @@
         const cx = MARGIN + x * stepPx();
         const cy = MARGIN + y * stepPx();
         ctx.beginPath();
-        ctx.fillStyle = by === "owner" ? "#111" : "#ff6a33";
+        ctx.fillStyle = by.side === "owner" ? "#111" : colorForVisitor(by.pid);
         ctx.arc(cx, cy, 8.6, 0, Math.PI * 2);
         ctx.fill();
       }
@@ -403,7 +468,8 @@
           const el = document.createElement("div");
           el.className = "move";
           const cap = m.captured ? `, захват: ${m.captured}` : "";
-          el.textContent = `${moves.length - (moves.slice(-80).length - idx - 1)}. ${roleLabel(m.by)}: (${m.x + 1}, ${m.y + 1})${cap}`;
+          const actor = m.by === "owner" ? "владелец" : (m.name || `гость-${shortId(m.pid)}`);
+          el.textContent = `${moves.length - (moves.slice(-80).length - idx - 1)}. ${actor}: (${m.x + 1}, ${m.y + 1})${cap}`;
           movesEl.appendChild(el);
         });
       }
@@ -446,8 +512,13 @@
       if (hasMoveAt(payload.x, payload.y)) {
         return false;
       }
-      pieces.set(keyOf(payload.x, payload.y), payload.by);
-      const captured = captureAfterMove(payload.x, payload.y, payload.by);
+      const piece = {
+        side: payload.by,
+        pid: payload.pid || "legacy",
+        name: payload.name || "гость"
+      };
+      pieces.set(keyOf(payload.x, payload.y), piece);
+      const captured = captureAfterMove(payload.x, payload.y, piece);
       payload.captured = captured;
       moves.push(payload);
       if (externalId) {
@@ -590,6 +661,8 @@
         x: cell.x,
         y: cell.y,
         by: myRole,
+        pid: visitor.id,
+        name: visitorNameEl.value.trim() || `гость-${shortId(visitor.id)}`,
         ply: moves.length,
         ts: Date.now()
       };
@@ -629,6 +702,10 @@
       statusEl.textContent = "Ссылка скопирована";
     });
 
+    visitorNameEl.addEventListener("input", () => {
+      localStorage.setItem(VISITOR_NAME_KEY, visitorNameEl.value.trim());
+    });
+
     function restoreRoomFromHash() {
       const hash = location.hash.replace(/^#/, "");
       const params = new URLSearchParams(hash);
@@ -639,6 +716,9 @@
     }
 
     restoreRoomFromHash();
+    const storedName = localStorage.getItem(VISITOR_NAME_KEY);
+    visitorIdEl.value = shortId(visitor.id);
+    visitorNameEl.value = storedName || `гость-${shortId(visitor.id)}`;
     drawBoard();
     updateUi();
   </script>
