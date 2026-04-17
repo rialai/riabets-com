@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>riabets.com stats</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      color: #111111;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+
+    .row {
+      margin: 12px 0;
+      font-size: 18px;
+    }
+
+    .label {
+      display: inline-block;
+      min-width: 220px;
+      font-weight: 700;
+    }
+
+    .value {
+      font-family: monospace;
+    }
+
+    .muted {
+      margin-top: 18px;
+      color: #666666;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <h1>riabets.com visitor stats</h1>
+
+  <div class="row"><span class="label">Total visits:</span> <span id="total" class="value">loading...</span></div>
+  <div class="row"><span class="label">Daily unique (browser):</span> <span id="unique" class="value">loading...</span></div>
+
+  <p class="muted">Data source: CountAPI</p>
+
+  <script>
+    async function getCount(key) {
+      const url = "https://api.countapi.xyz/get/riabets-com/" + key;
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
+      const data = await response.json();
+      return data.value;
+    }
+
+    async function loadStats() {
+      try {
+        const [total, unique] = await Promise.all([
+          getCount("visits_total"),
+          getCount("visits_unique_daily")
+        ]);
+
+        document.getElementById("total").textContent = String(total);
+        document.getElementById("unique").textContent = String(unique);
+      } catch (error) {
+        document.getElementById("total").textContent = "unavailable";
+        document.getElementById("unique").textContent = "unavailable";
+      }
+    }
+
+    loadStats();
+  </script>
+</body>
+</html>
