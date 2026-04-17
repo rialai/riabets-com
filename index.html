@@ -3,16 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Точки онлайн</title>
-  <meta name="description" content="Бесконечное поле для игры в Точки.">
+  <title>Riabets | Product & Systems Builder</title>
+  <meta name="description" content="Персональная страница Riabets: разработка, автоматизация, архитектура цифровых продуктов.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Bricolage+Grotesque:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f3f0ea;
-      --panel: #fffcf8;
-      --ink: #1f2925;
-      --grid: #d4dbd2;
-      --owner: #111111;
-      --accent: #284835;
+      --bg: #f0ece4;
+      --paper: #fffdf8;
+      --ink: #1b2720;
+      --muted: #567060;
+      --line: rgba(20, 30, 24, 0.16);
+      --accent: #1d5a43;
+      --accent-soft: #dceee5;
+      --radius: 18px;
+      --max: 1100px;
     }
 
     * {
@@ -21,68 +27,117 @@
       padding: 0;
     }
 
-    html,
     body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
       color: var(--ink);
-      background: radial-gradient(1000px 620px at 100% 0%, #e4efe7 0%, transparent 55%), var(--bg);
+      font-family: "Manrope", sans-serif;
+      background:
+        radial-gradient(1200px 700px at 90% -10%, rgba(29, 90, 67, 0.2), transparent 65%),
+        radial-gradient(700px 400px at -5% 35%, rgba(128, 79, 46, 0.14), transparent 60%),
+        var(--bg);
+      line-height: 1.45;
+      padding: 22px;
     }
 
-    .hud {
-      position: fixed;
-      top: 12px;
-      left: 12px;
-      right: 12px;
-      z-index: 5;
+    .shell {
+      max-width: var(--max);
+      margin: 0 auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(18, 28, 22, 0.08);
+    }
+
+    .top {
       display: flex;
       justify-content: space-between;
-      gap: 10px;
-      pointer-events: none;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(7px);
     }
 
-    .chip {
-      pointer-events: auto;
-      background: rgba(255, 252, 248, 0.9);
-      backdrop-filter: blur(8px);
-      border: 1px solid #d8dfd6;
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 0.86rem;
-      line-height: 1.35;
-      box-shadow: 0 8px 25px rgba(20, 30, 24, 0.08);
-      min-width: 170px;
+    .brand {
+      font-size: 0.84rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #294136;
     }
 
-    .chip b {
+    .badge {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.78rem;
+      color: #4b6356;
       font-weight: 700;
+      background: #fff;
     }
 
-    .chip .line + .line {
-      margin-top: 3px;
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 14px;
+      padding: 28px;
+    }
+
+    .hero-main {
+      padding: 6px 4px;
+    }
+
+    h1 {
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: clamp(2.2rem, 7.2vw, 5.2rem);
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      text-wrap: balance;
+    }
+
+    .lead {
+      max-width: 58ch;
+      color: var(--muted);
+      font-size: clamp(1rem, 2.1vw, 1.25rem);
+    }
+
+    .hero-side {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: linear-gradient(170deg, #ffffff 0%, #f5f8f2 100%);
+    }
+
+    .hero-side h2 {
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .hero-side p {
+      font-size: 0.95rem;
+      color: #4d6256;
+      margin-bottom: 13px;
     }
 
     .actions {
       display: flex;
-      gap: 8px;
-      margin-top: 8px;
       flex-wrap: wrap;
+      gap: 8px;
     }
 
     .btn {
-      border: 1px solid #cfd7cd;
-      background: #fff;
-      color: #1f2925;
-      border-radius: 9px;
-      padding: 6px 9px;
-      cursor: pointer;
-      font-size: 0.76rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 13px;
+      border-radius: 999px;
+      font-size: 0.9rem;
       font-weight: 700;
+      border: 1px solid var(--line);
     }
 
     .btn.primary {
@@ -91,649 +146,152 @@
       color: #fff;
     }
 
-    .legend {
-      position: fixed;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 5;
-      background: rgba(255, 252, 248, 0.92);
-      border: 1px solid #d8dfd6;
-      border-radius: 999px;
-      padding: 8px 14px;
+    .btn.secondary {
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .content {
+      padding: 0 28px 28px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 15px;
+      background: #fff;
+      min-height: 150px;
+    }
+
+    .kicker {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #60786b;
+      margin-bottom: 7px;
+      font-weight: 700;
+    }
+
+    .card h3 {
+      font-size: 1.08rem;
+      margin-bottom: 7px;
+    }
+
+    .card p {
+      font-size: 0.93rem;
+      color: #4c6257;
+    }
+
+    .quote {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 15px;
+      background: var(--accent-soft);
+      font-size: 1.02rem;
+      color: #244635;
+      font-weight: 700;
+    }
+
+    .foot {
+      margin-top: 16px;
+      border-top: 1px dashed var(--line);
+      padding-top: 12px;
+      font-size: 0.84rem;
+      color: #5f7569;
       display: flex;
-      gap: 14px;
-      font-size: 0.83rem;
-      box-shadow: 0 8px 24px rgba(20, 30, 24, 0.08);
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .dot {
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      margin-right: 5px;
-      vertical-align: middle;
-    }
-
-    #board {
-      width: 100vw;
-      height: 100vh;
-      display: block;
-      touch-action: none;
-      cursor: crosshair;
-    }
-
-    @media (max-width: 820px) {
-      .hud {
-        flex-direction: column;
-        align-items: flex-start;
+    @media (max-width: 940px) {
+      .hero {
+        grid-template-columns: 1fr;
       }
 
-      .chip {
-        width: min(96vw, 560px);
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        padding: 10px;
       }
 
-      .legend {
-        font-size: 0.78rem;
-        gap: 10px;
-        padding: 7px 11px;
+      .hero,
+      .content {
+        padding: 16px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .top {
+        padding: 13px 15px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="hud">
-    <div class="chip" id="statusChip">
-      <div class="line"><b>Точки</b>: бесконечное поле</div>
-      <div class="line" id="statusLine">Подключение...</div>
-      <div class="line" id="turnLine">Ход: ...</div>
+  <main class="shell">
+    <div class="top">
+      <div class="brand">RIABETS / PERSONAL PAGE</div>
+      <div class="badge">Open for collaboration</div>
     </div>
-    <div class="chip">
-      <div class="line"><b>Вы</b>: <span id="meLine"></span></div>
-      <div class="line">Комната: <span id="roomLine"></span></div>
-      <div class="actions">
-        <button class="btn primary" id="notifyBtn">Уведомления</button>
-        <button class="btn" id="copyBtn">Ссылка гостю</button>
-        <button class="btn" id="centerBtn">В центр</button>
+
+    <section class="hero">
+      <div class="hero-main">
+        <h1>Nikolai Riabets</h1>
+        <p class="lead">Я создаю прикладные цифровые системы: от архитектуры до финального интерфейса. Фокус: автоматизация процессов, интеграции и устойчивые продукты, которые можно поддерживать годами.</p>
       </div>
-    </div>
-  </div>
 
-  <canvas id="board"></canvas>
-
-  <div class="legend">
-    <span><span class="dot" style="background:#111"></span>владелец</span>
-    <span><span class="dot" style="background:#ff6a33"></span>гости</span>
-    <span>ЛКМ: ход | drag: панорама | wheel: масштаб</span>
-  </div>
-
-  <script>
-    const ROLE_OWNER = "owner";
-    const ROLE_GUEST = "guest";
-
-    const VISITOR_STORAGE_KEY = "riabets-dots-visitor-v1";
-    const VISITOR_NAME_KEY = "riabets-dots-visitor-name-v1";
-
-    const canvas = document.getElementById("board");
-    const ctx = canvas.getContext("2d");
-
-    const statusLine = document.getElementById("statusLine");
-    const turnLine = document.getElementById("turnLine");
-    const meLine = document.getElementById("meLine");
-    const roomLine = document.getElementById("roomLine");
-
-    const notifyBtn = document.getElementById("notifyBtn");
-    const copyBtn = document.getElementById("copyBtn");
-    const centerBtn = document.getElementById("centerBtn");
-
-    let topic = "";
-    let eventSource = null;
-    let connected = false;
-    let moves = [];
-    let pieces = new Map();
-    let seen = new Set();
-
-    let cameraX = 0;
-    let cameraY = 0;
-    let cellPx = 36;
-
-    let pointerDown = false;
-    let dragged = false;
-    let panStartX = 0;
-    let panStartY = 0;
-    let cameraStartX = 0;
-    let cameraStartY = 0;
-
-    function randomId() {
-      if (window.crypto && crypto.randomUUID) {
-        return crypto.randomUUID();
-      }
-      return `id-${Math.random().toString(36).slice(2)}-${Date.now().toString(36)}`;
-    }
-
-    function shortId(id) {
-      return (id || "anon").replace(/-/g, "").slice(0, 6);
-    }
-
-    function getOrCreateVisitor() {
-      const raw = localStorage.getItem(VISITOR_STORAGE_KEY);
-      if (raw) {
-        try {
-          const parsed = JSON.parse(raw);
-          if (parsed && parsed.id) {
-            return parsed;
-          }
-        } catch {
-          // malformed storage
-        }
-      }
-      const visitor = { id: randomId(), createdAt: Date.now() };
-      localStorage.setItem(VISITOR_STORAGE_KEY, JSON.stringify(visitor));
-      return visitor;
-    }
-
-    const visitor = getOrCreateVisitor();
-    const params = new URLSearchParams(location.search);
-    const myRole = params.get("as") === "owner" ? ROLE_OWNER : ROLE_GUEST;
-
-    const storedName = localStorage.getItem(VISITOR_NAME_KEY);
-    const visitorName = (storedName && storedName.trim()) || `гость-${shortId(visitor.id)}`;
-    localStorage.setItem(VISITOR_NAME_KEY, visitorName);
-
-    function roleLabel(role) {
-      return role === ROLE_OWNER ? "владелец" : "гости";
-    }
-
-    function oppositeRole(role) {
-      return role === ROLE_OWNER ? ROLE_GUEST : ROLE_OWNER;
-    }
-
-    function keyOf(x, y) {
-      return `${x}:${y}`;
-    }
-
-    function keyToCoords(key) {
-      const [x, y] = key.split(":").map(Number);
-      return { x, y };
-    }
-
-    function getNeighbors(x, y) {
-      return [
-        { x: x - 1, y },
-        { x: x + 1, y },
-        { x, y: y - 1 },
-        { x, y: y + 1 }
-      ];
-    }
-
-    function currentTurn() {
-      return moves.length % 2 === 0 ? ROLE_OWNER : ROLE_GUEST;
-    }
-
-    function roomFromUrl() {
-      const hash = location.hash.replace(/^#/, "");
-      const hashParams = new URLSearchParams(hash);
-      const room = hashParams.get("room") || "riabets-main-room";
-      return room.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "-");
-    }
-
-    function roomToTopic(room) {
-      return `riabets-dots-${room}`;
-    }
-
-    function colorForVisitor(id) {
-      if (!id) {
-        return "#ff6a33";
-      }
-      let h = 0;
-      for (let i = 0; i < id.length; i += 1) {
-        h = (h * 31 + id.charCodeAt(i)) % 360;
-      }
-      return `hsl(${h}, 78%, 53%)`;
-    }
-
-    function resizeCanvas() {
-      const dpr = window.devicePixelRatio || 1;
-      const w = Math.floor(window.innerWidth * dpr);
-      const h = Math.floor(window.innerHeight * dpr);
-      canvas.width = w;
-      canvas.height = h;
-      draw();
-    }
-
-    function worldToScreen(wx, wy) {
-      return {
-        x: canvas.width / 2 + (wx - cameraX) * cellPx,
-        y: canvas.height / 2 + (wy - cameraY) * cellPx
-      };
-    }
-
-    function screenToWorld(sx, sy) {
-      return {
-        x: (sx - canvas.width / 2) / cellPx + cameraX,
-        y: (sy - canvas.height / 2) / cellPx + cameraY
-      };
-    }
-
-    function nearestCell(screenX, screenY) {
-      const w = screenToWorld(screenX, screenY);
-      const gx = Math.round(w.x);
-      const gy = Math.round(w.y);
-      const center = worldToScreen(gx, gy);
-      const dist = Math.hypot(center.x - screenX, center.y - screenY);
-      if (dist > 12 * (window.devicePixelRatio || 1)) {
-        return null;
-      }
-      return { x: gx, y: gy };
-    }
-
-    function drawGrid() {
-      const leftWorld = cameraX - canvas.width / (2 * cellPx);
-      const rightWorld = cameraX + canvas.width / (2 * cellPx);
-      const topWorld = cameraY - canvas.height / (2 * cellPx);
-      const bottomWorld = cameraY + canvas.height / (2 * cellPx);
-
-      const xStart = Math.floor(leftWorld) - 1;
-      const xEnd = Math.ceil(rightWorld) + 1;
-      const yStart = Math.floor(topWorld) - 1;
-      const yEnd = Math.ceil(bottomWorld) + 1;
-
-      ctx.strokeStyle = "#d4dbd2";
-      ctx.lineWidth = 1;
-
-      for (let gx = xStart; gx <= xEnd; gx += 1) {
-        const p1 = worldToScreen(gx, yStart);
-        const p2 = worldToScreen(gx, yEnd);
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
-      }
-
-      for (let gy = yStart; gy <= yEnd; gy += 1) {
-        const p1 = worldToScreen(xStart, gy);
-        const p2 = worldToScreen(xEnd, gy);
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
-      }
-    }
-
-    function drawPieces() {
-      for (const [key, piece] of pieces.entries()) {
-        const { x, y } = keyToCoords(key);
-        const p = worldToScreen(x, y);
-        if (p.x < -20 || p.y < -20 || p.x > canvas.width + 20 || p.y > canvas.height + 20) {
-          continue;
-        }
-        ctx.beginPath();
-        ctx.fillStyle = piece.side === ROLE_OWNER ? "#111111" : colorForVisitor(piece.pid);
-        ctx.arc(p.x, p.y, Math.max(4, cellPx * 0.23), 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function drawAxes() {
-      const zeroX = worldToScreen(0, 0).x;
-      const zeroY = worldToScreen(0, 0).y;
-      ctx.strokeStyle = "#bcc5bb";
-      ctx.lineWidth = 1.4;
-      ctx.beginPath();
-      ctx.moveTo(0, zeroY);
-      ctx.lineTo(canvas.width, zeroY);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(zeroX, 0);
-      ctx.lineTo(zeroX, canvas.height);
-      ctx.stroke();
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawGrid();
-      drawAxes();
-      drawPieces();
-    }
-
-    function getGroup(startX, startY, role) {
-      const startKey = keyOf(startX, startY);
-      if (pieces.get(startKey)?.side !== role) {
-        return [];
-      }
-      const stack = [startKey];
-      const visited = new Set([startKey]);
-      while (stack.length) {
-        const key = stack.pop();
-        const { x, y } = keyToCoords(key);
-        for (const n of getNeighbors(x, y)) {
-          const nk = keyOf(n.x, n.y);
-          if (!visited.has(nk) && pieces.get(nk)?.side === role) {
-            visited.add(nk);
-            stack.push(nk);
-          }
-        }
-      }
-      return [...visited];
-    }
-
-    function groupHasLiberty(groupKeys) {
-      for (const key of groupKeys) {
-        const { x, y } = keyToCoords(key);
-        for (const n of getNeighbors(x, y)) {
-          if (!pieces.has(keyOf(n.x, n.y))) {
-            return true;
-          }
-        }
-      }
-      return false;
-    }
-
-    function captureAfterMove(x, y, piece) {
-      const opponent = oppositeRole(piece.side);
-      const checked = new Set();
-      let captured = 0;
-      for (const n of getNeighbors(x, y)) {
-        const nk = keyOf(n.x, n.y);
-        if (pieces.get(nk)?.side !== opponent || checked.has(nk)) {
-          continue;
-        }
-        const group = getGroup(n.x, n.y, opponent);
-        for (const gk of group) {
-          checked.add(gk);
-        }
-        if (!groupHasLiberty(group)) {
-          for (const gk of group) {
-            pieces.set(gk, { ...piece });
-            captured += 1;
-          }
-        }
-      }
-      return captured;
-    }
-
-    function updateHud() {
-      const turn = currentTurn();
-      const canMove = connected && myRole === turn;
-      const roleHuman = myRole === ROLE_OWNER ? "владелец" : `гость (${visitorName})`;
-
-      meLine.textContent = `${roleHuman}, id ${shortId(visitor.id)}`;
-      roomLine.textContent = topic || "...";
-      statusLine.textContent = connected ? `подключено` : `переподключение...`;
-      turnLine.textContent = `Ход: ${roleLabel(turn)}${canMove ? " (ваш)" : ""}`;
-      document.title = canMove ? "Ваш ход в Точки" : "Точки онлайн";
-    }
-
-    function notifyTurn() {
-      if (Notification.permission === "granted") {
-        new Notification("Точки: ваш ход", {
-          body: "Соперник походил, можно отвечать.",
-          tag: "dots-your-turn"
-        });
-      }
-    }
-
-    function hasMoveAt(x, y) {
-      return pieces.has(keyOf(x, y));
-    }
-
-    function applyMove(payload, externalId = null) {
-      if (payload.type !== "move") {
-        return false;
-      }
-      if (payload.ply !== moves.length) {
-        return false;
-      }
-      if (payload.by !== currentTurn()) {
-        return false;
-      }
-      if (hasMoveAt(payload.x, payload.y)) {
-        return false;
-      }
-
-      const piece = {
-        side: payload.by,
-        pid: payload.pid || "legacy",
-        name: payload.name || "гость"
-      };
-      pieces.set(keyOf(payload.x, payload.y), piece);
-      payload.captured = captureAfterMove(payload.x, payload.y, piece);
-      moves.push(payload);
-
-      if (externalId) {
-        seen.add(externalId);
-      }
-
-      updateHud();
-      draw();
-      return true;
-    }
-
-    async function sendMove(move) {
-      const res = await fetch(`https://ntfy.sh/${topic}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain",
-          "Priority": "default",
-          "Title": "Dots move",
-          "Tags": "game"
-        },
-        body: JSON.stringify(move)
-      });
-      if (!res.ok) {
-        throw new Error("Не удалось отправить ход");
-      }
-    }
-
-    async function syncMoves() {
-      if (!topic) {
-        return;
-      }
-      const res = await fetch(`https://ntfy.sh/${topic}/json?since=all`);
-      if (!res.ok) {
-        return;
-      }
-      const text = await res.text();
-      const lines = text.split("\n").filter(Boolean);
-      for (const line of lines) {
-        let msg;
-        try {
-          msg = JSON.parse(line);
-        } catch {
-          continue;
-        }
-        if (msg.event !== "message" || !msg.message || seen.has(msg.id)) {
-          continue;
-        }
-        let payload;
-        try {
-          payload = JSON.parse(msg.message);
-        } catch {
-          continue;
-        }
-        const before = currentTurn();
-        if (applyMove(payload, msg.id) && myRole === currentTurn() && myRole !== before) {
-          notifyTurn();
-        }
-      }
-    }
-
-    function connectSse() {
-      if (eventSource) {
-        eventSource.close();
-      }
-      eventSource = new EventSource(`https://ntfy.sh/${topic}/sse`);
-      eventSource.onmessage = (evt) => {
-        let msg;
-        try {
-          msg = JSON.parse(evt.data);
-        } catch {
-          return;
-        }
-        if (msg.event !== "message" || !msg.message || seen.has(msg.id)) {
-          return;
-        }
-        let payload;
-        try {
-          payload = JSON.parse(msg.message);
-        } catch {
-          return;
-        }
-        const before = currentTurn();
-        if (applyMove(payload, msg.id) && myRole === currentTurn() && myRole !== before) {
-          notifyTurn();
-        }
-      };
-      eventSource.onerror = () => {
-        connected = false;
-        updateHud();
-      };
-      eventSource.onopen = () => {
-        connected = true;
-        updateHud();
-      };
-    }
-
-    async function connect() {
-      moves = [];
-      pieces = new Map();
-      seen = new Set();
-      topic = roomToTopic(roomFromUrl());
-      connected = true;
-      updateHud();
-      await syncMoves();
-      connectSse();
-      updateHud();
-      draw();
-    }
-
-    function onCanvasClick(evt) {
-      if (!connected) {
-        return;
-      }
-      if (dragged) {
-        return;
-      }
-      if (myRole !== currentTurn()) {
-        return;
-      }
-
-      const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-      const sx = (evt.clientX - rect.left) * dpr;
-      const sy = (evt.clientY - rect.top) * dpr;
-      const cell = nearestCell(sx, sy);
-      if (!cell || hasMoveAt(cell.x, cell.y)) {
-        return;
-      }
-
-      const payload = {
-        type: "move",
-        x: cell.x,
-        y: cell.y,
-        by: myRole,
-        pid: visitor.id,
-        name: visitorName,
-        ply: moves.length,
-        ts: Date.now()
-      };
-
-      if (!applyMove(payload)) {
-        return;
-      }
-      sendMove(payload).catch(() => {
-        statusLine.textContent = "ошибка отправки хода";
-      });
-    }
-
-    canvas.addEventListener("pointerdown", (evt) => {
-      pointerDown = true;
-      dragged = false;
-      panStartX = evt.clientX;
-      panStartY = evt.clientY;
-      cameraStartX = cameraX;
-      cameraStartY = cameraY;
-      canvas.setPointerCapture(evt.pointerId);
-    });
-
-    canvas.addEventListener("pointermove", (evt) => {
-      if (!pointerDown) {
-        return;
-      }
-      const dx = evt.clientX - panStartX;
-      const dy = evt.clientY - panStartY;
-      if (Math.hypot(dx, dy) > 4) {
-        dragged = true;
-      }
-      cameraX = cameraStartX - dx / cellPx;
-      cameraY = cameraStartY - dy / cellPx;
-      draw();
-    });
-
-    canvas.addEventListener("pointerup", (evt) => {
-      if (!pointerDown) {
-        return;
-      }
-      pointerDown = false;
-      canvas.releasePointerCapture(evt.pointerId);
-      if (!dragged) {
-        onCanvasClick(evt);
-      }
-      setTimeout(() => {
-        dragged = false;
-      }, 0);
-    });
-
-    canvas.addEventListener("wheel", (evt) => {
-      evt.preventDefault();
-      const oldCell = cellPx;
-      const next = evt.deltaY < 0 ? cellPx * 1.1 : cellPx / 1.1;
-      cellPx = Math.max(14, Math.min(88, next));
-
-      const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
-      const sx = (evt.clientX - rect.left) * dpr;
-      const sy = (evt.clientY - rect.top) * dpr;
-
-      const wxBefore = (sx - canvas.width / 2) / oldCell + cameraX;
-      const wyBefore = (sy - canvas.height / 2) / oldCell + cameraY;
-      const wxAfter = (sx - canvas.width / 2) / cellPx + cameraX;
-      const wyAfter = (sy - canvas.height / 2) / cellPx + cameraY;
-      cameraX += wxBefore - wxAfter;
-      cameraY += wyBefore - wyAfter;
-
-      draw();
-    }, { passive: false });
-
-    notifyBtn.addEventListener("click", async () => {
-      if (!("Notification" in window)) {
-        statusLine.textContent = "уведомления не поддерживаются";
-        return;
-      }
-      const p = await Notification.requestPermission();
-      statusLine.textContent = p === "granted" ? "уведомления включены" : "уведомления отключены";
-    });
-
-    copyBtn.addEventListener("click", async () => {
-      const guestUrl = `${location.origin}${location.pathname}#room=${encodeURIComponent(roomFromUrl())}`;
-      await navigator.clipboard.writeText(guestUrl);
-      statusLine.textContent = "ссылка скопирована";
-    });
-
-    centerBtn.addEventListener("click", () => {
-      cameraX = 0;
-      cameraY = 0;
-      draw();
-    });
-
-    window.addEventListener("resize", resizeCanvas);
-
-    resizeCanvas();
-    updateHud();
-    connect().catch(() => {
-      statusLine.textContent = "ошибка подключения";
-    });
-  </script>
+      <aside class="hero-side">
+        <h2>Сейчас</h2>
+        <p>Работаю с Frappe/ERPNext, Python и веб-интерфейсами. Собираю минималистичные и надежные решения без лишней инфраструктуры.</p>
+        <div class="actions">
+          <a class="btn primary" href="mailto:hello@riabets.com">Написать</a>
+          <a class="btn secondary" href="https://github.com/rialai" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </aside>
+    </section>
+
+    <section class="content">
+      <div class="grid">
+        <article class="card">
+          <div class="kicker">Направление</div>
+          <h3>Product Systems</h3>
+          <p>Проектирую логику и структуру продукта так, чтобы команда могла быстро развивать функциональность без технического долга.</p>
+        </article>
+
+        <article class="card">
+          <div class="kicker">Направление</div>
+          <h3>Automation</h3>
+          <p>Автоматизирую рутинные операции: синхронизации, отчеты, внутренние инструменты и связанные интеграции.</p>
+        </article>
+
+        <article class="card">
+          <div class="kicker">Направление</div>
+          <h3>Execution</h3>
+          <p>Довожу решения до результата: чистый фронтенд, рабочий backend, предсказуемый деплой и понятная эксплуатация.</p>
+        </article>
+      </div>
+
+      <div class="quote">Если нужна команда из одного человека, который думает как архитектор, пишет как инженер и отвечает за результат, — это ко мне.</div>
+
+      <div class="foot">
+        <span>riabets.com</span>
+        <span>hello@riabets.com</span>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
