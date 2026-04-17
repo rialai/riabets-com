@@ -23,6 +23,22 @@
       box-sizing: border-box;
     }
 
+    .lang-wrap {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+    }
+
+    .lang-btn {
+      border: 1px solid #d0d0d0;
+      border-radius: 999px;
+      background: #ffffff;
+      font: inherit;
+      font-size: 0.9rem;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
     main {
       max-width: 760px;
       text-align: center;
@@ -47,9 +63,60 @@
   </style>
 </head>
 <body>
+  <div class="lang-wrap">
+    <button id="langBtn" class="lang-btn" type="button">EN</button>
+  </div>
+
   <main>
-    <h1>Когда-то тут будет что-то ебалозавалическое, а пока домен используется для почтового сервера.</h1>
-    <p>Кстати, моя почта: <a href="mailto:nikolai@riabets.com">nikolai@riabets.com</a></p>
+    <h1 id="headline"></h1>
+    <p id="contactLine"></p>
   </main>
+
+  <script>
+    const STORAGE_KEY = "riabets-lang";
+    const langBtn = document.getElementById("langBtn");
+    const headline = document.getElementById("headline");
+    const contactLine = document.getElementById("contactLine");
+
+    const messages = {
+      ru: {
+        headline: "Когда-то тут будет что-то ебалозавалическое, а пока домен используется для почтового сервера.",
+        contactHtml: "Кстати, моя почта: <a href=\"mailto:nikolai@riabets.com\">nikolai@riabets.com</a>",
+        button: "EN",
+        htmlLang: "ru"
+      },
+      en: {
+        headline: "One day there will be something mind-blowing here, but for now this domain is used for the mail server.",
+        contactHtml: "By the way, my email is: <a href=\"mailto:nikolai@riabets.com\">nikolai@riabets.com</a>",
+        button: "RU",
+        htmlLang: "en"
+      }
+    };
+
+    function setLanguage(lang) {
+      const data = messages[lang] || messages.ru;
+      headline.textContent = data.headline;
+      contactLine.innerHTML = data.contactHtml;
+      langBtn.textContent = data.button;
+      document.documentElement.lang = data.htmlLang;
+      localStorage.setItem(STORAGE_KEY, lang);
+    }
+
+    function getInitialLanguage() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === "ru" || saved === "en") {
+        return saved;
+      }
+      return (navigator.language || "").toLowerCase().startsWith("ru") ? "ru" : "en";
+    }
+
+    let currentLang = getInitialLanguage();
+    setLanguage(currentLang);
+
+    langBtn.addEventListener("click", () => {
+      currentLang = currentLang === "ru" ? "en" : "ru";
+      setLanguage(currentLang);
+    });
+  </script>
 </body>
 </html>
