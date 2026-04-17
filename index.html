@@ -11,73 +11,211 @@
       margin: 0;
       width: 100%;
       height: 100%;
-      background: #ffffff;
-      color: #111111;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #008080;
+      color: #000000;
+      font-family: Tahoma, "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
+      image-rendering: pixelated;
     }
 
     body {
-      display: grid;
-      place-items: center;
-      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
       box-sizing: border-box;
     }
 
-    .lang-btn {
-      border: 0;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #111111 0%, #3a3a3a 100%);
-      color: #ffffff;
-      font: inherit;
-      font-size: clamp(1.2rem, 3.2vw, 2rem);
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      padding: 18px 34px;
-      cursor: pointer;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
-      transition: transform 0.16s ease, box-shadow 0.16s ease;
-      margin: 24px auto 24px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: min(86vw, 360px);
+    .window {
+      width: min(860px, 100%);
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      box-shadow: 2px 2px 0 #000000;
     }
 
-    .lang-btn:hover {
-      transform: translateY(-2px) scale(1.01);
-      box-shadow: 0 22px 50px rgba(0, 0, 0, 0.23);
+    .title-bar {
+      background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #7f7f7f;
+    }
+
+    .title-label {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 8px;
+    }
+
+    .title-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .title-action {
+      width: 18px;
+      height: 16px;
+      background: #c0c0c0;
+      color: #000000;
+      font-size: 12px;
+      line-height: 13px;
+      text-align: center;
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-right: 1px solid #3f3f3f;
+      border-bottom: 1px solid #3f3f3f;
+      user-select: none;
+    }
+
+    .content {
+      padding: 22px 18px 12px;
+      background: #c0c0c0;
+      text-align: center;
+    }
+
+    .content-panel {
+      background: #ffffff;
+      border-top: 2px solid #7f7f7f;
+      border-left: 2px solid #7f7f7f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      padding: 20px 14px 18px;
     }
 
     main {
-      max-width: 760px;
       text-align: center;
     }
 
     h1 {
-      margin: 0 0 14px;
-      font-size: clamp(1.5rem, 4vw, 2.2rem);
-      line-height: 1.25;
+      margin: 0 0 18px;
+      font-size: clamp(1.04rem, 2.8vw, 1.55rem);
+      line-height: 1.38;
       font-weight: 700;
     }
 
     p {
       margin: 0;
-      font-size: clamp(1rem, 2.3vw, 1.2rem);
-      line-height: 1.5;
+      font-size: clamp(0.92rem, 2.05vw, 1.07rem);
+      line-height: 1.45;
+    }
+
+    .lang-btn {
+      font-family: inherit;
+      font-size: clamp(1.1rem, 4.2vw, 2rem);
+      font-weight: 700;
+      background: #c0c0c0;
+      color: #000000;
+      min-width: min(460px, 88vw);
+      min-height: 74px;
+      padding: 14px 28px;
+      margin: 0 auto 18px;
+      cursor: pointer;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.01em;
+      text-transform: lowercase;
+      box-shadow: 1px 1px 0 #000000;
+    }
+
+    .lang-btn:hover {
+      background: #d4d0c8;
+    }
+
+    .lang-btn:active {
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      box-shadow: inset 1px 1px 0 #000000;
+      transform: translate(1px, 1px);
+    }
+
+    .status-bar {
+      display: flex;
+      gap: 8px;
+      padding: 8px;
+      border-top: 1px solid #7f7f7f;
+      background: #c0c0c0;
+    }
+
+    .status-item {
+      flex: 1;
+      min-height: 20px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid #7f7f7f;
+      border-left: 1px solid #7f7f7f;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+      background: #c0c0c0;
     }
 
     a {
-      color: inherit;
+      color: #000080;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 10px;
+      }
+
+      .content {
+        padding: 14px 10px 10px;
+      }
+
+      .content-panel {
+        padding: 14px 10px;
+      }
+
+      .lang-btn {
+        min-height: 64px;
+        min-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <main>
-    <h1 id="headline"></h1>
-    <button id="langBtn" class="lang-btn" type="button">EN</button>
-    <p id="contactLine"></p>
-  </main>
+  <div class="window" role="application" aria-label="Windows 98 style window">
+    <div class="title-bar">
+      <span class="title-label">riabets.com - internet explorer</span>
+      <div class="title-actions" aria-hidden="true">
+        <span class="title-action">_</span>
+        <span class="title-action">o</span>
+        <span class="title-action">x</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="content-panel">
+        <main>
+          <button id="langBtn" class="lang-btn" type="button">EN</button>
+          <h1 id="headline"></h1>
+          <p id="contactLine"></p>
+        </main>
+      </div>
+    </div>
+
+    <div class="status-bar" aria-hidden="true">
+      <span class="status-item">HTML document</span>
+      <span class="status-item">done</span>
+      <span class="status-item">win98 mode</span>
+    </div>
+  </div>
 
   <script>
     const STORAGE_KEY = "riabets-lang";
