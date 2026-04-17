@@ -142,8 +142,6 @@
 
   <script>
     const STORAGE_KEY = "riabets-lang";
-    const TRACKER_NAMESPACE = "riabets-com";
-    const UNIQUE_DAY_KEY = "riabets-unique-day";
     const langBtn = document.getElementById("langBtn");
     const headline = document.getElementById("headline");
     const contactLine = document.getElementById("contactLine");
@@ -180,20 +178,16 @@
       return (navigator.language || "").toLowerCase().startsWith("ru") ? "ru" : "en";
     }
 
-    function hitCounter(counterKey) {
-      const url = "https://api.countapi.xyz/hit/" + TRACKER_NAMESPACE + "/" + counterKey;
-      return fetch(url).catch(() => null);
+    function hitCounter(url) {
+      const beacon = new Image();
+      beacon.referrerPolicy = "no-referrer";
+      beacon.src = url;
     }
 
     function trackVisit() {
-      hitCounter("visits_total");
-
+      hitCounter("https://hits.sh/riabets.com-total.svg?label=total%20visits&color=007ec6");
       const today = new Date().toISOString().slice(0, 10);
-      const lastTrackedDay = localStorage.getItem(UNIQUE_DAY_KEY);
-      if (lastTrackedDay !== today) {
-        localStorage.setItem(UNIQUE_DAY_KEY, today);
-        hitCounter("visits_unique_daily");
-      }
+      hitCounter("https://hits.sh/riabets.com-" + today + ".svg?label=today%20visits&color=8c7ae6");
     }
 
     let currentLang = getInitialLanguage();
