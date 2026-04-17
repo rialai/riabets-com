@@ -1,24 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>riabets.com | Systems, products, experiments</title>
-  <meta name="description" content="riabets.com - personal digital studio: product systems, automation, and experiments.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Newsreader:opsz,wght@6..72,400;6..72,600&display=swap" rel="stylesheet">
+  <title>riabets.com | Точки онлайн</title>
+  <meta name="description" content="Онлайн-игра Точки: ходят владелец сайта и гости по очереди.">
   <style>
     :root {
-      --bg: #f4f0e9;
-      --paper: #fffdf8;
-      --ink: #1f2420;
-      --muted: #55625a;
-      --line: rgba(31, 36, 32, 0.15);
-      --accent: #bf3b1f;
-      --accent-soft: #ffd8ca;
-      --radius: 20px;
-      --max: 1040px;
+      --bg: #f2efe9;
+      --card: #fffcf7;
+      --ink: #1e2724;
+      --line: #cfd5cd;
+      --owner: #111;
+      --guest: #ff6a33;
+      --accent: #234131;
     }
 
     * {
@@ -27,365 +22,544 @@
       padding: 0;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
-      font-family: "Space Grotesk", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--ink);
-      background:
-        radial-gradient(1200px 600px at 90% -10%, rgba(191, 59, 31, 0.22), transparent 65%),
-        radial-gradient(700px 380px at 0% 30%, rgba(80, 133, 100, 0.18), transparent 60%),
-        var(--bg);
-      line-height: 1.55;
+      background: radial-gradient(1300px 700px at 100% 0%, #e8f0e8 0%, transparent 55%), var(--bg);
       min-height: 100vh;
+      padding: 18px;
     }
 
-    .noise {
-      pointer-events: none;
-      position: fixed;
-      inset: 0;
-      opacity: 0.06;
-      background-image: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.5) 50%);
-      background-size: 100% 3px;
-      mix-blend-mode: multiply;
-      z-index: 0;
-    }
-
-    .wrap {
-      position: relative;
-      z-index: 1;
-      max-width: var(--max);
+    .container {
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 26px;
-    }
-
-    .card {
-      background: color-mix(in srgb, var(--paper) 92%, white);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: 0 14px 44px rgba(31, 36, 32, 0.08);
-      backdrop-filter: blur(5px);
+      background: var(--card);
+      border: 1px solid #d9dfd7;
+      border-radius: 18px;
+      box-shadow: 0 14px 45px rgba(20, 30, 24, 0.08);
       overflow: hidden;
     }
 
     header {
+      padding: 18px 20px;
+      border-bottom: 1px solid #e0e5de;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 22px 24px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .logo {
-      display: inline-flex;
       align-items: center;
-      gap: 10px;
-      font-size: 0.86rem;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--accent), #df7a2f);
-      box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 20%, transparent);
-      animation: pulse 2.4s ease-in-out infinite;
-    }
-
-    .status {
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
-      background: color-mix(in srgb, var(--accent-soft) 62%, white);
-      font-size: 0.8rem;
-      color: #6f2a16;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 18px;
-      padding: 28px;
-    }
-
-    .hero-main {
-      padding: 6px 6px 12px;
+      gap: 12px;
     }
 
     h1 {
-      font-family: "Newsreader", serif;
-      font-size: clamp(2.15rem, 6vw, 4.45rem);
-      line-height: 0.95;
-      letter-spacing: -0.02em;
-      margin-bottom: 18px;
-      text-wrap: balance;
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      letter-spacing: 0.01em;
     }
 
-    .lead {
-      font-size: clamp(1.02rem, 2.1vw, 1.22rem);
-      color: var(--muted);
-      max-width: 52ch;
+    .status {
+      font-size: 0.92rem;
+      color: #516257;
     }
 
-    .hero-side {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 18px;
-      background: linear-gradient(170deg, #fff 0%, #f9f3ea 100%);
-    }
-
-    .hero-side h2 {
-      font-size: 1rem;
-      margin-bottom: 10px;
-    }
-
-    .hero-side p {
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin-bottom: 16px;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      border-radius: 999px;
-      padding: 10px 16px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-    }
-
-    .btn.primary {
-      background: #17281d;
-      color: #fff;
-      box-shadow: 0 8px 24px rgba(23, 40, 29, 0.25);
-    }
-
-    .btn.secondary {
-      color: var(--ink);
-      background: #fff;
-      border: 1px solid var(--line);
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    main {
-      padding: 0 28px 28px;
-    }
-
-    .grid {
+    .layout {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
+      grid-template-columns: 320px 1fr;
+      gap: 0;
     }
 
-    .tile {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #fff;
+    .panel {
+      border-right: 1px solid #e0e5de;
       padding: 16px;
-      min-height: 170px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transform: translateY(16px);
-      opacity: 0;
-      animation: reveal 0.6s forwards;
     }
 
-    .tile:nth-child(1) { animation-delay: 0.07s; }
-    .tile:nth-child(2) { animation-delay: 0.14s; }
-    .tile:nth-child(3) { animation-delay: 0.21s; }
-    .tile:nth-child(4) { animation-delay: 0.28s; }
-    .tile:nth-child(5) { animation-delay: 0.35s; }
-    .tile:nth-child(6) { animation-delay: 0.42s; }
+    .field {
+      margin-bottom: 12px;
+    }
 
-    .tag {
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
+    label {
+      display: block;
+      font-size: 0.82rem;
+      color: #54695d;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #cfd6ce;
+      font: inherit;
+      padding: 10px 11px;
+      background: #fff;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    button {
+      cursor: pointer;
       font-weight: 700;
+      background: #fff;
     }
 
-    .tile h3 {
-      font-size: 1.15rem;
-      line-height: 1.2;
-      margin-bottom: 8px;
-      text-wrap: balance;
+    button.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
     }
 
-    .tile p {
-      font-size: 0.95rem;
-      color: var(--muted);
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
     }
 
-    .linkrow {
-      margin-top: 14px;
-      font-size: 0.9rem;
-      color: #2b3f32;
+    .hint {
+      font-size: 0.82rem;
+      color: #5f6e65;
+      line-height: 1.45;
+      margin-top: 10px;
     }
 
-    .linkrow a {
-      color: inherit;
-      font-weight: 700;
-      text-underline-offset: 3px;
+    .board-wrap {
+      padding: 16px;
     }
 
-    footer {
-      margin-top: 18px;
-      border-top: 1px dashed var(--line);
-      padding: 18px 2px 4px;
+    #board {
+      width: 100%;
+      max-width: 700px;
+      aspect-ratio: 1 / 1;
+      border: 1px solid #d5ddd3;
+      border-radius: 10px;
+      background: #fff;
+      touch-action: manipulation;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .legend {
+      margin-top: 10px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 0.87rem;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
     }
 
-    @keyframes reveal {
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+      vertical-align: middle;
     }
 
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-      100% { transform: scale(1); }
+    .owner-dot { background: var(--owner); }
+    .guest-dot { background: var(--guest); }
+
+    #moves {
+      margin-top: 12px;
+      max-height: 190px;
+      overflow: auto;
+      border: 1px solid #d7ded6;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 0.85rem;
+      background: #fff;
     }
 
-    @media (max-width: 980px) {
-      .hero {
+    .move {
+      padding: 4px 2px;
+      border-bottom: 1px dashed #e2e7e1;
+      color: #4b5d52;
+    }
+
+    .move:last-child {
+      border-bottom: 0;
+    }
+
+    @media (max-width: 920px) {
+      .layout {
         grid-template-columns: 1fr;
       }
-    }
 
-    @media (max-width: 760px) {
-      .wrap {
-        padding: 14px;
-      }
-
-      .hero,
-      main {
-        padding: 18px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      footer {
-        flex-direction: column;
-        align-items: flex-start;
+      .panel {
+        border-right: 0;
+        border-bottom: 1px solid #e0e5de;
       }
     }
   </style>
 </head>
 <body>
-  <div class="noise"></div>
-  <div class="wrap">
-    <div class="card">
-      <header>
-        <div class="logo"><span class="dot"></span>RIABETS / DIGITAL STUDIO</div>
-        <div class="status">Building in public</div>
-      </header>
+  <div class="container">
+    <header>
+      <h1>Точки онлайн</h1>
+      <div id="status" class="status">Подключение не выполнено</div>
+    </header>
 
-      <section class="hero">
-        <div class="hero-main">
-          <h1>riabets.com</h1>
-          <p class="lead">I design practical systems: clean interfaces, automations, and data-driven workflows that make products feel calm, fast, and obvious.</p>
+    <div class="layout">
+      <aside class="panel">
+        <div class="field">
+          <label for="room">Комната (общий код)</label>
+          <input id="room" value="riabets-main-room" autocomplete="off">
         </div>
-        <aside class="hero-side">
-          <h2>Now</h2>
-          <p>Currently shipping Frappe/ERPNext integrations, static GitHub Pages sites, and internal tools with minimal maintenance overhead.</p>
-          <div class="actions">
-            <a class="btn primary" href="mailto:hello@riabets.com">Contact</a>
-            <a class="btn secondary" href="https://github.com/rialai" target="_blank" rel="noreferrer">GitHub</a>
-          </div>
-        </aside>
+
+        <div class="field">
+          <label for="role">Роль</label>
+          <select id="role">
+            <option value="owner">Я владелец (черные точки)</option>
+            <option value="guest">Я гость (оранжевые точки)</option>
+          </select>
+        </div>
+
+        <div class="field row">
+          <button id="connect" class="primary">Подключиться</button>
+          <button id="newRoom">Новая комната</button>
+        </div>
+
+        <div class="field row">
+          <button id="notify">Разрешить уведомления</button>
+          <button id="copyLink">Копировать ссылку</button>
+        </div>
+
+        <div class="field">
+          <button id="sync">Обновить ходы</button>
+        </div>
+
+        <div class="hint">
+          Правило хода: сначала ходит владелец, затем любой из гостей, потом снова владелец.
+          <br><br>
+          Важно: офлайн пуш в телефон возможен через подписку на тему в приложении ntfy. В браузере уведомление приходит, пока вкладка открыта.
+        </div>
+
+        <div id="moves"></div>
+      </aside>
+
+      <section class="board-wrap">
+        <canvas id="board" width="700" height="700"></canvas>
+        <div class="legend">
+          <span><span class="dot owner-dot"></span>Владелец</span>
+          <span><span class="dot guest-dot"></span>Гости</span>
+          <span id="turnLabel">Ход: владелец</span>
+        </div>
       </section>
-
-      <main>
-        <section class="grid">
-          <article class="tile">
-            <div>
-              <div class="tag">Focus</div>
-              <h3>Product Systems</h3>
-              <p>Architecture that keeps business logic readable and maintainable when teams grow.</p>
-            </div>
-          </article>
-
-          <article class="tile">
-            <div>
-              <div class="tag">Focus</div>
-              <h3>Automation</h3>
-              <p>Repeatable flows for sync, deployment, and reporting with fewer manual steps.</p>
-            </div>
-          </article>
-
-          <article class="tile">
-            <div>
-              <div class="tag">Focus</div>
-              <h3>Clarity in UI</h3>
-              <p>Interfaces with strong hierarchy and meaningful motion instead of ornamental noise.</p>
-            </div>
-          </article>
-
-          <article class="tile">
-            <div>
-              <div class="tag">Stack</div>
-              <h3>Frappe + ERPNext</h3>
-              <p>Custom modules, pages, hooks, and polished frontends connected to operational data.</p>
-            </div>
-          </article>
-
-          <article class="tile">
-            <div>
-              <div class="tag">Stack</div>
-              <h3>Static + Serverless</h3>
-              <p>Low-cost architecture where GitHub Pages and CI/CD handle the boring parts.</p>
-            </div>
-          </article>
-
-          <article class="tile">
-            <div>
-              <div class="tag">Status</div>
-              <h3>Open for collaborations</h3>
-              <p>Available for implementation-heavy projects with clear timelines and direct communication.</p>
-            </div>
-            <div class="linkrow"><a href="mailto:hello@riabets.com">hello@riabets.com</a></div>
-          </article>
-        </section>
-
-        <footer>
-          <span>riabets.com</span>
-          <span>Last updated 2026</span>
-        </footer>
-      </main>
     </div>
   </div>
+
+  <script>
+    const SIZE = 15;
+    const MARGIN = 28;
+    const CLICK_RADIUS = 16;
+    const canvas = document.getElementById("board");
+    const ctx = canvas.getContext("2d");
+    const statusEl = document.getElementById("status");
+    const turnLabel = document.getElementById("turnLabel");
+    const movesEl = document.getElementById("moves");
+    const roomEl = document.getElementById("room");
+    const roleEl = document.getElementById("role");
+
+    let topic = "";
+    let eventSource = null;
+    let moves = [];
+    let seen = new Set();
+    let connected = false;
+
+    const gridSizePx = () => canvas.width - MARGIN * 2;
+    const stepPx = () => gridSizePx() / (SIZE - 1);
+    const currentTurn = () => (moves.length % 2 === 0 ? "owner" : "guest");
+    const roleLabel = (role) => (role === "owner" ? "владелец" : "гости");
+    const keyOf = (x, y) => `${x}:${y}`;
+
+    function roomToTopic(room) {
+      return `riabets-dots-${room.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "-")}`;
+    }
+
+    function drawBoard() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = "#d5ddd3";
+      ctx.lineWidth = 1;
+      for (let i = 0; i < SIZE; i += 1) {
+        const p = MARGIN + i * stepPx();
+        ctx.beginPath();
+        ctx.moveTo(MARGIN, p);
+        ctx.lineTo(canvas.width - MARGIN, p);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(p, MARGIN);
+        ctx.lineTo(p, canvas.height - MARGIN);
+        ctx.stroke();
+      }
+
+      for (const move of moves) {
+        const cx = MARGIN + move.x * stepPx();
+        const cy = MARGIN + move.y * stepPx();
+        ctx.beginPath();
+        ctx.fillStyle = move.by === "owner" ? "#111" : "#ff6a33";
+        ctx.arc(cx, cy, 8.6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function updateUi() {
+      const turn = currentTurn();
+      const myRole = roleEl.value;
+      const canMove = connected && myRole === turn;
+      turnLabel.textContent = `Ход: ${roleLabel(turn)}`;
+      statusEl.textContent = connected
+        ? `Подключено к комнате ${roomEl.value}. Сейчас ход: ${roleLabel(turn)}.`
+        : "Подключение не выполнено";
+      statusEl.style.color = canMove ? "#1b6b40" : "#516257";
+      document.title = canMove ? "Ваш ход в Точки" : "Точки онлайн";
+
+      movesEl.innerHTML = "";
+      if (!moves.length) {
+        const empty = document.createElement("div");
+        empty.className = "move";
+        empty.textContent = "Пока ходов нет.";
+        movesEl.appendChild(empty);
+      } else {
+        moves.slice(-80).forEach((m, idx) => {
+          const el = document.createElement("div");
+          el.className = "move";
+          el.textContent = `${moves.length - (moves.slice(-80).length - idx - 1)}. ${roleLabel(m.by)}: (${m.x + 1}, ${m.y + 1})`;
+          movesEl.appendChild(el);
+        });
+      }
+      drawBoard();
+    }
+
+    function notifyTurn() {
+      if (Notification.permission === "granted") {
+        new Notification("Точки: ваш ход", {
+          body: "Гость сделал ход. Пора ответить.",
+          tag: "dots-your-turn"
+        });
+      }
+      const osc = new (window.AudioContext || window.webkitAudioContext)();
+      const o = osc.createOscillator();
+      const g = osc.createGain();
+      o.type = "sine";
+      o.frequency.value = 880;
+      g.gain.value = 0.06;
+      o.connect(g);
+      g.connect(osc.destination);
+      o.start();
+      o.stop(osc.currentTime + 0.12);
+    }
+
+    function hasMoveAt(x, y) {
+      return moves.some((m) => m.x === x && m.y === y);
+    }
+
+    function applyMove(payload, externalId = null) {
+      if (payload.type !== "move") {
+        return false;
+      }
+      if (payload.ply !== moves.length) {
+        return false;
+      }
+      if (payload.by !== currentTurn()) {
+        return false;
+      }
+      if (hasMoveAt(payload.x, payload.y)) {
+        return false;
+      }
+      moves.push(payload);
+      if (externalId) {
+        seen.add(externalId);
+      }
+      updateUi();
+      return true;
+    }
+
+    async function sendMove(move) {
+      const res = await fetch(`https://ntfy.sh/${topic}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain",
+          "Priority": "default",
+          "Title": "Dots move",
+          "Tags": "game"
+        },
+        body: JSON.stringify(move)
+      });
+      if (!res.ok) {
+        throw new Error("Не удалось отправить ход");
+      }
+    }
+
+    async function syncMoves() {
+      if (!topic) {
+        return;
+      }
+      try {
+        const res = await fetch(`https://ntfy.sh/${topic}/json?since=all`);
+        if (!res.ok) {
+          return;
+        }
+        const text = await res.text();
+        const lines = text.split("\n").filter(Boolean);
+        for (const line of lines) {
+          let msg;
+          try {
+            msg = JSON.parse(line);
+          } catch {
+            continue;
+          }
+          if (msg.event !== "message" || !msg.message || seen.has(msg.id)) {
+            continue;
+          }
+          let payload;
+          try {
+            payload = JSON.parse(msg.message);
+          } catch {
+            continue;
+          }
+          const before = currentTurn();
+          if (applyMove(payload, msg.id) && roleEl.value === currentTurn() && roleEl.value !== before) {
+            notifyTurn();
+          }
+        }
+      } catch {
+        statusEl.textContent = "Проблема синхронизации ходов";
+      }
+    }
+
+    function connectSse() {
+      if (eventSource) {
+        eventSource.close();
+      }
+      eventSource = new EventSource(`https://ntfy.sh/${topic}/sse`);
+      eventSource.onmessage = (evt) => {
+        let msg;
+        try {
+          msg = JSON.parse(evt.data);
+        } catch {
+          return;
+        }
+        if (msg.event !== "message" || !msg.message || seen.has(msg.id)) {
+          return;
+        }
+        let payload;
+        try {
+          payload = JSON.parse(msg.message);
+        } catch {
+          return;
+        }
+        const before = currentTurn();
+        if (applyMove(payload, msg.id) && roleEl.value === currentTurn() && roleEl.value !== before) {
+          notifyTurn();
+        }
+      };
+      eventSource.onerror = () => {
+        statusEl.textContent = "Связь прервалась, переподключаемся...";
+      };
+    }
+
+    async function connect() {
+      moves = [];
+      seen = new Set();
+      topic = roomToTopic(roomEl.value || "main");
+      connected = true;
+      updateUi();
+      await syncMoves();
+      connectSse();
+      updateUi();
+    }
+
+    function pointerToCell(evt) {
+      const rect = canvas.getBoundingClientRect();
+      const x = (evt.clientX - rect.left) * (canvas.width / rect.width);
+      const y = (evt.clientY - rect.top) * (canvas.height / rect.height);
+      const gx = Math.round((x - MARGIN) / stepPx());
+      const gy = Math.round((y - MARGIN) / stepPx());
+      if (gx < 0 || gx >= SIZE || gy < 0 || gy >= SIZE) {
+        return null;
+      }
+      const cx = MARGIN + gx * stepPx();
+      const cy = MARGIN + gy * stepPx();
+      const dist = Math.hypot(cx - x, cy - y);
+      if (dist > CLICK_RADIUS) {
+        return null;
+      }
+      return { x: gx, y: gy };
+    }
+
+    canvas.addEventListener("click", async (evt) => {
+      if (!connected) {
+        statusEl.textContent = "Сначала подключитесь к комнате";
+        return;
+      }
+      const myRole = roleEl.value;
+      if (myRole !== currentTurn()) {
+        statusEl.textContent = `Сейчас ход: ${roleLabel(currentTurn())}`;
+        return;
+      }
+      const cell = pointerToCell(evt);
+      if (!cell || hasMoveAt(cell.x, cell.y)) {
+        return;
+      }
+      const payload = {
+        type: "move",
+        x: cell.x,
+        y: cell.y,
+        by: myRole,
+        ply: moves.length,
+        ts: Date.now()
+      };
+      const applied = applyMove(payload);
+      if (!applied) {
+        return;
+      }
+      try {
+        await sendMove(payload);
+      } catch (err) {
+        statusEl.textContent = err.message;
+      }
+    });
+
+    document.getElementById("connect").addEventListener("click", connect);
+
+    document.getElementById("newRoom").addEventListener("click", () => {
+      roomEl.value = `room-${Math.random().toString(36).slice(2, 8)}`;
+    });
+
+    document.getElementById("sync").addEventListener("click", syncMoves);
+
+    document.getElementById("notify").addEventListener("click", async () => {
+      if (!("Notification" in window)) {
+        statusEl.textContent = "Этот браузер не поддерживает уведомления";
+        return;
+      }
+      const result = await Notification.requestPermission();
+      statusEl.textContent = result === "granted"
+        ? "Уведомления включены"
+        : "Уведомления отключены";
+    });
+
+    document.getElementById("copyLink").addEventListener("click", async () => {
+      const url = `${location.origin}${location.pathname}#room=${encodeURIComponent(roomEl.value)}`;
+      await navigator.clipboard.writeText(url);
+      statusEl.textContent = "Ссылка скопирована";
+    });
+
+    function restoreRoomFromHash() {
+      const hash = location.hash.replace(/^#/, "");
+      const params = new URLSearchParams(hash);
+      const room = params.get("room");
+      if (room) {
+        roomEl.value = room;
+      }
+    }
+
+    restoreRoomFromHash();
+    drawBoard();
+    updateUi();
+  </script>
 </body>
 </html>
