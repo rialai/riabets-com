@@ -23,20 +23,30 @@
       box-sizing: border-box;
     }
 
-    .lang-wrap {
-      position: fixed;
-      top: 14px;
-      right: 14px;
+    .lang-btn {
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #111111 0%, #3a3a3a 100%);
+      color: #ffffff;
+      font: inherit;
+      font-size: clamp(1.2rem, 3.2vw, 2rem);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 18px 34px;
+      cursor: pointer;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      margin: 24px auto 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: min(86vw, 360px);
     }
 
-    .lang-btn {
-      border: 1px solid #d0d0d0;
-      border-radius: 999px;
-      background: #ffffff;
-      font: inherit;
-      font-size: 0.9rem;
-      padding: 8px 12px;
-      cursor: pointer;
+    .lang-btn:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 22px 50px rgba(0, 0, 0, 0.23);
     }
 
     main {
@@ -63,12 +73,9 @@
   </style>
 </head>
 <body>
-  <div class="lang-wrap">
-    <button id="langBtn" class="lang-btn" type="button">EN</button>
-  </div>
-
   <main>
     <h1 id="headline"></h1>
+    <button id="langBtn" class="lang-btn" type="button">EN</button>
     <p id="contactLine"></p>
   </main>
 
@@ -82,13 +89,13 @@
       ru: {
         headline: "Когда-то тут будет что-то ебалозавалическое, а пока домен используется для почтового сервера.",
         contactHtml: "Кстати, моя почта: <a href=\"mailto:nikolai@riabets.com\">nikolai@riabets.com</a>",
-        button: "EN",
+        button: "Switch to English",
         htmlLang: "ru"
       },
       en: {
         headline: "One day there will be something mind-blowing here, but for now this domain is used for the mail server.",
         contactHtml: "By the way, my email is: <a href=\"mailto:nikolai@riabets.com\">nikolai@riabets.com</a>",
-        button: "RU",
+        button: "Переключить на русский",
         htmlLang: "en"
       }
     };
