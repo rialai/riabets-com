@@ -30,6 +30,19 @@
       border-right: 2px solid #3f3f3f;
       border-bottom: 2px solid #3f3f3f;
       box-shadow: 2px 2px 0 #000000;
+      position: relative;
+    }
+
+    .window.maximized {
+      max-width: none;
+      margin: -16px;
+      min-height: calc(100vh - 0px);
+    }
+
+    .window.minimized .menu-bar,
+    .window.minimized .content,
+    .window.minimized .window-footer {
+      display: none;
     }
 
     .title-bar {
@@ -41,6 +54,7 @@
       align-items: center;
       font-weight: 700;
       font-size: 0.92rem;
+      user-select: none;
     }
 
     .title-bar-buttons {
@@ -49,8 +63,8 @@
     }
 
     .title-bar-button {
-      width: 18px;
-      height: 16px;
+      width: 20px;
+      height: 18px;
       background: #c0c0c0;
       color: #000000;
       border-top: 1px solid #ffffff;
@@ -58,11 +72,23 @@
       border-right: 1px solid #3f3f3f;
       border-bottom: 1px solid #3f3f3f;
       font-family: inherit;
-      font-size: 0.7rem;
+      font-size: 0.72rem;
+      line-height: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      cursor: default;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .title-bar-button:hover { background: #d4d0c8; }
+
+    .title-bar-button:active {
+      border-top: 1px solid #3f3f3f;
+      border-left: 1px solid #3f3f3f;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+      padding: 1px 0 0 1px;
     }
 
     .menu-bar {
@@ -70,11 +96,60 @@
       padding: 2px 6px;
       border-bottom: 1px solid #7f7f7f;
       font-size: 0.86rem;
+      position: relative;
+      user-select: none;
     }
-    .menu-bar span {
-      margin-right: 12px;
+    .menu-bar > .menu-item {
+      display: inline-block;
+      padding: 2px 8px;
+      margin-right: 2px;
+      cursor: pointer;
+      position: relative;
     }
-    .menu-bar u { text-decoration: underline; }
+    .menu-bar > .menu-item:hover,
+    .menu-bar > .menu-item.open {
+      background: #000080;
+      color: #ffffff;
+    }
+    .menu-bar > .menu-item u { text-decoration: underline; }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 220px;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+      padding: 2px;
+      z-index: 50;
+      font-size: 0.88rem;
+    }
+    .menu-bar > .menu-item.open .dropdown { display: block; }
+
+    .dropdown button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      padding: 4px 12px;
+      font-family: inherit;
+      font-size: inherit;
+      color: #000000;
+      cursor: pointer;
+    }
+    .dropdown button:hover { background: #000080; color: #ffffff; }
+    .dropdown hr {
+      margin: 3px 1px;
+      border: 0;
+      border-top: 1px solid #7f7f7f;
+      border-bottom: 1px solid #ffffff;
+    }
 
     .content {
       padding: 14px;
@@ -123,17 +198,9 @@
     }
     .notice a { color: #000080; }
 
-    nav.toc {
-      font-size: 0.92rem;
-    }
-    nav.toc h2 {
-      margin: 0 0 8px;
-      font-size: 1rem;
-    }
-    nav.toc ol {
-      margin: 0;
-      padding-left: 22px;
-    }
+    nav.toc { font-size: 0.92rem; }
+    nav.toc h2 { margin: 0 0 8px; font-size: 1rem; }
+    nav.toc ol { margin: 0; padding-left: 22px; }
     nav.toc a { color: #000080; }
 
     section.cv h2 {
@@ -142,18 +209,9 @@
       padding-bottom: 4px;
       border-bottom: 1px solid #7f7f7f;
     }
-
-    section.cv article {
-      margin-bottom: 14px;
-    }
-    section.cv article:last-child {
-      margin-bottom: 0;
-    }
-
-    section.cv h3 {
-      margin: 0 0 2px;
-      font-size: 1rem;
-    }
+    section.cv article { margin-bottom: 14px; }
+    section.cv article:last-child { margin-bottom: 0; }
+    section.cv h3 { margin: 0 0 2px; font-size: 1rem; }
     section.cv .role-meta {
       margin: 0 0 6px;
       font-size: 0.86rem;
@@ -164,15 +222,15 @@
       font-size: 0.92rem;
       line-height: 1.5;
     }
-    section.cv ul {
-      padding-left: 20px;
-    }
+    section.cv ul { padding-left: 20px; }
 
     .placeholder {
       color: #707070;
       font-style: italic;
       font-size: 0.88rem;
     }
+
+    .collapsed { display: none; }
 
     footer.window-footer {
       background: #c0c0c0;
@@ -186,33 +244,151 @@
     }
     footer.window-footer a { color: #000080; }
 
+    /* Modal dialog (Win-98 style) */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.0);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      max-width: 420px;
+      width: 100%;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+    }
+    .modal .title-bar { padding: 3px 6px; }
+    .modal-body {
+      padding: 16px 14px 12px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    .modal-icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      background: #ffff00;
+      color: #000000;
+      border: 2px solid #000000;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.3rem;
+    }
+    .modal-buttons {
+      padding: 4px 14px 14px;
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+    .modal-button {
+      min-width: 84px;
+      padding: 4px 12px;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      font-family: inherit;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+    .modal-button:active {
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+    }
+
+    /* Toast (status feedback) */
+    .toast {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      padding: 6px 14px;
+      font-size: 0.88rem;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 200;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
     @media (max-width: 640px) {
       body { padding: 8px; }
       .content { padding: 10px; }
       .panel { padding: 12px; }
       .cv-header h1 { font-size: 1.3rem; }
+      .window.maximized { margin: -8px; }
     }
 
     @media print {
       body { background: #ffffff; padding: 0; }
       .window { box-shadow: none; border: none; }
-      .title-bar, .menu-bar, footer.window-footer, .notice { display: none; }
+      .title-bar, .menu-bar, footer.window-footer, .notice, .modal-backdrop, .toast { display: none; }
       .panel { border: none; padding: 8px 0; }
     }
   </style>
 </head>
 <body>
-  <div class="window">
+  <div class="window" id="mainWindow">
     <div class="title-bar">
       <span>Mykola Riabets.exe — Journey</span>
       <span class="title-bar-buttons">
-        <span class="title-bar-button" aria-hidden="true">_</span>
-        <span class="title-bar-button" aria-hidden="true">□</span>
-        <span class="title-bar-button" aria-hidden="true">×</span>
+        <button class="title-bar-button" id="btnMin" type="button" title="Minimize" aria-label="Minimize">_</button>
+        <button class="title-bar-button" id="btnMax" type="button" title="Maximize" aria-label="Maximize">□</button>
+        <button class="title-bar-button" id="btnClose" type="button" title="Close" aria-label="Close">×</button>
       </span>
     </div>
-    <div class="menu-bar">
-      <span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span>
+    <div class="menu-bar" id="menuBar">
+      <span class="menu-item" data-menu="file"><u>F</u>ile
+        <div class="dropdown">
+          <button data-action="print">Save as PDF (Print)…</button>
+          <button data-action="email">Email Mykola</button>
+          <button data-action="github">View source on GitHub</button>
+          <hr>
+          <button data-action="close">Close</button>
+        </div>
+      </span><span class="menu-item" data-menu="edit"><u>E</u>dit
+        <div class="dropdown">
+          <button data-action="copy-email">Copy email address</button>
+          <button data-action="copy-link">Copy link to this page</button>
+        </div>
+      </span><span class="menu-item" data-menu="view"><u>V</u>iew
+        <div class="dropdown">
+          <button data-action="expand-all">Expand all sections</button>
+          <button data-action="collapse-all">Collapse all sections</button>
+          <hr>
+          <button data-action="back-home">Back to riabets.com</button>
+        </div>
+      </span><span class="menu-item" data-menu="help"><u>H</u>elp
+        <div class="dropdown">
+          <button data-action="about">About this page</button>
+          <button data-action="about-win98">Why Windows 98?</button>
+        </div>
+      </span>
     </div>
 
     <div class="content">
@@ -251,53 +427,60 @@
         </nav>
       </section>
 
-      <!-- About -->
-      <section class="panel cv" id="about">
+      <section class="panel cv collapsible" id="about">
         <h2>About</h2>
-        <p class="placeholder">This section will be assembled last — it summarises the rest.</p>
+        <div class="section-body">
+          <p class="placeholder">This section will be assembled last — it summarises the rest.</p>
+        </div>
       </section>
 
-      <!-- Right now -->
-      <section class="panel cv" id="right-now">
+      <section class="panel cv collapsible" id="right-now">
         <h2>Right now</h2>
-        <p class="placeholder">Current role narrative being drafted from a working interview. Will land here as a process-observation case study.</p>
+        <div class="section-body">
+          <p class="placeholder">Current role narrative being drafted from a working interview. Will land here as a process-observation case study.</p>
+        </div>
       </section>
 
-      <!-- Experience -->
-      <section class="panel cv" id="experience">
+      <section class="panel cv collapsible" id="experience">
         <h2>Experience</h2>
-        <p class="placeholder">Career history being collected, role by role, with measurable outcomes.</p>
+        <div class="section-body">
+          <p class="placeholder">Career history being collected, role by role, with measurable outcomes.</p>
+        </div>
       </section>
 
-      <!-- Education -->
-      <section class="panel cv" id="education">
+      <section class="panel cv collapsible" id="education">
         <h2>Education</h2>
-        <article>
-          <h3>Kharkiv National University of Radio Electronics (NURE)</h3>
-          <p class="role-meta">Bachelor's programme · Electronic Engineering — Information Security Systems · 2010–2012 (incomplete) · Kharkiv, Ukraine</p>
-        </article>
-        <article>
-          <h3>Solonytsivka Collegium</h3>
-          <p class="role-meta">Specialised secondary education · advanced mathematics and physics · graduated 2010 · Kharkiv region, Ukraine</p>
-        </article>
+        <div class="section-body">
+          <article>
+            <h3>Kharkiv National University of Radio Electronics (NURE)</h3>
+            <p class="role-meta">Bachelor's programme · Electronic Engineering — Information Security Systems · 2010–2012 (incomplete) · Kharkiv, Ukraine</p>
+          </article>
+          <article>
+            <h3>Solonytsivka Collegium</h3>
+            <p class="role-meta">Specialised secondary education · advanced mathematics and physics · graduated 2010 · Kharkiv region, Ukraine</p>
+          </article>
+        </div>
       </section>
 
-      <!-- Skills -->
-      <section class="panel cv" id="skills">
+      <section class="panel cv collapsible" id="skills">
         <h2>Skills</h2>
-        <p class="placeholder">Being collected — covering process analysis, business automation, data wrangling and the technical surface used to deliver it.</p>
+        <div class="section-body">
+          <p class="placeholder">Being collected — covering process analysis, business automation, data wrangling and the technical surface used to deliver it.</p>
+        </div>
       </section>
 
-      <!-- Projects -->
-      <section class="panel cv" id="projects">
+      <section class="panel cv collapsible" id="projects">
         <h2>Projects</h2>
-        <p class="placeholder">Being collected — pet projects illustrating the same systems-thinking applied outside the workplace.</p>
+        <div class="section-body">
+          <p class="placeholder">Being collected — pet projects illustrating the same systems-thinking applied outside the workplace.</p>
+        </div>
       </section>
 
-      <!-- Languages -->
-      <section class="panel cv" id="languages">
+      <section class="panel cv collapsible" id="languages">
         <h2>Languages</h2>
-        <p class="placeholder">Being collected.</p>
+        <div class="section-body">
+          <p class="placeholder">Being collected.</p>
+        </div>
       </section>
     </div>
 
@@ -306,5 +489,213 @@
       <span><a href="https://github.com/rialai/riabets-com">view source on GitHub</a></span>
     </footer>
   </div>
+
+  <!-- Modal dialog -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="title-bar">
+        <span id="modalTitle">Notice</span>
+        <span class="title-bar-buttons">
+          <button class="title-bar-button" data-modal-close type="button" aria-label="Close">×</button>
+        </span>
+      </div>
+      <div class="modal-body">
+        <div class="modal-icon" id="modalIcon">i</div>
+        <div id="modalText">Message goes here.</div>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-button" data-modal-close type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      var mainWindow = document.getElementById('mainWindow');
+      var modal = document.getElementById('modalBackdrop');
+      var modalTitle = document.getElementById('modalTitle');
+      var modalText = document.getElementById('modalText');
+      var modalIcon = document.getElementById('modalIcon');
+      var toast = document.getElementById('toast');
+      var toastTimer = null;
+
+      function showModal(title, text, iconChar) {
+        modalTitle.textContent = title;
+        modalText.innerHTML = text;
+        modalIcon.textContent = iconChar || 'i';
+        modal.classList.add('open');
+      }
+      function closeModal() { modal.classList.remove('open'); }
+
+      function showToast(text) {
+        toast.textContent = text;
+        toast.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toast.classList.remove('show');
+        }, 1800);
+      }
+
+      // Modal close handlers (backdrop click + buttons)
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+        if (e.target.matches('[data-modal-close]')) closeModal();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      // Title bar buttons
+      document.getElementById('btnClose').addEventListener('click', function () {
+        showModal(
+          'Cannot close window',
+          'You cannot close this window — Mykola is actively job-hunting and needs to stay visible.<br><br>' +
+          'Try <a href="mailto:nikolai@riabets.com">emailing instead</a>.',
+          '!'
+        );
+      });
+
+      document.getElementById('btnMax').addEventListener('click', function () {
+        mainWindow.classList.toggle('maximized');
+      });
+
+      document.getElementById('btnMin').addEventListener('click', function () {
+        mainWindow.classList.toggle('minimized');
+      });
+
+      // Menu bar dropdowns
+      var menuBar = document.getElementById('menuBar');
+      menuBar.addEventListener('click', function (e) {
+        var item = e.target.closest('.menu-item');
+        if (item && !e.target.closest('.dropdown')) {
+          // Toggle this menu, close others
+          var wasOpen = item.classList.contains('open');
+          closeAllMenus();
+          if (!wasOpen) item.classList.add('open');
+          e.stopPropagation();
+        }
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.menu-bar')) closeAllMenus();
+      });
+
+      function closeAllMenus() {
+        var open = document.querySelectorAll('.menu-item.open');
+        for (var i = 0; i < open.length; i++) open[i].classList.remove('open');
+      }
+
+      // Menu actions
+      menuBar.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        var action = btn.dataset.action;
+        closeAllMenus();
+        handleAction(action);
+      });
+
+      function handleAction(action) {
+        switch (action) {
+          case 'print':
+            window.print();
+            break;
+          case 'email':
+            window.location.href = 'mailto:nikolai@riabets.com';
+            break;
+          case 'github':
+            window.open('https://github.com/rialai/riabets-com', '_blank', 'noopener');
+            break;
+          case 'close':
+            showModal(
+              'Cannot close window',
+              'You cannot close this window — Mykola is actively job-hunting and needs to stay visible.<br><br>' +
+              'Try <a href="mailto:nikolai@riabets.com">emailing instead</a>.',
+              '!'
+            );
+            break;
+          case 'copy-email':
+            copyText('nikolai@riabets.com', 'Email copied to clipboard');
+            break;
+          case 'copy-link':
+            copyText(window.location.href, 'Link copied to clipboard');
+            break;
+          case 'expand-all':
+            toggleSections(false);
+            showToast('All sections expanded');
+            break;
+          case 'collapse-all':
+            toggleSections(true);
+            showToast('All sections collapsed');
+            break;
+          case 'back-home':
+            window.location.href = '/';
+            break;
+          case 'about':
+            showModal(
+              'About this page',
+              'This is Mykola Riabets’s public CV-in-progress. Each section is added as it gets drafted, and every change is a public git commit at <a href="https://github.com/rialai/riabets-com/commits/main" target="_blank" rel="noopener">github.com/rialai/riabets-com</a>.<br><br>' +
+              'Target roles: Junior ERP Functional Consultant, Business Analyst, Process Automation Consultant in Ireland.',
+              'i'
+            );
+            break;
+          case 'about-win98':
+            showModal(
+              'Why Windows 98?',
+              'Because a CV that looks like every other CV reads like every other CV. The Win-98 chrome is a reading affordance: it tells you the document has personality, then it gets out of the way and lets the words do the work.',
+              '?'
+            );
+            break;
+        }
+      }
+
+      function copyText(text, successMsg) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            showToast(successMsg);
+          }).catch(function () {
+            showToast('Copy failed — please copy manually');
+          });
+        } else {
+          // Fallback for very old browsers
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand('copy');
+            showToast(successMsg);
+          } catch (err) {
+            showToast('Copy failed');
+          }
+          document.body.removeChild(ta);
+        }
+      }
+
+      function toggleSections(collapse) {
+        var bodies = document.querySelectorAll('.collapsible .section-body');
+        for (var i = 0; i < bodies.length; i++) {
+          if (collapse) bodies[i].classList.add('collapsed');
+          else bodies[i].classList.remove('collapsed');
+        }
+      }
+
+      // Click on section header to toggle individual section
+      document.querySelectorAll('.collapsible h2').forEach(function (h) {
+        h.style.cursor = 'pointer';
+        h.title = 'Click to collapse/expand';
+        h.addEventListener('click', function () {
+          var body = h.nextElementSibling;
+          if (body && body.classList.contains('section-body')) {
+            body.classList.toggle('collapsed');
+          }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
