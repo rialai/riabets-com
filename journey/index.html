@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mykola Riabets — Journey</title>
+  <meta name="description" content="A CV being assembled in public. Currently a work in progress.">
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #008080;
+      color: #000000;
+      font-family: Tahoma, "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
+      image-rendering: pixelated;
+    }
+
+    body {
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .window {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      box-shadow: 2px 2px 0 #000000;
+    }
+
+    .title-bar {
+      background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+      color: #ffffff;
+      padding: 3px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .title-bar-buttons {
+      display: inline-flex;
+      gap: 2px;
+    }
+
+    .title-bar-button {
+      width: 18px;
+      height: 16px;
+      background: #c0c0c0;
+      color: #000000;
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-right: 1px solid #3f3f3f;
+      border-bottom: 1px solid #3f3f3f;
+      font-family: inherit;
+      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+    }
+
+    .menu-bar {
+      background: #c0c0c0;
+      padding: 2px 6px;
+      border-bottom: 1px solid #7f7f7f;
+      font-size: 0.86rem;
+    }
+    .menu-bar span {
+      margin-right: 12px;
+    }
+    .menu-bar u { text-decoration: underline; }
+
+    .content {
+      padding: 14px;
+      background: #c0c0c0;
+    }
+
+    .panel {
+      background: #ffffff;
+      border-top: 2px solid #7f7f7f;
+      border-left: 2px solid #7f7f7f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      padding: 16px 18px;
+      margin-bottom: 12px;
+    }
+
+    .panel:last-child { margin-bottom: 0; }
+
+    .cv-header h1 {
+      margin: 0 0 6px;
+      font-size: 1.6rem;
+      letter-spacing: 0.5px;
+    }
+    .cv-header .meta {
+      margin: 0;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    .cv-header .meta a { color: #000080; }
+    .cv-header .badge {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 2px 8px;
+      background: #008000;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+    }
+
+    .notice {
+      background: #ffffcc;
+      border: 1px dashed #808000;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+    }
+    .notice a { color: #000080; }
+
+    nav.toc {
+      font-size: 0.92rem;
+    }
+    nav.toc h2 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+    nav.toc ol {
+      margin: 0;
+      padding-left: 22px;
+    }
+    nav.toc a { color: #000080; }
+
+    section.cv h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #7f7f7f;
+    }
+
+    section.cv article {
+      margin-bottom: 14px;
+    }
+    section.cv article:last-child {
+      margin-bottom: 0;
+    }
+
+    section.cv h3 {
+      margin: 0 0 2px;
+      font-size: 1rem;
+    }
+    section.cv .role-meta {
+      margin: 0 0 6px;
+      font-size: 0.86rem;
+      color: #444444;
+    }
+    section.cv p, section.cv ul {
+      margin: 0 0 6px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    section.cv ul {
+      padding-left: 20px;
+    }
+
+    .placeholder {
+      color: #707070;
+      font-style: italic;
+      font-size: 0.88rem;
+    }
+
+    footer.window-footer {
+      background: #c0c0c0;
+      padding: 6px 12px;
+      border-top: 1px solid #7f7f7f;
+      font-size: 0.82rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    footer.window-footer a { color: #000080; }
+
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      .content { padding: 10px; }
+      .panel { padding: 12px; }
+      .cv-header h1 { font-size: 1.3rem; }
+    }
+
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .window { box-shadow: none; border: none; }
+      .title-bar, .menu-bar, footer.window-footer, .notice { display: none; }
+      .panel { border: none; padding: 8px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="title-bar">
+      <span>Mykola Riabets.exe — Journey</span>
+      <span class="title-bar-buttons">
+        <span class="title-bar-button" aria-hidden="true">_</span>
+        <span class="title-bar-button" aria-hidden="true">□</span>
+        <span class="title-bar-button" aria-hidden="true">×</span>
+      </span>
+    </div>
+    <div class="menu-bar">
+      <span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span>
+    </div>
+
+    <div class="content">
+      <!-- Header -->
+      <section class="panel cv-header">
+        <h1>Mykola Riabets</h1>
+        <p class="meta">
+          Dublin, Ireland<br>
+          <a href="mailto:nikolai@riabets.com">nikolai@riabets.com</a>
+        </p>
+        <span class="badge">Right to work: Stamp 4 — no sponsorship required</span>
+        <p class="meta" style="margin-top:8px;">Open to relocation across Ireland.</p>
+      </section>
+
+      <!-- Build-in-public notice -->
+      <section class="panel notice">
+        <strong>📋 This document is being assembled in public.</strong><br>
+        Last updated: <time datetime="2026-05-18">18 May 2026</time>.
+        The <a href="https://github.com/rialai/riabets-com/commits/main">git history</a>
+        is part of the document — each commit is an iteration on how I think about my own work.
+      </section>
+
+      <!-- Table of contents -->
+      <section class="panel">
+        <nav class="toc">
+          <h2>Contents</h2>
+          <ol>
+            <li><a href="#about">About</a></li>
+            <li><a href="#right-now">Right now</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#languages">Languages</a></li>
+          </ol>
+        </nav>
+      </section>
+
+      <!-- About -->
+      <section class="panel cv" id="about">
+        <h2>About</h2>
+        <p class="placeholder">This section will be assembled last — it summarises the rest.</p>
+      </section>
+
+      <!-- Right now -->
+      <section class="panel cv" id="right-now">
+        <h2>Right now</h2>
+        <p class="placeholder">Current role narrative being drafted from a working interview. Will land here as a process-observation case study.</p>
+      </section>
+
+      <!-- Experience -->
+      <section class="panel cv" id="experience">
+        <h2>Experience</h2>
+        <p class="placeholder">Career history being collected, role by role, with measurable outcomes.</p>
+      </section>
+
+      <!-- Education -->
+      <section class="panel cv" id="education">
+        <h2>Education</h2>
+        <article>
+          <h3>Kharkiv National University of Radio Electronics (NURE)</h3>
+          <p class="role-meta">Bachelor's programme · Electronic Engineering — Information Security Systems · 2010–2012 (incomplete) · Kharkiv, Ukraine</p>
+        </article>
+        <article>
+          <h3>Solonytsivka Collegium</h3>
+          <p class="role-meta">Specialised secondary education · advanced mathematics and physics · graduated 2010 · Kharkiv region, Ukraine</p>
+        </article>
+      </section>
+
+      <!-- Skills -->
+      <section class="panel cv" id="skills">
+        <h2>Skills</h2>
+        <p class="placeholder">Being collected — covering process analysis, business automation, data wrangling and the technical surface used to deliver it.</p>
+      </section>
+
+      <!-- Projects -->
+      <section class="panel cv" id="projects">
+        <h2>Projects</h2>
+        <p class="placeholder">Being collected — pet projects illustrating the same systems-thinking applied outside the workplace.</p>
+      </section>
+
+      <!-- Languages -->
+      <section class="panel cv" id="languages">
+        <h2>Languages</h2>
+        <p class="placeholder">Being collected.</p>
+      </section>
+    </div>
+
+    <footer class="window-footer">
+      <span>← <a href="/">back to riabets.com</a></span>
+      <span><a href="https://github.com/rialai/riabets-com">view source on GitHub</a></span>
+    </footer>
+  </div>
+</body>
+</html>
