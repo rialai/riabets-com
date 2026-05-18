@@ -682,7 +682,59 @@
           <div class="section-body">
             <article id="edu-nure" data-name="nure.txt" data-path="C:\Mykola Riabets\CV\education\nure.txt">
               <h3>Kharkiv National University of Radio Electronics (NURE)</h3>
-              <p class="role-meta">Bachelor's programme · Electronic Engineering — Information Security Systems · 2010–2012 (incomplete) · Kharkiv, Ukraine</p>
+              <p class="role-meta">
+                Faculty of Electronic Engineering · Department of Physical Foundations of Electronic Engineering<br>
+                Bachelor's programme — Electronic Devices and Systems (direction code 6.050802), specialisation: Technical Information Protection Systems<br>
+                Cohort ЭПС-10-1 · 2010–2012 (incomplete) · Kharkiv, Ukraine
+              </p>
+              <p style="margin-top:8px;"><strong>Coursework completed through Year 2:</strong></p>
+
+              <p style="margin:8px 0 2px;"><strong>Year 1 (2010–2011)</strong></p>
+              <p class="role-meta" style="margin:0;">Humanities &amp; social sciences</p>
+              <ul>
+                <li>History of Ukraine</li>
+                <li>Ukrainian Language for Professional Communication</li>
+                <li>English (Year 1)</li>
+                <li>Philosophy / Cultural Studies</li>
+                <li>Life Safety Fundamentals (Health &amp; Safety)</li>
+                <li>Physical Education</li>
+              </ul>
+              <p class="role-meta" style="margin:0;">Natural sciences &amp; general engineering</p>
+              <ul>
+                <li>Higher Mathematics — Year 1 (Linear Algebra, Calculus I)</li>
+                <li>Physics — Year 1 (Mechanics, Thermodynamics)</li>
+                <li>General and Inorganic Chemistry</li>
+                <li>Informatics and Computing</li>
+                <li>Programming — Year 1 (Pascal / C fundamentals)</li>
+                <li>Introduction to the Speciality</li>
+              </ul>
+
+              <p style="margin:10px 0 2px;"><strong>Year 2 (2011–2012)</strong></p>
+              <p class="role-meta" style="margin:0;">Natural sciences &amp; general engineering</p>
+              <ul>
+                <li>Higher Mathematics — Year 2 (Calculus II, Differential Equations)</li>
+                <li>Physics — Year 2 (Electromagnetism, Optics, Atomic Physics)</li>
+                <li>Probability Theory and Mathematical Statistics</li>
+                <li>Programming — Year 2 (C / C++, Algorithms and Data Structures)</li>
+                <li>Engineering and Computer Graphics (AutoCAD)</li>
+                <li>Applied Mechanics</li>
+                <li>English (Year 2)</li>
+              </ul>
+              <p class="role-meta" style="margin:0;">Professional cycle (specialty start)</p>
+              <ul>
+                <li>Theoretical Foundations of Electrical Engineering (ТОЕ)</li>
+                <li>Foundations of Circuit Theory</li>
+                <li>Electronics (general course)</li>
+                <li>Materials of Electronic Engineering</li>
+                <li>Foundations of Metrology and Measurement Techniques</li>
+                <li>Introduction to Technical Information Protection Systems</li>
+              </ul>
+              <p class="role-meta" style="margin:0;">Humanities</p>
+              <ul>
+                <li>Economic Theory</li>
+                <li>Sociology / Political Science</li>
+                <li>Physical Education</li>
+              </ul>
             </article>
             <article id="edu-collegium" data-name="collegium.txt" data-path="C:\Mykola Riabets\CV\education\collegium.txt">
               <h3>Solonytsivka Collegium</h3>
@@ -927,9 +979,28 @@
       function navigateTo(targetId) {
         var el = document.getElementById(targetId);
         if (!el) return;
-        setActive(targetId);
-        var contentPane = document.getElementById('contentPane');
-        if (contentPane) contentPane.scrollTop = 0;
+
+        // If target is inside a section but isn't a section itself, open the parent
+        var section = el.classList.contains('section') ? el : el.closest('.section');
+        if (!section) return;
+        setActive(section.id);
+
+        // If we clicked a child (article), override address/status/tree highlight
+        if (el !== section) {
+          if (el.dataset.path) addressInput.value = el.dataset.path;
+          if (el.dataset.name) statusSelected.textContent = el.dataset.name + ' selected';
+          document.querySelectorAll('.tree-item.active').forEach(function (n) {
+            n.classList.remove('active');
+          });
+          var treeEl = document.querySelector('.tree-item[data-target="' + targetId + '"]');
+          if (treeEl) treeEl.classList.add('active');
+          setTimeout(function () {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 30);
+        } else {
+          var contentPane = document.getElementById('contentPane');
+          if (contentPane) contentPane.scrollTop = 0;
+        }
       }
 
       function setActive(targetId) {
