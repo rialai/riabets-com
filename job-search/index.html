@@ -28,7 +28,15 @@
       box-shadow: 2px 2px 0 #000000;
       position: relative;
     }
-    .window.maximized { max-width: none; margin: -16px; min-height: calc(100vh - 0px); }
+    .window.maximized {
+      position: fixed;
+      inset: 0;
+      max-width: none;
+      margin: 0;
+      min-height: 100vh;
+      box-shadow: none;
+      z-index: 90;
+    }
     .window.minimized .menu-bar,
     .window.minimized .toolbar,
     .window.minimized .content,
@@ -158,9 +166,26 @@
       opacity: 0.5; cursor: not-allowed;
     }
     .tb-icon {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      font-size: 0;
+    }
+    /* Fallback for glyph-only toolbar icons (e.g. Run, CV-back arrow): keep them legible */
+    .tb-icon.glyph {
       font-size: 1.2rem;
       line-height: 1;
+      width: auto;
+      height: auto;
     }
+    /* Pixel-art Win-98 toolbar icons (data URIs, no external assets) */
+    .ico-refresh { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M8 3a5 5 0 1 1-4.7 6.7' fill='none' stroke='%23006400' stroke-width='1.6'/%3E%3Cpolygon points='8,1 8,5 12,3' fill='%23006400'/%3E%3C/svg%3E"); }
+    .ico-export  { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='3' y='12' width='10' height='2' fill='%23808080'/%3E%3Cpath d='M8 2v8' stroke='%23000080' stroke-width='1.6'/%3E%3Cpolygon points='8,11 4,7 12,7' fill='%23000080'/%3E%3C/svg%3E"); }
+    .ico-source  { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M5 4L2 8l3 4M11 4l3 4-3 4M9 4l-2 8' stroke='%23000080' stroke-width='1.4' fill='none'/%3E%3C/svg%3E"); }
+    .ico-bot     { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Ccircle cx='8' cy='8' r='5' fill='%23c0c0c0' stroke='%23000000'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23000000'/%3E%3Crect x='7' y='1' width='2' height='3' fill='%23c0c0c0' stroke='%23000000'/%3E%3Crect x='7' y='12' width='2' height='3' fill='%23c0c0c0' stroke='%23000000'/%3E%3Crect x='1' y='7' width='3' height='2' fill='%23c0c0c0' stroke='%23000000'/%3E%3Crect x='12' y='7' width='3' height='2' fill='%23c0c0c0' stroke='%23000000'/%3E%3C/svg%3E"); }
     .tb-sep {
       width: 1px;
       align-self: stretch;
@@ -207,7 +232,21 @@
       margin-bottom: 12px;
     }
     .notice a { color: #000080; }
-    .notice strong { display: block; margin-bottom: 4px; }
+    .notice strong { display: inline; margin-right: 4px; }
+    .notice-icon {
+      display: inline-block;
+      width: 16px; height: 16px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      vertical-align: -3px;
+      margin-right: 6px;
+    }
+    .placeholder {
+      color: #707070;
+      font-style: italic;
+      font-size: 0.88rem;
+    }
 
     /* Postings table */
     .postings {
@@ -429,19 +468,20 @@
     </div>
 
     <div class="toolbar">
-      <button class="tb-btn" data-action="refresh"><span class="tb-icon">⟳</span>Refresh</button>
-      <button class="tb-btn" disabled title="Bot scheduling not yet wired up"><span class="tb-icon">▶</span>Run now</button>
+      <button class="tb-btn" data-action="refresh"><span class="tb-icon ico-refresh"></span>Refresh</button>
+      <button class="tb-btn" disabled title="Bot scheduling not yet wired up"><span class="tb-icon glyph">▸</span>Run now</button>
       <div class="tb-sep"></div>
-      <button class="tb-btn" data-action="export"><span class="tb-icon">⤓</span>Export</button>
-      <button class="tb-btn" data-action="github"><span class="tb-icon">⌥</span>Source</button>
+      <button class="tb-btn" data-action="export"><span class="tb-icon ico-export"></span>Export</button>
+      <button class="tb-btn" data-action="github"><span class="tb-icon ico-source"></span>Source</button>
       <div class="tb-sep"></div>
-      <button class="tb-btn" data-action="back-cv"><span class="tb-icon">◂</span>CV</button>
+      <button class="tb-btn" data-action="back-cv"><span class="tb-icon glyph">◂</span>CV</button>
     </div>
 
     <div class="content">
       <!-- Notice -->
       <div class="notice">
-        <strong>🤖 This is a real bot, currently being built in public.</strong>
+        <span class="notice-icon ico-bot" aria-hidden="true"></span>
+        <strong>This is a real bot, currently being built in public.</strong>
         Source code lives at <a href="https://github.com/rialai/riabets-com" target="_blank" rel="noopener">github.com/rialai/riabets-com</a>
         (sister project to <a href="https://github.com/rialai/riabets-com/tree/main/old" target="_blank" rel="noopener">the rest of riabets.com</a>).
         The bot is in setup phase — scanning sources will start soon. This window will fill up as it runs.
@@ -497,7 +537,7 @@
       <!-- Activity log -->
       <section class="panel">
         <h2>Activity log</h2>
-        <p class="placeholder" style="color:#707070; font-style:italic; font-size:0.88rem;">
+        <p class="placeholder">
           Empty. Bot has not been scheduled yet. Once wired up, every run will append a line with timestamp, source, postings found and postings passed filter.
         </p>
       </section>
