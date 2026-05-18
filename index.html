@@ -272,12 +272,9 @@
     .tree .indent-1 { padding-left: 18px; }
     .tree .indent-2 { padding-left: 36px; }
 
-    /* Content sections */
-    .section {
-      margin-bottom: 18px;
-      scroll-margin-top: 8px;
-    }
-    .section:last-child { margin-bottom: 0; }
+    /* Content sections — Explorer "one file at a time" semantics */
+    .section { display: none; margin-bottom: 0; }
+    .section.active { display: block; }
     .section-header {
       display: flex;
       align-items: center;
@@ -487,7 +484,7 @@
       .status-bar, .pane.tree-pane { display: none; }
       .split { display: block; padding: 0; }
       .pane.content-pane { border: none; padding: 0; overflow: visible; }
-      .section { page-break-inside: avoid; }
+      .section { display: block !important; page-break-inside: avoid; }
     }
   </style>
 </head>
@@ -571,6 +568,9 @@
                 <div class="tree-item indent-1" data-target="header"><span class="ico">📇</span><span>card.vcf</span></div>
               </li>
               <li>
+                <div class="tree-item indent-1" data-target="readme"><span class="ico">📋</span><span>readme.txt</span></div>
+              </li>
+              <li>
                 <div class="tree-item indent-1" data-target="about"><span class="ico">📄</span><span>about.txt</span></div>
               </li>
               <li>
@@ -614,11 +614,14 @@
           <p class="meta" style="margin-top:6px;">Open to relocation across Ireland.</p>
         </div>
 
-        <div class="notice">
-          <strong>📋 Document assembled in public.</strong>
-          Last updated: <time datetime="2026-05-18">18 May 2026</time>.
-          The <a href="https://github.com/rialai/riabets-com/commits/main" target="_blank" rel="noopener">git history</a> is part of the document — each commit is an iteration.
-        </div>
+        <section class="section" id="readme" data-name="readme.txt" data-path="C:\Mykola Riabets\CV\readme.txt">
+          <div class="section-header"><span class="ico">📋</span><h2>readme.txt</h2></div>
+          <div class="section-body">
+            <p><strong>This document is being assembled in public.</strong></p>
+            <p>Last updated: <time datetime="2026-05-18">18 May 2026</time>. The <a href="https://github.com/rialai/riabets-com/commits/main" target="_blank" rel="noopener">git history</a> is part of the document — each commit is an iteration on how I think about my own work.</p>
+            <p>To navigate, click any file in the left pane, or use the <em>Go</em> menu.</p>
+          </div>
+        </section>
 
         <section class="section" id="about" data-name="about.txt" data-path="C:\Mykola Riabets\CV\about.txt">
           <div class="section-header"><span class="ico">📄</span><h2>About</h2></div>
@@ -924,11 +927,12 @@
       function navigateTo(targetId) {
         var el = document.getElementById(targetId);
         if (!el) return;
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        setActive(targetId, true);
+        setActive(targetId);
+        var contentPane = document.getElementById('contentPane');
+        if (contentPane) contentPane.scrollTop = 0;
       }
 
-      function setActive(targetId, fromClick) {
+      function setActive(targetId) {
         var el = document.getElementById(targetId);
         if (!el) return;
         var path = el.dataset.path || '';
@@ -936,6 +940,13 @@
         if (path) addressInput.value = path;
         statusSelected.textContent = name + ' selected';
 
+        // Show only the target section, hide the rest (Explorer semantics)
+        document.querySelectorAll('.section').forEach(function (s) {
+          s.classList.remove('active');
+        });
+        el.classList.add('active');
+
+        // Highlight in tree
         document.querySelectorAll('.tree-item.active').forEach(function (n) {
           n.classList.remove('active');
         });
@@ -943,25 +954,10 @@
         if (treeEl) treeEl.classList.add('active');
       }
 
-      // Track scroll position to highlight current section in tree (intersection observer)
-      var sections = document.querySelectorAll('.section, .cv-header.section');
-      var visible = new Map();
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) visible.set(entry.target.id, entry.intersectionRatio);
-          else visible.delete(entry.target.id);
-        });
-        // Pick the most-visible
-        var best = null, bestRatio = 0;
-        visible.forEach(function (ratio, id) {
-          if (ratio > bestRatio) { best = id; bestRatio = ratio; }
-        });
-        if (best) setActive(best, false);
-      }, {
-        root: document.getElementById('contentPane'),
-        threshold: [0.1, 0.5, 0.9]
-      });
-      sections.forEach(function (s) { observer.observe(s); });
+      var sections = document.querySelectorAll('.section');
+
+      // Default selection: open card.vcf (header) on load
+      navigateTo('header');
 
       // Address bar "Go" — try to find a section whose path matches
       document.getElementById('addressGo').addEventListener('click', function () {
