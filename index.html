@@ -509,6 +509,27 @@
     .dir-link:hover { background: #ece9d8; }
     .dir-listing .ico { width: 18px; text-align: center; }
     .dir-listing .role-meta { color: #555555; font-size: 0.82rem; }
+
+    /* .ini file rendering (Win-98 Notepad-style with light syntax colouring) */
+    .ini-file {
+      font-family: "Courier New", "Lucida Console", monospace;
+      background: #ffffff;
+      padding: 10px 12px;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: normal;
+      overflow-wrap: anywhere;
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      margin: 6px 0 0;
+    }
+    .ini-comment        { color: #008000; }
+    .ini-comment-inline { color: #808080; }
+    .ini-section        { color: #000080; font-weight: 700; }
+    .ini-key            { color: #000000; }
     a { color: #000080; }
 
     /* Header card (inside content pane) */
@@ -1002,9 +1023,68 @@
         </section>
 
         <section class="section" id="skills" data-name="skills.ini" data-path="C:\Mykola Riabets\CV\skills.ini">
-          <div class="section-header"><span class="ico">🔧</span><h2>Skills</h2></div>
+          <div class="section-header"><span class="ico">🔧</span><h2>skills.ini</h2></div>
           <div class="section-body">
-            <p class="placeholder">Being collected — covering process analysis, business automation, data wrangling and the technical surface used to deliver it.</p>
+            <p class="role-meta">Skill manifest, work in progress. Drafted from active projects and verified background — being expanded as the CV interview continues.</p>
+<pre class="ini-file"><span class="ini-comment">; Mykola Riabets — skill configuration</span>
+<span class="ini-comment">; Last updated: 2026-05-18</span>
+<span class="ini-comment">; Loaded by: riabets.com  ::  JobSearch.exe</span>
+
+<span class="ini-section">[BusinessProcess]</span>
+<span class="ini-key">ProcessMapping</span>           = field-to-system data flow, dysfunction analysis
+<span class="ini-key">MasterDataQuality</span>        = addressing / geocoding mismatch awareness, single source of truth thinking
+<span class="ini-key">WarehouseManagement</span>      = configured an SME warehouse end-to-end (layout, slotting, picking)
+<span class="ini-key">OrderManagement</span>          = multi-marketplace listing automation, EDI-style integration patterns
+<span class="ini-key">DemandPlanning</span>           = market-demand-driven automated procurement
+<span class="ini-key">CashFlowForecasting</span>      = co-built treasury / cash-gap model with a SAP consultant
+<span class="ini-key">SolutionArchitecture</span>     = decomposes any business task as a network of ERP-style nodes
+
+<span class="ini-section">[Programming]</span>
+<span class="ini-key">Python</span>                  = bot building, scraping, automation, scripting
+<span class="ini-key">JavaScript</span>              = vanilla JS, DOM, Pointer Events, no framework dependencies
+<span class="ini-key">HTML_CSS</span>                = retro-faithful UI, responsive, custom chrome over native
+<span class="ini-key">SQL_SQLite</span>              = lightweight persistence, dedup, run-state tracking
+<span class="ini-key">Bash</span>                    = CLI orchestration, scheduling glue
+<span class="ini-key">C_CPlusPlus_Pascal</span>      = university foundations (NURE, 2010-2012)
+
+<span class="ini-section">[BrowserAutomation]</span>
+<span class="ini-key">Playwright</span>              = CDP-driven, isolated Chrome profiles, dedicated ports
+<span class="ini-key">DOM_Scraping</span>            = CSS selectors, XPath when needed
+<span class="ini-key">AntiBotPatterns</span>         = human pacing, key-by-key typing, pre-click mouse arc
+<span class="ini-key">CloudflareDetection</span>     = DOM + network signal heuristics
+<span class="ini-key">RateGovernance</span>          = daily caps, quiet hours, exponential supervisor backoff
+
+<span class="ini-section">[AI_LLM]</span>
+<span class="ini-key">Anthropic_API</span>           = Claude for classification, scoring, drafting cover letters
+<span class="ini-key">PromptDesign</span>            = structured outputs, reliable parsing, task framing
+
+<span class="ini-section">[DevOps_Hosting]</span>
+<span class="ini-key">Git_GitHub</span>              = daily workflow, public commit history as documentation
+<span class="ini-key">GitHubPages_Jekyll</span>      = static hosting, custom-domain CNAME
+<span class="ini-key">macOS_launchd</span>           = scheduled jobs (in plan)
+<span class="ini-key">TelegramBotAPI</span>          = approval-loop messaging (in plan)
+
+<span class="ini-section">[Foundations]</span>
+<span class="ini-comment">; from NURE 2010-2012 coursework</span>
+<span class="ini-key">Mathematics</span>             = Calculus I-II, Linear Algebra, Differential Equations
+<span class="ini-key">ProbabilityStatistics</span>   = math-stat fundamentals
+<span class="ini-key">CircuitTheory_TOE</span>       = theoretical foundations of electrical engineering
+<span class="ini-key">Electronics</span>             = general electronics
+<span class="ini-key">Metrology</span>               = measurement techniques
+<span class="ini-key">InformationSecurity</span>     = introduction to technical info protection systems
+
+<span class="ini-section">[Languages]</span>
+<span class="ini-key">Ukrainian</span>               = native
+<span class="ini-key">Russian</span>                 = native
+<span class="ini-key">English</span>                 = B2 estimated — full working proficiency <span class="ini-comment-inline">; school SFE 9/12 + university English Y1-Y2</span>
+
+<span class="ini-section">[Soft]</span>
+<span class="ini-key">SystemsThinking</span>         = sees a task and immediately models the surrounding process graph
+<span class="ini-key">SelfDirectedLearning</span>    = 10+ years of digital-market work, self-taught across the stack
+<span class="ini-key">DocumentationDiscipline</span>  = "the commit log is the document"
+<span class="ini-key">BuildInPublic</span>           = this site and JobSearch.exe are the demo
+<span class="ini-key">CautiousAutomation</span>      = slow, human-looking, reputation-aware (after the daft-bot precedent)
+</pre>
           </div>
         </section>
 
@@ -1039,11 +1119,6 @@
       <div class="status-cell"><span id="clock">--:--:--</span></div>
     </div>
 
-    <footer class="window-footer">
-      <span><a href="/job-search/">▶ Open bot dashboard</a></span>
-      <span><a href="https://github.com/rialai/riabets-com">view source on GitHub</a></span>
-      <span><a href="/old/">previous landing</a></span>
-    </footer>
   </div>
 
   <!-- Modal -->
