@@ -199,56 +199,87 @@
       margin: 2px 4px;
     }
 
-    .content {
-      padding: 12px;
-      background: #c0c0c0;
+    /* Content-row: a flex row holding the scrollable .content + the custom
+       Win-98 vertical scrollbar widget. Matches the main page approach so the
+       chrome looks the same on macOS (auto-hidden overlay scrollbars) and on
+       iPadOS Safari (which ignores ::-webkit-scrollbar entirely). */
+    .content-row {
       flex: 1 1 auto;
       min-height: 0;
+      display: flex;
+      background: #c0c0c0;
+    }
+    .content {
+      flex: 1 1 auto;
+      min-width: 0;
+      padding: 12px;
+      background: #c0c0c0;
       overflow-y: auto;
       overflow-x: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
     }
+    .content::-webkit-scrollbar { display: none; width: 0; height: 0; }
 
-    /* Win-98-styled native scrollbar for .content (Webkit/Blink browsers).
-       iPadOS Safari ignores ::-webkit-scrollbar and shows its own thin overlay;
-       that's an acceptable trade-off here — the bot dashboard is desktop-first. */
-    .content::-webkit-scrollbar { width: 16px; height: 16px; }
-    .content::-webkit-scrollbar-track {
+    /* Custom Win-98 vertical scrollbar */
+    .wscroll-vbar {
+      width: 16px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background: #c0c0c0;
+      border-left: 1px solid #7f7f7f;
+      user-select: none;
+      touch-action: none;
+    }
+    .wscroll-vbar.hidden { display: none; }
+    .wscroll-btn {
+      width: 16px; height: 16px;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.62rem;
+      line-height: 1;
+      color: #000000;
+      font-family: inherit;
+      flex-shrink: 0;
+    }
+    .wscroll-btn:active {
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+    }
+    .wscroll-track {
+      flex: 1;
+      position: relative;
       background-color: #c0c0c0;
       background-image:
         linear-gradient(45deg, #b0b0b0 25%, transparent 25%, transparent 75%, #b0b0b0 75%, #b0b0b0),
         linear-gradient(45deg, #b0b0b0 25%, transparent 25%, transparent 75%, #b0b0b0 75%, #b0b0b0);
       background-position: 0 0, 1px 1px;
       background-size: 2px 2px;
+      cursor: pointer;
+      min-height: 16px;
     }
-    .content::-webkit-scrollbar-thumb {
+    .wscroll-thumb {
+      position: absolute;
+      left: 0; right: 0;
       background: #c0c0c0;
       border-top: 2px solid #ffffff;
       border-left: 2px solid #ffffff;
       border-right: 2px solid #3f3f3f;
       border-bottom: 2px solid #3f3f3f;
+      min-height: 24px;
+      cursor: grab;
+      touch-action: none;
     }
-    .content::-webkit-scrollbar-button {
-      background: #c0c0c0;
-      border-top: 2px solid #ffffff;
-      border-left: 2px solid #ffffff;
-      border-right: 2px solid #3f3f3f;
-      border-bottom: 2px solid #3f3f3f;
-      display: block;
-      height: 16px; width: 16px;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-    .content::-webkit-scrollbar-button:vertical:decrement {
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><polygon points='4,2 7,6 1,6' fill='black'/></svg>");
-    }
-    .content::-webkit-scrollbar-button:vertical:increment {
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><polygon points='1,2 7,2 4,6' fill='black'/></svg>");
-    }
-    .content::-webkit-scrollbar-button:single-button { display: block; }
-    .content::-webkit-scrollbar-button:vertical:start:increment,
-    .content::-webkit-scrollbar-button:vertical:end:decrement { display: none; }
-    .content::-webkit-scrollbar-corner { background: #c0c0c0; }
-    .content { scrollbar-width: auto; scrollbar-color: #c0c0c0 #a0a0a0; }
+    .wscroll-thumb:active { cursor: grabbing; }
 
     .panel {
       background: #ffffff;
@@ -530,7 +561,8 @@
       <button class="tb-btn" data-action="back-cv"><span class="tb-icon glyph">◂</span>CV</button>
     </div>
 
-    <div class="content">
+    <div class="content-row">
+    <div class="content" id="contentArea">
       <!-- Notice -->
       <div class="notice">
         <span class="notice-icon ico-bot" aria-hidden="true"></span>
@@ -594,6 +626,14 @@
           Empty. Bot has not been scheduled yet. Once wired up, every run will append a line with timestamp, source, postings found and postings passed filter.
         </p>
       </section>
+    </div>
+    <div class="wscroll-vbar" id="wscrollV" aria-hidden="true">
+      <button class="wscroll-btn" data-dir="up" type="button" aria-label="Scroll up">▲</button>
+      <div class="wscroll-track" id="wscrollTrack">
+        <div class="wscroll-thumb" id="wscrollThumb"></div>
+      </div>
+      <button class="wscroll-btn" data-dir="down" type="button" aria-label="Scroll down">▼</button>
+    </div>
     </div>
 
     <div class="status-bar">
@@ -784,6 +824,103 @@
         beacon.src = url;
       }
       hitCounter('https://hits.sh/riabets.com-job-search.svg?label=jobsearch%20visits&color=8c7ae6');
+
+      // === Custom Win-98 scrollbar for .content (matches main CV page) ===
+      var inner = document.getElementById('contentArea');
+      var bar = document.getElementById('wscrollV');
+      var track = document.getElementById('wscrollTrack');
+      var thumb = document.getElementById('wscrollThumb');
+
+      function updateScrollbar() {
+        if (!inner || !bar || !track || !thumb) return;
+        var ratio = inner.clientHeight / inner.scrollHeight;
+        if (!isFinite(ratio) || ratio >= 1) {
+          bar.classList.add('hidden');
+          return;
+        }
+        bar.classList.remove('hidden');
+        var trackH = track.clientHeight;
+        var thumbH = Math.max(24, Math.floor(trackH * ratio));
+        thumb.style.height = thumbH + 'px';
+        var maxScroll = inner.scrollHeight - inner.clientHeight;
+        var sRatio = maxScroll > 0 ? inner.scrollTop / maxScroll : 0;
+        thumb.style.top = Math.floor((trackH - thumbH) * sRatio) + 'px';
+      }
+
+      if (inner) {
+        inner.addEventListener('scroll', updateScrollbar);
+        window.addEventListener('resize', updateScrollbar);
+        if (window.ResizeObserver) new ResizeObserver(updateScrollbar).observe(inner);
+        new MutationObserver(updateScrollbar).observe(inner, { childList: true, subtree: true, attributes: true });
+
+        // Buttons with auto-repeat while held
+        document.querySelectorAll('.wscroll-btn').forEach(function (b) {
+          var dir = b.dataset.dir === 'down' ? 1 : -1;
+          var step = 32;
+          var intervalId = null, timeoutId = null;
+          function tickOnce() { inner.scrollTop += dir * step; }
+          b.addEventListener('pointerdown', function (e) {
+            tickOnce();
+            timeoutId = setTimeout(function () {
+              intervalId = setInterval(tickOnce, 50);
+            }, 300);
+            e.preventDefault();
+          });
+          var stop = function () {
+            if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+            if (intervalId) { clearInterval(intervalId); intervalId = null; }
+          };
+          b.addEventListener('pointerup', stop);
+          b.addEventListener('pointerleave', stop);
+          b.addEventListener('pointercancel', stop);
+        });
+
+        // Thumb drag
+        var dragInfo = null;
+        thumb.addEventListener('pointerdown', function (e) {
+          try { thumb.setPointerCapture(e.pointerId); } catch (_) {}
+          var trackRect = track.getBoundingClientRect();
+          var thumbRect = thumb.getBoundingClientRect();
+          dragInfo = {
+            offsetY: e.clientY - thumbRect.top,
+            trackTop: trackRect.top,
+            trackH: track.clientHeight
+          };
+          e.preventDefault();
+          e.stopPropagation();
+        });
+        thumb.addEventListener('pointermove', function (e) {
+          if (!dragInfo) return;
+          var thumbH = thumb.clientHeight;
+          var maxTop = dragInfo.trackH - thumbH;
+          var rawTop = e.clientY - dragInfo.trackTop - dragInfo.offsetY;
+          var top = Math.max(0, Math.min(maxTop, rawTop));
+          var ratio = maxTop > 0 ? top / maxTop : 0;
+          var maxScroll = inner.scrollHeight - inner.clientHeight;
+          inner.scrollTop = ratio * maxScroll;
+        });
+        function endDrag(e) {
+          if (dragInfo && e && e.pointerId !== undefined) {
+            try { thumb.releasePointerCapture(e.pointerId); } catch (_) {}
+          }
+          dragInfo = null;
+        }
+        thumb.addEventListener('pointerup', endDrag);
+        thumb.addEventListener('pointercancel', endDrag);
+
+        // Track click outside thumb = page up/down
+        track.addEventListener('pointerdown', function (e) {
+          if (e.target !== track) return;
+          var rect = track.getBoundingClientRect();
+          var clickY = e.clientY - rect.top;
+          var thumbTop = thumb.offsetTop;
+          var thumbBottom = thumbTop + thumb.clientHeight;
+          if (clickY < thumbTop) inner.scrollTop -= inner.clientHeight * 0.9;
+          else if (clickY > thumbBottom) inner.scrollTop += inner.clientHeight * 0.9;
+        });
+
+        updateScrollbar();
+      }
     })();
   </script>
 </body>
