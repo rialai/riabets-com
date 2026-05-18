@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobSearch.exe — Mykola Riabets</title>
+  <meta name="description" content="An autonomous job-discovery bot running on Mykola Riabets's behalf. Status and recent postings.">
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #008080;
+      color: #000000;
+      font-family: Tahoma, "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
+      image-rendering: pixelated;
+    }
+    body { padding: 16px; box-sizing: border-box; }
+
+    .window {
+      max-width: 980px;
+      margin: 0 auto;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      box-shadow: 2px 2px 0 #000000;
+      position: relative;
+    }
+    .window.maximized { max-width: none; margin: -16px; min-height: calc(100vh - 0px); }
+    .window.minimized .menu-bar,
+    .window.minimized .toolbar,
+    .window.minimized .content,
+    .window.minimized .status-bar,
+    .window.minimized .window-footer { display: none; }
+
+    .title-bar {
+      background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+      color: #ffffff;
+      padding: 3px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.92rem;
+      user-select: none;
+    }
+    .title-bar.error { background: linear-gradient(90deg, #7a0000 0%, #c04040 100%); }
+
+    .title-bar-buttons { display: inline-flex; gap: 2px; }
+    .title-bar-button {
+      width: 20px; height: 18px;
+      background: #c0c0c0; color: #000000;
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-right: 1px solid #3f3f3f;
+      border-bottom: 1px solid #3f3f3f;
+      font-family: inherit; font-size: 0.72rem; line-height: 1;
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; padding: 0;
+    }
+    .title-bar-button:hover { background: #d4d0c8; }
+    .title-bar-button:active {
+      border-top: 1px solid #3f3f3f;
+      border-left: 1px solid #3f3f3f;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+      padding: 1px 0 0 1px;
+    }
+
+    .menu-bar {
+      background: #c0c0c0;
+      padding: 2px 6px;
+      border-bottom: 1px solid #7f7f7f;
+      font-size: 0.86rem;
+      position: relative;
+      user-select: none;
+    }
+    .menu-bar > .menu-item {
+      display: inline-block;
+      padding: 2px 8px;
+      margin-right: 2px;
+      cursor: pointer;
+      position: relative;
+    }
+    .menu-bar > .menu-item:hover,
+    .menu-bar > .menu-item.open {
+      background: #000080; color: #ffffff;
+    }
+    .menu-bar > .menu-item u { text-decoration: underline; }
+
+    .dropdown {
+      display: none;
+      position: absolute; top: 100%; left: 0;
+      min-width: 220px;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+      padding: 2px;
+      z-index: 50;
+      font-size: 0.88rem;
+    }
+    .menu-bar > .menu-item.open .dropdown { display: block; }
+    .dropdown button {
+      display: block; width: 100%; text-align: left;
+      background: transparent; border: none;
+      padding: 4px 12px;
+      font-family: inherit; font-size: inherit;
+      color: #000000; cursor: pointer;
+    }
+    .dropdown button:hover { background: #000080; color: #ffffff; }
+    .dropdown hr {
+      margin: 3px 1px; border: 0;
+      border-top: 1px solid #7f7f7f;
+      border-bottom: 1px solid #ffffff;
+    }
+
+    /* Toolbar */
+    .toolbar {
+      background: #c0c0c0;
+      padding: 4px 6px;
+      border-bottom: 1px solid #7f7f7f;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+    .tb-btn {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+      min-width: 50px;
+      padding: 4px 6px 2px;
+      background: #c0c0c0;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.74rem;
+      color: #000000;
+    }
+    .tb-btn:hover {
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-right: 1px solid #3f3f3f;
+      border-bottom: 1px solid #3f3f3f;
+    }
+    .tb-btn:active {
+      border-top: 1px solid #3f3f3f;
+      border-left: 1px solid #3f3f3f;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+    }
+    .tb-btn:disabled {
+      opacity: 0.5; cursor: not-allowed;
+    }
+    .tb-icon {
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .tb-sep {
+      width: 1px;
+      align-self: stretch;
+      background: #7f7f7f;
+      border-right: 1px solid #ffffff;
+      margin: 2px 4px;
+    }
+
+    .content {
+      padding: 12px;
+      background: #c0c0c0;
+    }
+
+    .panel {
+      background: #ffffff;
+      border-top: 2px solid #7f7f7f;
+      border-left: 2px solid #7f7f7f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .panel:last-child { margin-bottom: 0; }
+
+    .panel h2 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #7f7f7f;
+    }
+    .panel p {
+      margin: 0 0 6px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    .panel p:last-child { margin-bottom: 0; }
+    .panel a { color: #000080; }
+
+    .notice {
+      background: #ffffcc;
+      border: 1px dashed #808000;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+    .notice a { color: #000080; }
+    .notice strong { display: block; margin-bottom: 4px; }
+
+    /* Postings table */
+    .postings {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+    .postings th, .postings td {
+      padding: 5px 8px;
+      text-align: left;
+      border-bottom: 1px solid #c0c0c0;
+    }
+    .postings thead th {
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      font-weight: 700;
+    }
+    .postings tbody tr:hover { background: #ffffe0; }
+    .postings .empty {
+      text-align: center;
+      padding: 30px 12px;
+      color: #707070;
+      font-style: italic;
+    }
+
+    /* About bot config grid */
+    .config-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 4px 14px;
+      font-size: 0.88rem;
+    }
+    .config-grid dt {
+      font-weight: 700;
+      color: #333333;
+    }
+    .config-grid dd {
+      margin: 0;
+      font-family: "Courier New", monospace;
+    }
+
+    /* Status bar (Win-98 bottom) */
+    .status-bar {
+      background: #c0c0c0;
+      padding: 3px 4px;
+      border-top: 1px solid #ffffff;
+      display: flex;
+      gap: 2px;
+      font-size: 0.78rem;
+      align-items: stretch;
+    }
+    .status-cell {
+      padding: 2px 8px;
+      border-top: 1px solid #7f7f7f;
+      border-left: 1px solid #7f7f7f;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+      background: #c0c0c0;
+      flex: 0 0 auto;
+    }
+    .status-cell.grow { flex: 1 1 auto; }
+    .led {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+      background: #444444;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.4);
+    }
+    .led.idle    { background: #b4b400; }
+    .led.running { background: #00aa00; animation: blink 1s steps(2, end) infinite; }
+    .led.error   { background: #cc0000; }
+    @keyframes blink {
+      50% { opacity: 0.3; }
+    }
+
+    footer.window-footer {
+      background: #c0c0c0;
+      padding: 6px 12px;
+      border-top: 1px solid #7f7f7f;
+      font-size: 0.82rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    footer.window-footer a { color: #000080; }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0);
+      z-index: 100;
+      align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      max-width: 460px; width: 100%;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.6);
+    }
+    .modal .title-bar { padding: 3px 6px; }
+    .modal-body {
+      padding: 16px 14px 12px;
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 0.92rem; line-height: 1.5;
+    }
+    .modal-icon {
+      width: 32px; height: 32px; flex-shrink: 0;
+      border: 2px solid #000000;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.3rem;
+    }
+    .modal-icon.info {
+      background: #ffffff; color: #000080;
+      font-style: italic; font-family: "Times New Roman", serif;
+    }
+    .modal-icon.warning { background: #ffff00; color: #000000; }
+    .modal-icon.error {
+      background: #ffffff; color: #cc0000; border-color: #cc0000;
+    }
+    .modal-error-code {
+      margin-top: 10px;
+      font-family: "Courier New", monospace;
+      font-size: 0.78rem;
+      color: #555555;
+    }
+    .modal-buttons {
+      padding: 4px 14px 14px;
+      display: flex; gap: 6px; justify-content: flex-end;
+    }
+    .modal-button {
+      min-width: 84px; padding: 4px 12px;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      font-family: inherit; font-size: 0.88rem;
+      cursor: pointer;
+    }
+    .modal-button:active {
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+    }
+
+    .toast {
+      position: fixed; bottom: 16px; left: 50%;
+      transform: translateX(-50%);
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      padding: 6px 14px;
+      font-size: 0.88rem;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 200; pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+
+    @media (max-width: 640px) {
+      body { padding: 8px; }
+      .content { padding: 10px; }
+      .panel { padding: 12px; }
+      .toolbar { overflow-x: auto; }
+      .config-grid { grid-template-columns: 1fr; gap: 2px 0; }
+      .config-grid dd { margin-bottom: 6px; }
+      .status-bar { flex-wrap: wrap; }
+      .status-cell { flex: 1 1 auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="window" id="mainWindow">
+    <div class="title-bar">
+      <span>JobSearch.exe — Bot dashboard</span>
+      <span class="title-bar-buttons">
+        <button class="title-bar-button" id="btnMin" type="button" title="Minimize" aria-label="Minimize">_</button>
+        <button class="title-bar-button" id="btnMax" type="button" title="Maximize" aria-label="Maximize">□</button>
+        <button class="title-bar-button" id="btnClose" type="button" title="Close" aria-label="Close">×</button>
+      </span>
+    </div>
+
+    <div class="menu-bar" id="menuBar">
+      <span class="menu-item" data-menu="file"><u>F</u>ile
+        <div class="dropdown">
+          <button data-action="refresh">Refresh data</button>
+          <button data-action="export">Export postings as CSV…</button>
+          <hr>
+          <button data-action="close">Close</button>
+        </div>
+      </span><span class="menu-item" data-menu="view"><u>V</u>iew
+        <div class="dropdown">
+          <button data-action="back-cv">← Back to CV</button>
+          <button data-action="github">View bot source on GitHub</button>
+        </div>
+      </span><span class="menu-item" data-menu="help"><u>H</u>elp
+        <div class="dropdown">
+          <button data-action="about">About this bot</button>
+          <button data-action="how">How it works</button>
+        </div>
+      </span>
+    </div>
+
+    <div class="toolbar">
+      <button class="tb-btn" data-action="refresh"><span class="tb-icon">⟳</span>Refresh</button>
+      <button class="tb-btn" disabled title="Bot scheduling not yet wired up"><span class="tb-icon">▶</span>Run now</button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn" data-action="export"><span class="tb-icon">⤓</span>Export</button>
+      <button class="tb-btn" data-action="github"><span class="tb-icon">⌥</span>Source</button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn" data-action="back-cv"><span class="tb-icon">◂</span>CV</button>
+    </div>
+
+    <div class="content">
+      <!-- Notice -->
+      <div class="notice">
+        <strong>🤖 This is a real bot, currently being built in public.</strong>
+        Source code lives at <a href="https://github.com/rialai/riabets-com" target="_blank" rel="noopener">github.com/rialai/riabets-com</a>
+        (sister project to <a href="https://github.com/rialai/riabets-com/tree/main/old" target="_blank" rel="noopener">the rest of riabets.com</a>).
+        The bot is in setup phase — scanning sources will start soon. This window will fill up as it runs.
+      </div>
+
+      <!-- Recent postings -->
+      <section class="panel">
+        <h2>Recent postings</h2>
+        <table class="postings">
+          <thead>
+            <tr>
+              <th style="width:90px;">Found</th>
+              <th>Title</th>
+              <th>Company</th>
+              <th style="width:110px;">Location</th>
+              <th style="width:60px;">Score</th>
+              <th style="width:90px;">Status</th>
+            </tr>
+          </thead>
+          <tbody id="postingsBody">
+            <tr><td class="empty" colspan="6">Inbox is empty — bot has not crawled any source yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Configuration -->
+      <section class="panel">
+        <h2>Configuration</h2>
+        <dl class="config-grid">
+          <dt>Target roles</dt>
+          <dd>Junior ERP Functional Consultant · Business Analyst · Process Automation Consultant · Implementation Analyst · Pre-sales Associate</dd>
+
+          <dt>Target locations</dt>
+          <dd>Dublin · Ireland-wide (open to relocation)</dd>
+
+          <dt>Right-to-work filter</dt>
+          <dd>Stamp 4 / EU-EEA — sponsorship not required</dd>
+
+          <dt>Sources (planned)</dt>
+          <dd>IrishJobs.ie · Jobs.ie · Indeed.ie · vendor partners (Storm Technology, Sysco, Annata) · Big 4 careers · Workday EMEA</dd>
+
+          <dt>Sources (excluded)</dt>
+          <dd>LinkedIn — too bot-hostile, manual only</dd>
+
+          <dt>Mode</dt>
+          <dd>discover &amp; draft (cover letter generated, sent for approval via Telegram — never auto-applied)</dd>
+
+          <dt>Cadence</dt>
+          <dd>daily morning digest (TBD)</dd>
+        </dl>
+      </section>
+
+      <!-- Activity log -->
+      <section class="panel">
+        <h2>Activity log</h2>
+        <p class="placeholder" style="color:#707070; font-style:italic; font-size:0.88rem;">
+          Empty. Bot has not been scheduled yet. Once wired up, every run will append a line with timestamp, source, postings found and postings passed filter.
+        </p>
+      </section>
+    </div>
+
+    <div class="status-bar">
+      <div class="status-cell"><span class="led idle" id="statusLed"></span><span id="statusText">Idle — setup phase</span></div>
+      <div class="status-cell">Last run: <span id="lastRun">never</span></div>
+      <div class="status-cell">Next run: <span id="nextRun">unscheduled</span></div>
+      <div class="status-cell">Postings: <span id="postingsCount">0</span></div>
+      <div class="status-cell">Drafts: <span id="draftsCount">0</span></div>
+      <div class="status-cell grow"></div>
+      <div class="status-cell"><span id="clock">--:--:--</span></div>
+    </div>
+
+    <footer class="window-footer">
+      <span>← <a href="/">back to riabets.com (CV)</a></span>
+      <span><a href="https://github.com/rialai/riabets-com">view source on GitHub</a></span>
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="title-bar" id="modalTitleBar">
+        <span id="modalTitle">Notice</span>
+        <span class="title-bar-buttons">
+          <button class="title-bar-button" data-modal-close type="button" aria-label="Close">×</button>
+        </span>
+      </div>
+      <div class="modal-body">
+        <div class="modal-icon info" id="modalIcon">i</div>
+        <div>
+          <div id="modalText">Message goes here.</div>
+          <div class="modal-error-code" id="modalErrorCode" style="display:none;"></div>
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-button" data-modal-close type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      var mainWindow = document.getElementById('mainWindow');
+      var modal = document.getElementById('modalBackdrop');
+      var modalTitle = document.getElementById('modalTitle');
+      var modalTitleBar = document.getElementById('modalTitleBar');
+      var modalText = document.getElementById('modalText');
+      var modalIcon = document.getElementById('modalIcon');
+      var modalErrorCode = document.getElementById('modalErrorCode');
+      var toast = document.getElementById('toast');
+      var toastTimer = null;
+
+      function showModal(title, text, opts) {
+        opts = opts || {};
+        var type = opts.type || 'info';
+        modalTitle.textContent = title;
+        modalText.innerHTML = text;
+        modalIcon.className = 'modal-icon ' + type;
+        modalIcon.textContent = type === 'error' ? '✕' : type === 'warning' ? '!' : 'i';
+        if (type === 'error') modalTitleBar.classList.add('error');
+        else modalTitleBar.classList.remove('error');
+        if (opts.errorCode) {
+          modalErrorCode.textContent = opts.errorCode;
+          modalErrorCode.style.display = '';
+        } else {
+          modalErrorCode.style.display = 'none';
+        }
+        modal.classList.add('open');
+      }
+      function closeModal() { modal.classList.remove('open'); }
+      function showToast(text) {
+        toast.textContent = text;
+        toast.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1800);
+      }
+
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal || e.target.matches('[data-modal-close]')) closeModal();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+      });
+
+      function showAccessDenied() {
+        showModal(
+          'Access denied',
+          'Unable to terminate process <strong>JobSearch.exe</strong>.<br><br>' +
+          'This is a protected system process. Only an Administrator account may end this task.<br><br>' +
+          'If you need to reach the process owner, <a href="mailto:nikolai@riabets.com">email Mykola</a>.',
+          { type: 'error', errorCode: 'Error 0x00000005 — ERROR_ACCESS_DENIED' }
+        );
+      }
+
+      document.getElementById('btnClose').addEventListener('click', showAccessDenied);
+      document.getElementById('btnMax').addEventListener('click', function () {
+        mainWindow.classList.toggle('maximized');
+      });
+      document.getElementById('btnMin').addEventListener('click', function () {
+        mainWindow.classList.toggle('minimized');
+      });
+
+      // Menu
+      var menuBar = document.getElementById('menuBar');
+      menuBar.addEventListener('click', function (e) {
+        var item = e.target.closest('.menu-item');
+        if (item && !e.target.closest('.dropdown')) {
+          var wasOpen = item.classList.contains('open');
+          closeAllMenus();
+          if (!wasOpen) item.classList.add('open');
+          e.stopPropagation();
+        }
+      });
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.menu-bar')) closeAllMenus();
+      });
+      function closeAllMenus() {
+        var open = document.querySelectorAll('.menu-item.open');
+        for (var i = 0; i < open.length; i++) open[i].classList.remove('open');
+      }
+
+      // Action delegation (menu items + toolbar)
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        var action = btn.dataset.action;
+        closeAllMenus();
+        handleAction(action);
+      });
+
+      function handleAction(action) {
+        switch (action) {
+          case 'refresh':
+            showToast('No data source connected yet');
+            break;
+          case 'export':
+            showModal(
+              'Nothing to export',
+              'There are no postings in the inbox yet. Run the bot first.',
+              { type: 'warning' }
+            );
+            break;
+          case 'close':
+            showAccessDenied();
+            break;
+          case 'back-cv':
+            window.location.href = '/';
+            break;
+          case 'github':
+            window.open('https://github.com/rialai/riabets-com', '_blank', 'noopener');
+            break;
+          case 'about':
+            showModal(
+              'About JobSearch.exe',
+              'JobSearch.exe is an autonomous bot that monitors Irish job boards and company career pages for roles matching the configuration shown on this page.<br><br>' +
+              'It does NOT auto-apply. It drafts a personalised cover letter for each high-scoring posting and forwards it for human approval via Telegram. Sending is always manual.'
+            );
+            break;
+          case 'how':
+            showModal(
+              'How it works',
+              '<strong>1. Crawl</strong> — visits each configured source, collects new postings.<br>' +
+              '<strong>2. Classify</strong> — Claude scores each posting 0–10 on relevance, flags red flags (e.g. "5+ years SAP required").<br>' +
+              '<strong>3. Draft</strong> — for high-scoring postings, drafts a cover letter that maps Mykola’s real experience to the job description.<br>' +
+              '<strong>4. Forward</strong> — sends a Telegram message with summary, draft and approve/skip buttons.<br>' +
+              '<strong>5. Track</strong> — once a posting is approved and sent, status moves to "applied" and is tracked through to outcome.'
+            );
+            break;
+        }
+      }
+
+      // Live clock
+      var clockEl = document.getElementById('clock');
+      function tick() {
+        var d = new Date();
+        var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+        clockEl.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+      }
+      tick();
+      setInterval(tick, 1000);
+
+      // Visit tracking
+      function hitCounter(url) {
+        var beacon = new Image();
+        beacon.referrerPolicy = 'no-referrer';
+        beacon.src = url;
+      }
+      hitCounter('https://hits.sh/riabets.com-job-search.svg?label=jobsearch%20visits&color=8c7ae6');
+    })();
+  </script>
+</body>
+</html>
