@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>riabets.com</title>
+  <meta name="description" content="Временная страница riabets.com">
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #008080;
+      color: #000000;
+      font-family: Tahoma, "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
+      image-rendering: pixelated;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .retro-card {
+      width: min(860px, 100%);
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      box-shadow: 2px 2px 0 #000000;
+    }
+
+    .content {
+      padding: 18px;
+      background: #c0c0c0;
+      text-align: center;
+    }
+
+    .content-panel {
+      background: #ffffff;
+      border-top: 2px solid #7f7f7f;
+      border-left: 2px solid #7f7f7f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      padding: 20px 14px 18px;
+    }
+
+    main {
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 18px;
+      font-size: clamp(1.04rem, 2.8vw, 1.55rem);
+      line-height: 1.38;
+      font-weight: 700;
+    }
+
+    p {
+      margin: 0;
+      font-size: clamp(0.92rem, 2.05vw, 1.07rem);
+      line-height: 1.45;
+    }
+
+    .lang-btn {
+      font-family: inherit;
+      font-size: clamp(1.1rem, 4.2vw, 2rem);
+      font-weight: 700;
+      background: #c0c0c0;
+      color: #000000;
+      min-width: min(460px, 88vw);
+      min-height: 74px;
+      padding: 14px 28px;
+      margin: 0 auto 18px;
+      cursor: pointer;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.01em;
+      text-transform: lowercase;
+      box-shadow: 1px 1px 0 #000000;
+    }
+
+    .lang-btn:hover {
+      background: #d4d0c8;
+    }
+
+    .lang-btn:active {
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      box-shadow: inset 1px 1px 0 #000000;
+      transform: translate(1px, 1px);
+    }
+
+    a {
+      color: #000080;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 10px;
+      }
+
+      .content {
+        padding: 14px 10px 10px;
+      }
+
+      .content-panel {
+        padding: 14px 10px;
+      }
+
+      .lang-btn {
+        min-height: 64px;
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="retro-card" role="region" aria-label="Windows 98 style card">
+    <div class="content">
+      <div class="content-panel">
+        <main>
+          <button id="langBtn" class="lang-btn" type="button">EN</button>
+          <h1 id="headline"></h1>
+          <p id="contactLine"></p>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "riabets-lang";
+    const langBtn = document.getElementById("langBtn");
+    const headline = document.getElementById("headline");
+    const contactLine = document.getElementById("contactLine");
+
+    const messages = {
+      ru: {
+        headline: "Когда-то тут будет что-то ебалозавалическое, а пока домен используется для почтового сервера.",
+        contactHtml: "Кстати, моя почта: <a href=\"mailto:nikolai@riabets.com\">nikolai@riabets.com</a>",
+        button: "in English",
+        htmlLang: "ru"
+      },
+      en: {
+        headline: "One day this place will erupt into something absolutely jaw-dropping and gloriously over-the-top, but for now this domain is used for the mail server.",
+        contactHtml: "By the way, my email is: <a href=\"mailto:nikolai@riabets.com\">nikolai@riabets.com</a>",
+        button: "по-русски",
+        htmlLang: "en"
+      }
+    };
+
+    function setLanguage(lang) {
+      const data = messages[lang] || messages.ru;
+      headline.textContent = data.headline;
+      contactLine.innerHTML = data.contactHtml;
+      langBtn.textContent = data.button;
+      document.documentElement.lang = data.htmlLang;
+      localStorage.setItem(STORAGE_KEY, lang);
+    }
+
+    function getInitialLanguage() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === "ru" || saved === "en") {
+        return saved;
+      }
+      return (navigator.language || "").toLowerCase().startsWith("ru") ? "ru" : "en";
+    }
+
+    function hitCounter(url) {
+      const beacon = new Image();
+      beacon.referrerPolicy = "no-referrer";
+      beacon.src = url;
+    }
+
+    function trackVisit() {
+      hitCounter("https://hits.sh/riabets.com-total.svg?label=total%20visits&color=007ec6");
+      const today = new Date().toISOString().slice(0, 10);
+      hitCounter("https://hits.sh/riabets.com-" + today + ".svg?label=today%20visits&color=8c7ae6");
+    }
+
+    let currentLang = getInitialLanguage();
+    setLanguage(currentLang);
+    trackVisit();
+
+    langBtn.addEventListener("click", () => {
+      currentLang = currentLang === "ru" ? "en" : "ru";
+      setLanguage(currentLang);
+    });
+  </script>
+</body>
+</html>
