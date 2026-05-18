@@ -438,6 +438,7 @@
           <ol>
             <li><a href="#about">About</a></li>
             <li><a href="#right-now">Right now</a></li>
+            <li><a href="#building">Currently building</a></li>
             <li><a href="#experience">Experience</a></li>
             <li><a href="#education">Education</a></li>
             <li><a href="#skills">Skills</a></li>
@@ -458,6 +459,39 @@
         <h2>Right now</h2>
         <div class="section-body">
           <p class="placeholder">Current role narrative being drafted from a working interview. Will land here as a process-observation case study.</p>
+        </div>
+      </section>
+
+      <section class="panel cv collapsible" id="building">
+        <h2>Currently building</h2>
+        <div class="section-body">
+          <article>
+            <h3>JobSearch.exe — my own job-search infrastructure, built in public</h3>
+            <p class="role-meta">Self-initiated · live · source: <a href="https://github.com/rialai/riabets-com" target="_blank" rel="noopener">github.com/rialai/riabets-com</a></p>
+            <p>
+              While looking for an ERP / Business Analyst role in Dublin I’m building the search tooling itself, in the open, as a working demonstration of how I think about problems end-to-end.
+            </p>
+            <ul>
+              <li>
+                <strong>This page</strong> is a CV-in-progress — every section lands as a public git commit. The
+                <a href="https://github.com/rialai/riabets-com/commits/main" target="_blank" rel="noopener">commit log</a>
+                is part of the document; it shows the iteration, not just the result.
+              </li>
+              <li>
+                <strong><a href="/job-search/">JobSearch.exe — Bot dashboard</a></strong> is the operations view of the companion bot: discovered postings, relevance scores, draft cover letters, run logs, status LED.
+              </li>
+              <li>
+                <strong>Discovery bot</strong> (<code>~/job-bot</code>) — Python + Playwright over CDP — crawls Irish job sources (IrishJobs, Jobs.ie, Indeed.ie, vendor partner careers, Big 4), scores each posting against my profile via Claude, drafts a personalised cover letter for high-scoring matches and forwards each one to Telegram for one-tap human approval. <strong>It never auto-applies.</strong>
+              </li>
+              <li>
+                <strong>Sister project</strong>: a daft.ie auto-enquiry bot, built earlier in 2026 to find a room in Dublin. Decommissioned May 2026 once it found the room. Handover bundle archived for a friend.
+              </li>
+            </ul>
+            <p class="role-meta" style="margin-top:8px;">
+              <strong>Stack:</strong> HTML / CSS / vanilla JS, Python, Playwright (CDP), Anthropic API (Claude), Telegram Bot API, GitHub Pages with Jekyll, launchd.
+              <strong>Anti-bot care</strong> inherited from the daft.ie project: human pacing, key-by-key typing with React-native setter fallback, pre-click mouse arc, Cloudflare DOM + network detection, daily caps and Dublin quiet hours, exponential supervisor backoff. Isolated Chrome profile on a dedicated CDP port (9223), never colliding with the daft-bot profile.
+            </p>
+          </article>
         </div>
       </section>
 
