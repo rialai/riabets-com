@@ -511,7 +511,18 @@
       body { padding: 8px; }
       .content { padding: 10px; }
       .panel { padding: 12px; }
-      .toolbar { overflow-x: auto; flex-wrap: nowrap; }
+      /* Reserve room for the two-row tb-btn (icon + label) so labels are not
+         clipped by the panels below. flex-shrink:0 keeps the toolbar from
+         being squashed by the surrounding flexbox. */
+      .toolbar {
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        min-height: 50px;
+        flex-shrink: 0;
+      }
+      .tb-btn { flex-shrink: 0; }
       .config-grid { grid-template-columns: 1fr; gap: 2px 0; }
       .config-grid dd { margin-bottom: 6px; }
       .status-bar { flex-wrap: wrap; }

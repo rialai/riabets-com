@@ -730,13 +730,28 @@
     @media (max-width: 900px) {
       body { padding: 8px; }
       .split { flex-direction: column; }
+      /* Let the tree show its full height on iPad portrait — 12 items fit
+         comfortably within 1180 CSS px, no scrollbar needed. Avoiding the
+         32vh cap means the native iPad overlay scrollbar (which breaks the
+         Win-98 illusion) never appears here. */
       .pane.tree-pane {
         width: auto;
-        max-height: 32vh;
         flex-shrink: 0;
+        overflow-y: visible;
       }
       .pane.content-pane { flex: 1 1 auto; min-height: 0; }
-      .toolbar { overflow-x: auto; flex-wrap: nowrap; }
+      /* Reserve enough vertical room for the icon+label two-row toolbar buttons
+         so labels are not clipped by the address bar below.
+         flex-shrink: 0 keeps the toolbar from being squashed by the flexbox. */
+      .toolbar {
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        min-height: 50px;
+        flex-shrink: 0;
+      }
+      .tb-btn { flex-shrink: 0; }
       .address-bar { flex-wrap: wrap; }
       .address-bar label { order: 1; }
       .address-go { order: 2; }
