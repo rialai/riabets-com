@@ -332,6 +332,36 @@
     .grade-12 { color: #006600; }
     .grade-11 { color: #006600; }
     .grade-10 { color: #336600; }
+
+    /* Directory listing (when a folder section is opened) */
+    .dir-listing {
+      list-style: none;
+      padding: 8px 6px;
+      margin: 6px 0 0;
+      background: #fafafa;
+      border: 1px solid #c0c0c0;
+    }
+    .dir-listing li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 6px;
+      border-bottom: 1px dotted #d0d0d0;
+    }
+    .dir-listing li:last-child { border-bottom: none; }
+    .dir-link {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.92rem;
+      color: #000080;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .dir-link:hover { background: #ece9d8; }
+    .dir-listing .ico { width: 18px; text-align: center; }
+    .dir-listing .role-meta { color: #555555; font-size: 0.82rem; }
     a { color: #000080; }
 
     /* Header card (inside content pane) */
@@ -706,102 +736,123 @@
         </section>
 
         <section class="section" id="education" data-name="education\" data-path="C:\Mykola Riabets\CV\education\">
-          <div class="section-header"><span class="ico">📁</span><h2>Education</h2></div>
+          <div class="section-header"><span class="ico">📁</span><h2>education\</h2></div>
           <div class="section-body">
-            <article id="edu-nure" data-name="nure.txt" data-path="C:\Mykola Riabets\CV\education\nure.txt">
-              <h3>Kharkiv National University of Radio Electronics (NURE)</h3>
-              <p class="role-meta">
-                Faculty of Electronic Engineering · Department of Physical Foundations of Electronic Engineering<br>
-                Bachelor's programme — Electronic Devices and Systems (direction code 6.050802), specialisation: Technical Information Protection Systems<br>
-                Cohort ЭПС-10-1 · 2010–2012 (incomplete) · Kharkiv, Ukraine
-              </p>
-              <p style="margin-top:8px;"><strong>Coursework completed through Year 2:</strong></p>
+            <p>This folder contains 2 file(s):</p>
+            <ul class="dir-listing">
+              <li>
+                <span class="ico">📜</span>
+                <button class="dir-link" data-target="edu-nure">nure.txt</button>
+                <span class="role-meta">— Higher education, NURE Kharkiv (2010–2012, incomplete)</span>
+              </li>
+              <li>
+                <span class="ico">📜</span>
+                <button class="dir-link" data-target="edu-collegium">collegium.txt</button>
+                <span class="role-meta">— Secondary education, Solonytsivka Collegium (graduated 2010)</span>
+              </li>
+            </ul>
+          </div>
+        </section>
 
-              <p style="margin:8px 0 2px;"><strong>Year 1 (2010–2011)</strong></p>
-              <p class="role-meta" style="margin:0;">Humanities &amp; social sciences</p>
-              <ul>
-                <li>History of Ukraine</li>
-                <li>Ukrainian Language for Professional Communication</li>
-                <li>English (Year 1)</li>
-                <li>Philosophy / Cultural Studies</li>
-                <li>Life Safety Fundamentals (Health &amp; Safety)</li>
-                <li>Physical Education</li>
-              </ul>
-              <p class="role-meta" style="margin:0;">Natural sciences &amp; general engineering</p>
-              <ul>
-                <li>Higher Mathematics — Year 1 (Linear Algebra, Calculus I)</li>
-                <li>Physics — Year 1 (Mechanics, Thermodynamics)</li>
-                <li>General and Inorganic Chemistry</li>
-                <li>Informatics and Computing</li>
-                <li>Programming — Year 1 (Pascal / C fundamentals)</li>
-                <li>Introduction to the Speciality</li>
-              </ul>
+        <section class="section" id="edu-nure" data-name="nure.txt" data-path="C:\Mykola Riabets\CV\education\nure.txt">
+          <div class="section-header"><span class="ico">📜</span><h2>nure.txt</h2></div>
+          <div class="section-body">
+            <h3>Kharkiv National University of Radio Electronics (NURE)</h3>
+            <p class="role-meta">
+              Faculty of Electronic Engineering · Department of Physical Foundations of Electronic Engineering<br>
+              Bachelor's programme — Electronic Devices and Systems (direction code 6.050802), specialisation: Technical Information Protection Systems<br>
+              Cohort ЭПС-10-1 · 2010–2012 (incomplete) · Kharkiv, Ukraine
+            </p>
+            <p style="margin-top:8px;"><strong>Coursework completed through Year 2:</strong></p>
 
-              <p style="margin:10px 0 2px;"><strong>Year 2 (2011–2012)</strong></p>
-              <p class="role-meta" style="margin:0;">Natural sciences &amp; general engineering</p>
-              <ul>
-                <li>Higher Mathematics — Year 2 (Calculus II, Differential Equations)</li>
-                <li>Physics — Year 2 (Electromagnetism, Optics, Atomic Physics)</li>
-                <li>Probability Theory and Mathematical Statistics</li>
-                <li>Programming — Year 2 (C / C++, Algorithms and Data Structures)</li>
-                <li>Engineering and Computer Graphics (AutoCAD)</li>
-                <li>Applied Mechanics</li>
-                <li>English (Year 2)</li>
-              </ul>
-              <p class="role-meta" style="margin:0;">Professional cycle (specialty start)</p>
-              <ul>
-                <li>Theoretical Foundations of Electrical Engineering (ТОЕ)</li>
-                <li>Foundations of Circuit Theory</li>
-                <li>Electronics (general course)</li>
-                <li>Materials of Electronic Engineering</li>
-                <li>Foundations of Metrology and Measurement Techniques</li>
-                <li>Introduction to Technical Information Protection Systems</li>
-              </ul>
-              <p class="role-meta" style="margin:0;">Humanities</p>
-              <ul>
-                <li>Economic Theory</li>
-                <li>Sociology / Political Science</li>
-                <li>Physical Education</li>
-              </ul>
-            </article>
-            <article id="edu-collegium" data-name="collegium.txt" data-path="C:\Mykola Riabets\CV\education\collegium.txt">
-              <h3>Solonytsivka Collegium of Derhachi District Council, Kharkiv Oblast</h3>
-              <p class="role-meta">
-                Complete general secondary education · graduated 28 May 2010 · Kharkiv region, Ukraine<br>
-                Certificate №&nbsp;ХА&nbsp;38104645 · Headteacher: O.V.&nbsp;Balyuk<br>
-                <strong>Overall GPA: 9.2 / 12</strong> (≈ 7.7 / 10 international scale)
-              </p>
+            <p style="margin:8px 0 2px;"><strong>Year 1 (2010–2011)</strong></p>
+            <p class="role-meta" style="margin:0;">Humanities &amp; social sciences</p>
+            <ul>
+              <li>History of Ukraine</li>
+              <li>Ukrainian Language for Professional Communication</li>
+              <li>English (Year 1)</li>
+              <li>Philosophy / Cultural Studies</li>
+              <li>Life Safety Fundamentals (Health &amp; Safety)</li>
+              <li>Physical Education</li>
+            </ul>
+            <p class="role-meta" style="margin:0;">Natural sciences &amp; general engineering</p>
+            <ul>
+              <li>Higher Mathematics — Year 1 (Linear Algebra, Calculus I)</li>
+              <li>Physics — Year 1 (Mechanics, Thermodynamics)</li>
+              <li>General and Inorganic Chemistry</li>
+              <li>Informatics and Computing</li>
+              <li>Programming — Year 1 (Pascal / C fundamentals)</li>
+              <li>Introduction to the Speciality</li>
+            </ul>
 
-              <p style="margin-top:10px;"><strong>Final transcript</strong> <span class="role-meta">(Ukrainian 12-point scale, 12 = highest)</span></p>
-              <dl class="grades">
-                <dt>Informatics</dt><dd class="grade-11">11</dd>
-                <dt>Ukrainian Literature</dt><dd class="grade-10">10</dd>
-                <dt>History of Ukraine</dt><dd class="grade-10">10</dd>
-                <dt>World History</dt><dd class="grade-10">10</dd>
-                <dt>Person &amp; Society (Civics)</dt><dd class="grade-10">10</dd>
-                <dt>Physical Education</dt><dd class="grade-10">10</dd>
-                <dt>Ukrainian Language</dt><dd>9</dd>
-                <dt>World Literature</dt><dd>9</dd>
-                <dt>English Language</dt><dd>9</dd>
-                <dt>Biology</dt><dd>9</dd>
-                <dt>Astronomy</dt><dd>9</dd>
-                <dt>Life Safety Fundamentals</dt><dd>9</dd>
-                <dt>Defence of the Motherland</dt><dd>9</dd>
-                <dt>Algebra &amp; Beginnings of Analysis</dt><dd>8</dd>
-                <dt>Geometry</dt><dd>8</dd>
-                <dt>Physics</dt><dd>8</dd>
-                <dt>Chemistry</dt><dd>8</dd>
-                <dt>Geography</dt><dd>8</dd>
-                <dt>Foundations of Economics</dt><dd>8</dd>
-              </dl>
+            <p style="margin:10px 0 2px;"><strong>Year 2 (2011–2012)</strong></p>
+            <p class="role-meta" style="margin:0;">Natural sciences &amp; general engineering</p>
+            <ul>
+              <li>Higher Mathematics — Year 2 (Calculus II, Differential Equations)</li>
+              <li>Physics — Year 2 (Electromagnetism, Optics, Atomic Physics)</li>
+              <li>Probability Theory and Mathematical Statistics</li>
+              <li>Programming — Year 2 (C / C++, Algorithms and Data Structures)</li>
+              <li>Engineering and Computer Graphics (AutoCAD)</li>
+              <li>Applied Mechanics</li>
+              <li>English (Year 2)</li>
+            </ul>
+            <p class="role-meta" style="margin:0;">Professional cycle (specialty start)</p>
+            <ul>
+              <li>Theoretical Foundations of Electrical Engineering (ТОЕ)</li>
+              <li>Foundations of Circuit Theory</li>
+              <li>Electronics (general course)</li>
+              <li>Materials of Electronic Engineering</li>
+              <li>Foundations of Metrology and Measurement Techniques</li>
+              <li>Introduction to Technical Information Protection Systems</li>
+            </ul>
+            <p class="role-meta" style="margin:0;">Humanities</p>
+            <ul>
+              <li>Economic Theory</li>
+              <li>Sociology / Political Science</li>
+              <li>Physical Education</li>
+            </ul>
+          </div>
+        </section>
 
-              <p style="margin-top:8px;"><strong>State Final Examinations</strong></p>
-              <dl class="grades">
-                <dt>History of Ukraine</dt><dd class="grade-12">12</dd>
-                <dt>Ukrainian Language</dt><dd>9</dd>
-                <dt>English Language</dt><dd>9</dd>
-              </dl>
-            </article>
+        <section class="section" id="edu-collegium" data-name="collegium.txt" data-path="C:\Mykola Riabets\CV\education\collegium.txt">
+          <div class="section-header"><span class="ico">📜</span><h2>collegium.txt</h2></div>
+          <div class="section-body">
+            <h3>Solonytsivka Collegium of Derhachi District Council, Kharkiv Oblast</h3>
+            <p class="role-meta">
+              Complete general secondary education · graduated 28 May 2010 · Kharkiv region, Ukraine<br>
+              Certificate №&nbsp;ХА&nbsp;38104645 · Headteacher: O.V.&nbsp;Balyuk<br>
+              <strong>Overall GPA: 9.2 / 12</strong> (≈ 7.7 / 10 international scale)
+            </p>
+
+            <p style="margin-top:10px;"><strong>Final transcript</strong> <span class="role-meta">(Ukrainian 12-point scale, 12 = highest)</span></p>
+            <dl class="grades">
+              <dt>Informatics</dt><dd class="grade-11">11</dd>
+              <dt>Ukrainian Literature</dt><dd class="grade-10">10</dd>
+              <dt>History of Ukraine</dt><dd class="grade-10">10</dd>
+              <dt>World History</dt><dd class="grade-10">10</dd>
+              <dt>Person &amp; Society (Civics)</dt><dd class="grade-10">10</dd>
+              <dt>Physical Education</dt><dd class="grade-10">10</dd>
+              <dt>Ukrainian Language</dt><dd>9</dd>
+              <dt>World Literature</dt><dd>9</dd>
+              <dt>English Language</dt><dd>9</dd>
+              <dt>Biology</dt><dd>9</dd>
+              <dt>Astronomy</dt><dd>9</dd>
+              <dt>Life Safety Fundamentals</dt><dd>9</dd>
+              <dt>Defence of the Motherland</dt><dd>9</dd>
+              <dt>Algebra &amp; Beginnings of Analysis</dt><dd>8</dd>
+              <dt>Geometry</dt><dd>8</dd>
+              <dt>Physics</dt><dd>8</dd>
+              <dt>Chemistry</dt><dd>8</dd>
+              <dt>Geography</dt><dd>8</dd>
+              <dt>Foundations of Economics</dt><dd>8</dd>
+            </dl>
+
+            <p style="margin-top:8px;"><strong>State Final Examinations</strong></p>
+            <dl class="grades">
+              <dt>History of Ukraine</dt><dd class="grade-12">12</dd>
+              <dt>Ukrainian Language</dt><dd>9</dd>
+              <dt>English Language</dt><dd>9</dd>
+            </dl>
           </div>
         </section>
 
@@ -964,11 +1015,11 @@
         navigateTo(btn.dataset.go);
       });
 
-      // Tree-item navigation
-      document.querySelectorAll('.tree-item[data-target]').forEach(function (el) {
-        el.addEventListener('click', function () {
-          navigateTo(el.dataset.target);
-        });
+      // Navigation: any element with data-target (tree items, dir-listing links, ...)
+      document.addEventListener('click', function (e) {
+        var el = e.target.closest('[data-target]');
+        if (!el) return;
+        navigateTo(el.dataset.target);
       });
 
       function handleAction(action) {
@@ -1041,28 +1092,9 @@
       function navigateTo(targetId) {
         var el = document.getElementById(targetId);
         if (!el) return;
-
-        // If target is inside a section but isn't a section itself, open the parent
-        var section = el.classList.contains('section') ? el : el.closest('.section');
-        if (!section) return;
-        setActive(section.id);
-
-        // If we clicked a child (article), override address/status/tree highlight
-        if (el !== section) {
-          if (el.dataset.path) addressInput.value = el.dataset.path;
-          if (el.dataset.name) statusSelected.textContent = el.dataset.name + ' selected';
-          document.querySelectorAll('.tree-item.active').forEach(function (n) {
-            n.classList.remove('active');
-          });
-          var treeEl = document.querySelector('.tree-item[data-target="' + targetId + '"]');
-          if (treeEl) treeEl.classList.add('active');
-          setTimeout(function () {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 30);
-        } else {
-          var contentPane = document.getElementById('contentPane');
-          if (contentPane) contentPane.scrollTop = 0;
-        }
+        setActive(targetId);
+        var contentPane = document.getElementById('contentPane');
+        if (contentPane) contentPane.scrollTop = 0;
       }
 
       function setActive(targetId) {
