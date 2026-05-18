@@ -548,6 +548,9 @@
     .ico-email { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='1' y='4' width='14' height='9' fill='%23ffffff' stroke='%23000000'/%3E%3Cpath d='M1 4l7 5 7-5' fill='none' stroke='%23000000'/%3E%3C/svg%3E"); }
     .ico-source { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M5 4L2 8l3 4M11 4l3 4-3 4M9 4l-2 8' stroke='%23000080' stroke-width='1.4' fill='none'/%3E%3C/svg%3E"); }
     .ico-bot { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Ccircle cx='8' cy='8' r='5' fill='%23c0c0c0' stroke='%23000000'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23000000'/%3E%3Crect x='7' y='1' width='2' height='3' fill='%23c0c0c0' stroke='%23000000'/%3E%3Crect x='7' y='12' width='2' height='3' fill='%23c0c0c0' stroke='%23000000'/%3E%3Crect x='1' y='7' width='3' height='2' fill='%23c0c0c0' stroke='%23000000'/%3E%3Crect x='12' y='7' width='3' height='2' fill='%23c0c0c0' stroke='%23000000'/%3E%3C/svg%3E"); }
+    .ico-back { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M9 3 L3 8 L9 13 L9 10 L14 10 L14 6 L9 6 Z' fill='%23000080' stroke='%23000000' stroke-linejoin='miter'/%3E%3C/svg%3E"); }
+    .ico-forward { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M7 3 L13 8 L7 13 L7 10 L2 10 L2 6 L7 6 Z' fill='%23000080' stroke='%23000000' stroke-linejoin='miter'/%3E%3C/svg%3E"); }
+    .ico-up { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M1 8h5v1h9v6H1z' fill='%23FFCC33' stroke='%23806000'/%3E%3Cpath d='M8 1 L3 6 L6 6 L6 11 L10 11 L10 6 L13 6 Z' fill='%23000080' stroke='%23000000' stroke-linejoin='miter'/%3E%3C/svg%3E"); }
 
     /* .ini file rendering (Win-98 Notepad-style with light syntax colouring) */
     .ini-file {
@@ -721,8 +724,10 @@
     }
     .toast.show { opacity: 1; }
 
-    /* Mobile */
-    @media (max-width: 720px) {
+    /* Tablet / narrow viewports — stacked tree-over-content layout.
+       Threshold raised to 900px so iPad portrait (820 CSS px) gets the
+       column layout instead of the cramped desktop split. */
+    @media (max-width: 900px) {
       body { padding: 8px; }
       .split { flex-direction: column; }
       .pane.tree-pane {
@@ -733,7 +738,9 @@
       .pane.content-pane { flex: 1 1 auto; min-height: 0; }
       .toolbar { overflow-x: auto; flex-wrap: nowrap; }
       .address-bar { flex-wrap: wrap; }
-      .address-input-wrap { width: 100%; order: 3; }
+      .address-bar label { order: 1; }
+      .address-go { order: 2; }
+      .address-input-wrap { order: 3; width: 100%; flex: 1 1 100%; }
       .status-bar { flex-wrap: wrap; }
       .status-cell { flex: 1 1 auto; }
     }
@@ -800,9 +807,9 @@
     </div>
 
     <div class="toolbar">
-      <button class="tb-btn" id="tbBack" title="Back"><span class="tb-icon">◂</span>Back</button>
-      <button class="tb-btn" id="tbFwd" title="Forward"><span class="tb-icon">▸</span>Forward</button>
-      <button class="tb-btn" id="tbUp" title="Up — riabets.com"><span class="tb-icon">▴</span>Up</button>
+      <button class="tb-btn" id="tbBack" title="Back"><span class="tb-icon ico-back"></span>Back</button>
+      <button class="tb-btn" id="tbFwd" title="Forward"><span class="tb-icon ico-forward"></span>Forward</button>
+      <button class="tb-btn" id="tbUp" title="Up — riabets.com"><span class="tb-icon ico-up"></span>Up</button>
       <div class="tb-sep"></div>
       <button class="tb-btn" data-action="print"><span class="tb-icon ico-print"></span>Print</button>
       <button class="tb-btn" data-action="email"><span class="tb-icon ico-email"></span>Email</button>
