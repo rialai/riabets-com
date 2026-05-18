@@ -304,6 +304,34 @@
       font-style: italic;
       font-size: 0.88rem;
     }
+
+    /* Transcript grade list */
+    .grades {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2px 16px;
+      margin: 4px 0 10px;
+      font-size: 0.9rem;
+      padding: 6px 10px;
+      background: #fafafa;
+      border: 1px solid #c0c0c0;
+    }
+    .grades dt {
+      margin: 0;
+      padding: 1px 0;
+      border-bottom: 1px dotted #d0d0d0;
+    }
+    .grades dd {
+      margin: 0;
+      padding: 1px 0;
+      font-family: "Courier New", monospace;
+      font-weight: 700;
+      text-align: right;
+      border-bottom: 1px dotted #d0d0d0;
+    }
+    .grade-12 { color: #006600; }
+    .grade-11 { color: #006600; }
+    .grade-10 { color: #336600; }
     a { color: #000080; }
 
     /* Header card (inside content pane) */
@@ -737,8 +765,42 @@
               </ul>
             </article>
             <article id="edu-collegium" data-name="collegium.txt" data-path="C:\Mykola Riabets\CV\education\collegium.txt">
-              <h3>Solonytsivka Collegium</h3>
-              <p class="role-meta">Specialised secondary education · advanced mathematics and physics · graduated 2010 · Kharkiv region, Ukraine</p>
+              <h3>Solonytsivka Collegium of Derhachi District Council, Kharkiv Oblast</h3>
+              <p class="role-meta">
+                Complete general secondary education · graduated 28 May 2010 · Kharkiv region, Ukraine<br>
+                Certificate №&nbsp;ХА&nbsp;38104645 · Headteacher: O.V.&nbsp;Balyuk<br>
+                <strong>Overall GPA: 9.2 / 12</strong> (≈ 7.7 / 10 international scale)
+              </p>
+
+              <p style="margin-top:10px;"><strong>Final transcript</strong> <span class="role-meta">(Ukrainian 12-point scale, 12 = highest)</span></p>
+              <dl class="grades">
+                <dt>Informatics</dt><dd class="grade-11">11</dd>
+                <dt>Ukrainian Literature</dt><dd class="grade-10">10</dd>
+                <dt>History of Ukraine</dt><dd class="grade-10">10</dd>
+                <dt>World History</dt><dd class="grade-10">10</dd>
+                <dt>Person &amp; Society (Civics)</dt><dd class="grade-10">10</dd>
+                <dt>Physical Education</dt><dd class="grade-10">10</dd>
+                <dt>Ukrainian Language</dt><dd>9</dd>
+                <dt>World Literature</dt><dd>9</dd>
+                <dt>English Language</dt><dd>9</dd>
+                <dt>Biology</dt><dd>9</dd>
+                <dt>Astronomy</dt><dd>9</dd>
+                <dt>Life Safety Fundamentals</dt><dd>9</dd>
+                <dt>Defence of the Motherland</dt><dd>9</dd>
+                <dt>Algebra &amp; Beginnings of Analysis</dt><dd>8</dd>
+                <dt>Geometry</dt><dd>8</dd>
+                <dt>Physics</dt><dd>8</dd>
+                <dt>Chemistry</dt><dd>8</dd>
+                <dt>Geography</dt><dd>8</dd>
+                <dt>Foundations of Economics</dt><dd>8</dd>
+              </dl>
+
+              <p style="margin-top:8px;"><strong>State Final Examinations</strong></p>
+              <dl class="grades">
+                <dt>History of Ukraine</dt><dd class="grade-12">12</dd>
+                <dt>Ukrainian Language</dt><dd>9</dd>
+                <dt>English Language</dt><dd>9</dd>
+              </dl>
             </article>
           </div>
         </section>
