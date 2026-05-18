@@ -9,7 +9,8 @@
     html, body {
       margin: 0;
       width: 100%;
-      min-height: 100%;
+      height: 100%;
+      overflow: hidden;
       background: #008080;
       color: #000000;
       font-family: Tahoma, "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
@@ -29,9 +30,17 @@
       position: relative;
       display: flex;
       flex-direction: column;
-      min-height: calc(100vh - 32px);
+      height: 100%;
+      overflow: hidden;
     }
-    .window.maximized { max-width: none; margin: -16px; }
+    .window.maximized {
+      position: fixed;
+      inset: 0;
+      max-width: none;
+      margin: 0;
+      height: 100vh;
+      box-shadow: none;
+    }
     .window.minimized .menu-bar,
     .window.minimized .toolbar,
     .window.minimized .address-bar,
@@ -226,10 +235,11 @@
     .split {
       display: flex;
       flex: 1 1 auto;
-      min-height: 540px;
+      min-height: 0;
       background: #c0c0c0;
       padding: 4px;
       gap: 4px;
+      overflow: hidden;
     }
     .pane {
       background: #ffffff;
@@ -249,6 +259,72 @@
       flex: 1 1 auto;
       padding: 12px 14px;
     }
+
+    /* Win-98 scrollbar (Webkit/Blink) */
+    .pane::-webkit-scrollbar {
+      width: 16px;
+      height: 16px;
+    }
+    .pane::-webkit-scrollbar-track {
+      background-color: #c0c0c0;
+      background-image:
+        linear-gradient(45deg, #b0b0b0 25%, transparent 25%, transparent 75%, #b0b0b0 75%, #b0b0b0),
+        linear-gradient(45deg, #b0b0b0 25%, transparent 25%, transparent 75%, #b0b0b0 75%, #b0b0b0);
+      background-position: 0 0, 1px 1px;
+      background-size: 2px 2px;
+    }
+    .pane::-webkit-scrollbar-thumb {
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+    }
+    .pane::-webkit-scrollbar-thumb:active {
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+    }
+    .pane::-webkit-scrollbar-button {
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      display: block;
+      height: 16px;
+      width: 16px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .pane::-webkit-scrollbar-button:active {
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+    }
+    .pane::-webkit-scrollbar-button:vertical:decrement {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><polygon points='4,2 7,6 1,6' fill='black'/></svg>");
+    }
+    .pane::-webkit-scrollbar-button:vertical:increment {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><polygon points='1,2 7,2 4,6' fill='black'/></svg>");
+    }
+    .pane::-webkit-scrollbar-button:horizontal:decrement {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><polygon points='2,4 6,1 6,7' fill='black'/></svg>");
+    }
+    .pane::-webkit-scrollbar-button:horizontal:increment {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><polygon points='2,1 2,7 6,4' fill='black'/></svg>");
+    }
+    .pane::-webkit-scrollbar-button:single-button { display: block; }
+    .pane::-webkit-scrollbar-corner { background: #c0c0c0; }
+    /* Hide double-arrow buttons in middle if any */
+    .pane::-webkit-scrollbar-button:vertical:start:increment,
+    .pane::-webkit-scrollbar-button:vertical:end:decrement,
+    .pane::-webkit-scrollbar-button:horizontal:start:increment,
+    .pane::-webkit-scrollbar-button:horizontal:end:decrement { display: none; }
+    /* Firefox */
+    .pane { scrollbar-width: auto; scrollbar-color: #c0c0c0 #a0a0a0; }
 
     /* Tree */
     .tree { list-style: none; padding: 0; margin: 0; }
@@ -517,16 +593,13 @@
     /* Mobile */
     @media (max-width: 720px) {
       body { padding: 8px; }
-      .window { min-height: calc(100vh - 16px); }
-      .window.maximized { margin: -8px; }
-      .split {
-        flex-direction: column;
-        min-height: auto;
-      }
+      .split { flex-direction: column; }
       .pane.tree-pane {
         width: auto;
-        max-height: 200px;
+        max-height: 32vh;
+        flex-shrink: 0;
       }
+      .pane.content-pane { flex: 1 1 auto; min-height: 0; }
       .toolbar { overflow-x: auto; flex-wrap: nowrap; }
       .address-bar { flex-wrap: wrap; }
       .address-input-wrap { width: 100%; order: 3; }
