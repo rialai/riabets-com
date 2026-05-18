@@ -257,8 +257,79 @@
     }
     .pane.content-pane {
       flex: 1 1 auto;
-      padding: 12px 14px;
+      padding: 0;
+      display: flex;
+      overflow: hidden;
     }
+    .pane-inner {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 12px 14px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .pane-inner::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+    /* Custom Win-98 scrollbar (iOS-friendly, fully HTML/CSS/JS, no native chrome) */
+    .wscroll-vbar {
+      width: 16px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background: #c0c0c0;
+      border-left: 1px solid #7f7f7f;
+      user-select: none;
+      touch-action: none;
+    }
+    .wscroll-vbar.hidden { display: none; }
+    .wscroll-btn {
+      width: 16px; height: 16px;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.62rem;
+      line-height: 1;
+      color: #000000;
+      font-family: inherit;
+      flex-shrink: 0;
+    }
+    .wscroll-btn:active {
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+    }
+    .wscroll-track {
+      flex: 1;
+      position: relative;
+      background-color: #c0c0c0;
+      background-image:
+        linear-gradient(45deg, #b0b0b0 25%, transparent 25%, transparent 75%, #b0b0b0 75%, #b0b0b0),
+        linear-gradient(45deg, #b0b0b0 25%, transparent 25%, transparent 75%, #b0b0b0 75%, #b0b0b0);
+      background-position: 0 0, 1px 1px;
+      background-size: 2px 2px;
+      cursor: pointer;
+      min-height: 16px;
+    }
+    .wscroll-thumb {
+      position: absolute;
+      left: 0; right: 0;
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      min-height: 24px;
+      cursor: grab;
+      touch-action: none;
+    }
+    .wscroll-thumb:active { cursor: grabbing; }
 
     /* Win-98 scrollbar (Webkit/Blink) */
     .pane::-webkit-scrollbar {
@@ -735,6 +806,7 @@
       </div>
 
       <div class="pane content-pane" id="contentPane">
+        <div class="pane-inner" id="paneInner">
         <!-- Header card -->
         <div class="cv-header section" id="header" data-name="card.vcf" data-path="C:\Mykola Riabets\CV\card.vcf">
           <h1>Mykola Riabets</h1>
@@ -949,6 +1021,14 @@
             <p class="placeholder">Being collected.</p>
           </div>
         </section>
+        </div><!-- /pane-inner -->
+        <div class="wscroll-vbar" id="wscrollV" aria-hidden="true">
+          <button class="wscroll-btn" data-dir="up" type="button" aria-label="Scroll up">▲</button>
+          <div class="wscroll-track" id="wscrollTrack">
+            <div class="wscroll-thumb" id="wscrollThumb"></div>
+          </div>
+          <button class="wscroll-btn" data-dir="down" type="button" aria-label="Scroll down">▼</button>
+        </div>
       </div>
     </div>
 
@@ -1166,8 +1246,8 @@
         var el = document.getElementById(targetId);
         if (!el) return;
         setActive(targetId);
-        var contentPane = document.getElementById('contentPane');
-        if (contentPane) contentPane.scrollTop = 0;
+        var paneInner = document.getElementById('paneInner');
+        if (paneInner) paneInner.scrollTop = 0;
       }
 
       function setActive(targetId) {
@@ -1240,6 +1320,107 @@
       }
       hitCounter('https://hits.sh/riabets.com-total.svg?label=total%20visits&color=007ec6');
       hitCounter('https://hits.sh/riabets.com-' + (new Date()).toISOString().slice(0, 10) + '.svg?label=today%20visits&color=8c7ae6');
+
+      // === Custom Win-98 scrollbar for content pane (iOS-friendly) ===
+      var inner = document.getElementById('paneInner');
+      var bar = document.getElementById('wscrollV');
+      var track = document.getElementById('wscrollTrack');
+      var thumb = document.getElementById('wscrollThumb');
+
+      function updateScrollbar() {
+        if (!inner || !bar || !track || !thumb) return;
+        var ratio = inner.clientHeight / inner.scrollHeight;
+        if (!isFinite(ratio) || ratio >= 1) {
+          bar.classList.add('hidden');
+          return;
+        }
+        bar.classList.remove('hidden');
+        var trackH = track.clientHeight;
+        var thumbH = Math.max(24, Math.floor(trackH * ratio));
+        thumb.style.height = thumbH + 'px';
+        var maxScroll = inner.scrollHeight - inner.clientHeight;
+        var sRatio = maxScroll > 0 ? inner.scrollTop / maxScroll : 0;
+        thumb.style.top = Math.floor((trackH - thumbH) * sRatio) + 'px';
+      }
+
+      if (inner) {
+        inner.addEventListener('scroll', updateScrollbar);
+        window.addEventListener('resize', updateScrollbar);
+        if (window.ResizeObserver) new ResizeObserver(updateScrollbar).observe(inner);
+        new MutationObserver(updateScrollbar).observe(inner, { childList: true, subtree: true, attributes: true });
+
+        // Auto-update after any section navigation (open file → height changes)
+        var origNav = navigateTo;
+        navigateTo = function (id) { origNav(id); setTimeout(updateScrollbar, 0); };
+
+        // Buttons with auto-repeat while held
+        document.querySelectorAll('.wscroll-btn').forEach(function (b) {
+          var dir = b.dataset.dir === 'down' ? 1 : -1;
+          var step = 32;
+          var intervalId = null, timeoutId = null;
+          function tickOnce() { inner.scrollTop += dir * step; }
+          b.addEventListener('pointerdown', function (e) {
+            tickOnce();
+            timeoutId = setTimeout(function () {
+              intervalId = setInterval(tickOnce, 50);
+            }, 300);
+            e.preventDefault();
+          });
+          var stop = function () {
+            if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+            if (intervalId) { clearInterval(intervalId); intervalId = null; }
+          };
+          b.addEventListener('pointerup', stop);
+          b.addEventListener('pointerleave', stop);
+          b.addEventListener('pointercancel', stop);
+        });
+
+        // Thumb drag
+        var dragInfo = null;
+        thumb.addEventListener('pointerdown', function (e) {
+          try { thumb.setPointerCapture(e.pointerId); } catch (_) {}
+          var trackRect = track.getBoundingClientRect();
+          var thumbRect = thumb.getBoundingClientRect();
+          dragInfo = {
+            offsetY: e.clientY - thumbRect.top,
+            trackTop: trackRect.top,
+            trackH: track.clientHeight
+          };
+          e.preventDefault();
+          e.stopPropagation();
+        });
+        thumb.addEventListener('pointermove', function (e) {
+          if (!dragInfo) return;
+          var thumbH = thumb.clientHeight;
+          var maxTop = dragInfo.trackH - thumbH;
+          var rawTop = e.clientY - dragInfo.trackTop - dragInfo.offsetY;
+          var top = Math.max(0, Math.min(maxTop, rawTop));
+          var ratio = maxTop > 0 ? top / maxTop : 0;
+          var maxScroll = inner.scrollHeight - inner.clientHeight;
+          inner.scrollTop = ratio * maxScroll;
+        });
+        function endDrag(e) {
+          if (dragInfo && e && e.pointerId !== undefined) {
+            try { thumb.releasePointerCapture(e.pointerId); } catch (_) {}
+          }
+          dragInfo = null;
+        }
+        thumb.addEventListener('pointerup', endDrag);
+        thumb.addEventListener('pointercancel', endDrag);
+
+        // Track click outside thumb = page up/down
+        track.addEventListener('pointerdown', function (e) {
+          if (e.target !== track) return;
+          var rect = track.getBoundingClientRect();
+          var clickY = e.clientY - rect.top;
+          var thumbTop = thumb.offsetTop;
+          var thumbBottom = thumbTop + thumb.clientHeight;
+          if (clickY < thumbTop) inner.scrollTop -= inner.clientHeight * 0.9;
+          else if (clickY > thumbBottom) inner.scrollTop += inner.clientHeight * 0.9;
+        });
+
+        updateScrollbar();
+      }
     })();
   </script>
 </body>
