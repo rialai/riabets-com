@@ -398,7 +398,7 @@
     .pane { scrollbar-width: auto; scrollbar-color: #c0c0c0 #a0a0a0; }
 
     /* Tree */
-    .tree { list-style: none; padding: 0; margin: 0; }
+    .tree, .tree ul { list-style: none; padding: 0; margin: 0; }
     .tree li { line-height: 1.4; }
     .tree-item {
       display: flex;
@@ -1240,6 +1240,7 @@
 
       document.getElementById('btnClose').addEventListener('click', showAccessDenied);
       document.getElementById('btnMax').addEventListener('click', function () {
+        mainWindow.classList.remove('minimized');
         mainWindow.classList.toggle('maximized');
       });
       document.getElementById('btnMin').addEventListener('click', function () {
