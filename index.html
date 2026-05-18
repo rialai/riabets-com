@@ -1282,20 +1282,33 @@
         handleAction(action);
       });
 
-      // Go-to delegation (menu)
+      // Go-to delegation (menu) — user-initiated, push history
       document.addEventListener('click', function (e) {
         var btn = e.target.closest('[data-go]');
         if (!btn) return;
         closeAllMenus();
-        navigateTo(btn.dataset.go);
+        navigateTo(btn.dataset.go, { pushHistory: true });
       });
 
       // Navigation: any element with data-target (tree items, dir-listing links, ...)
+      // User-initiated clicks push a history entry so the toolbar Back/Forward
+      // (and the browser's own Back/Forward) walk through the file history.
       document.addEventListener('click', function (e) {
         var el = e.target.closest('[data-target]');
         if (!el) return;
-        navigateTo(el.dataset.target);
+        navigateTo(el.dataset.target, { pushHistory: true });
       });
+
+      // popstate: respond to Back/Forward by re-opening the file from URL hash
+      window.addEventListener('popstate', function (e) {
+        var target = (e.state && e.state.target) || readTargetFromUrl() || 'header';
+        navigateTo(target, { pushHistory: false });
+      });
+
+      function readTargetFromUrl() {
+        var h = window.location.hash.replace(/^#/, '');
+        return h && document.getElementById(h) ? h : null;
+      }
 
       function handleAction(action) {
         switch (action) {
@@ -1364,12 +1377,22 @@
       var addressInput = document.getElementById('addressInput');
       var statusSelected = document.getElementById('statusSelected');
 
-      function navigateTo(targetId) {
+      function navigateTo(targetId, opts) {
         var el = document.getElementById(targetId);
         if (!el) return;
+        opts = opts || {};
         setActive(targetId);
         var paneInner = document.getElementById('paneInner');
         if (paneInner) paneInner.scrollTop = 0;
+        if (opts.pushHistory) {
+          var url = window.location.pathname + window.location.search + '#' + targetId;
+          // Replace if we're already on this entry (avoid duplicates from rapid clicks)
+          if (history.state && history.state.target === targetId) {
+            history.replaceState({ target: targetId }, '', url);
+          } else {
+            history.pushState({ target: targetId }, '', url);
+          }
+        }
       }
 
       function setActive(targetId) {
@@ -1396,8 +1419,12 @@
 
       var sections = document.querySelectorAll('.section');
 
-      // Default selection: open card.vcf (header) on load
-      navigateTo('header');
+      // Default selection: respect URL hash (deep-link) or fall back to card.vcf.
+      // Use replaceState so the very first history entry already records the target —
+      // that way Back doesn't strand the user on a blank page.
+      var initialTarget = readTargetFromUrl() || 'header';
+      navigateTo(initialTarget, { pushHistory: false });
+      history.replaceState({ target: initialTarget }, '', window.location.pathname + window.location.search + '#' + initialTarget);
 
       // Address bar "Go" — try to find a section whose path matches
       document.getElementById('addressGo').addEventListener('click', function () {
@@ -1406,7 +1433,7 @@
         sections.forEach(function (s) {
           if (s.dataset.path === val) found = s.id;
         });
-        if (found) navigateTo(found);
+        if (found) navigateTo(found, { pushHistory: true });
         else showToast('Path not found: ' + val);
       });
       addressInput.addEventListener('focus', function () { this.removeAttribute('readonly'); });
@@ -1473,7 +1500,7 @@
 
         // Auto-update after any section navigation (open file → height changes)
         var origNav = navigateTo;
-        navigateTo = function (id) { origNav(id); setTimeout(updateScrollbar, 0); };
+        navigateTo = function (id, opts) { origNav(id, opts); setTimeout(updateScrollbar, 0); };
 
         // Buttons with auto-repeat while held
         document.querySelectorAll('.wscroll-btn').forEach(function (b) {
