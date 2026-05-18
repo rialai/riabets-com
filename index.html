@@ -507,8 +507,47 @@
       padding: 0;
     }
     .dir-link:hover { background: #ece9d8; }
-    .dir-listing .ico { width: 18px; text-align: center; }
     .dir-listing .role-meta { color: #555555; font-size: 0.82rem; }
+
+    /* Pixel-art Win-98 file & toolbar icons (replacing emoji) */
+    .ico {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      vertical-align: -3px;
+      flex-shrink: 0;
+    }
+    .section-header .ico { width: 24px; height: 24px; vertical-align: -6px; }
+    .dir-listing .ico { width: 20px; height: 20px; }
+    .address-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      margin-right: 6px;
+      vertical-align: -3px;
+    }
+    .tb-icon {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      font-size: 0;
+    }
+
+    .ico-folder { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M0 4h6v1h10v10H0z' fill='%23806000'/%3E%3Cpath d='M1 5h5v1h9v9H1z' fill='%23FFCC33'/%3E%3Cpath d='M1 5h14' stroke='%23FFEE99'/%3E%3C/svg%3E"); }
+    .ico-doc { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M3 1h7v3h3v11H3z' fill='%23ffffff' stroke='%23000000' stroke-width='0.7'/%3E%3Cpath d='M10 1v3h3' fill='%23dddddd' stroke='%23000000' stroke-width='0.7'/%3E%3Crect x='5' y='6' width='6' height='1' fill='%23000080'/%3E%3Crect x='5' y='8' width='6' height='1' fill='%23000080'/%3E%3Crect x='5' y='10' width='6' height='1' fill='%23000080'/%3E%3Crect x='5' y='12' width='4' height='1' fill='%23000080'/%3E%3C/svg%3E"); }
+    .ico-print { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='4' y='9' width='8' height='5' fill='%23ffffff' stroke='%23000000'/%3E%3Crect x='2' y='5' width='12' height='5' fill='%23c0c0c0' stroke='%23000000'/%3E%3Crect x='4' y='3' width='8' height='2' fill='%23ffffff' stroke='%23000000'/%3E%3Crect x='12' y='7' width='1' height='1' fill='%2300cc00'/%3E%3C/svg%3E"); }
+    .ico-email { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect x='1' y='4' width='14' height='9' fill='%23ffffff' stroke='%23000000'/%3E%3Cpath d='M1 4l7 5 7-5' fill='none' stroke='%23000000'/%3E%3C/svg%3E"); }
+    .ico-source { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath d='M5 4L2 8l3 4M11 4l3 4-3 4M9 4l-2 8' stroke='%23000080' stroke-width='1.4' fill='none'/%3E%3C/svg%3E"); }
+    .ico-bot { background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Ccircle cx='8' cy='8' r='5' fill='%23c0c0c0' stroke='%23000000'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23000000'/%3E%3Crect x='7' y='1' width='2' height='3' fill='%23c0c0c0' stroke='%23000000'/%3E%3Crect x='7' y='12' width='2' height='3' fill='%23c0c0c0' stroke='%23000000'/%3E%3Crect x='1' y='7' width='3' height='2' fill='%23c0c0c0' stroke='%23000000'/%3E%3Crect x='12' y='7' width='3' height='2' fill='%23c0c0c0' stroke='%23000000'/%3E%3C/svg%3E"); }
 
     /* .ini file rendering (Win-98 Notepad-style with light syntax colouring) */
     .ini-file {
@@ -765,17 +804,17 @@
       <button class="tb-btn" id="tbFwd" title="Forward"><span class="tb-icon">▸</span>Forward</button>
       <button class="tb-btn" id="tbUp" title="Up — riabets.com"><span class="tb-icon">▴</span>Up</button>
       <div class="tb-sep"></div>
-      <button class="tb-btn" data-action="print"><span class="tb-icon">🖨</span>Print</button>
-      <button class="tb-btn" data-action="email"><span class="tb-icon">✉</span>Email</button>
-      <button class="tb-btn" data-action="github"><span class="tb-icon">⌥</span>Source</button>
+      <button class="tb-btn" data-action="print"><span class="tb-icon ico-print"></span>Print</button>
+      <button class="tb-btn" data-action="email"><span class="tb-icon ico-email"></span>Email</button>
+      <button class="tb-btn" data-action="github"><span class="tb-icon ico-source"></span>Source</button>
       <div class="tb-sep"></div>
-      <a class="tb-btn" href="/job-search/" style="text-decoration:none;"><span class="tb-icon">⚙</span>Bot</a>
+      <a class="tb-btn" href="/job-search/" style="text-decoration:none;"><span class="tb-icon ico-bot"></span>Bot</a>
     </div>
 
     <div class="address-bar">
       <label for="addressInput">Address</label>
       <div class="address-input-wrap" id="addressWrap">
-        <span class="address-icon">📁</span>
+        <span class="address-icon ico-folder"></span>
         <input class="address-input" id="addressInput" value="C:\Mykola Riabets\CV\" readonly>
       </div>
       <button class="address-go" id="addressGo" type="button">Go</button>
@@ -785,41 +824,41 @@
       <div class="pane tree-pane" id="treePane">
         <ul class="tree" id="tree">
           <li>
-            <div class="tree-item group"><span class="ico">📁</span><span>Mykola Riabets</span></div>
+            <div class="tree-item group"><span class="ico ico-folder"></span><span>Mykola Riabets</span></div>
             <ul>
               <li>
-                <div class="tree-item indent-1" data-target="header"><span class="ico">📇</span><span>card.vcf</span></div>
+                <div class="tree-item indent-1" data-target="header"><span class="ico ico-doc"></span><span>card.vcf</span></div>
               </li>
               <li>
-                <div class="tree-item indent-1" data-target="readme"><span class="ico">📋</span><span>readme.txt</span></div>
+                <div class="tree-item indent-1" data-target="readme"><span class="ico ico-doc"></span><span>readme.txt</span></div>
               </li>
               <li>
-                <div class="tree-item indent-1" data-target="about"><span class="ico">📄</span><span>about.txt</span></div>
+                <div class="tree-item indent-1" data-target="about"><span class="ico ico-doc"></span><span>about.txt</span></div>
               </li>
               <li>
-                <div class="tree-item indent-1" data-target="right-now"><span class="ico">⏰</span><span>right-now.log</span></div>
+                <div class="tree-item indent-1" data-target="right-now"><span class="ico ico-doc"></span><span>right-now.log</span></div>
               </li>
               <li>
-                <div class="tree-item indent-1" data-target="building"><span class="ico">🔨</span><span>building.md</span></div>
+                <div class="tree-item indent-1" data-target="building"><span class="ico ico-doc"></span><span>building.md</span></div>
               </li>
               <li>
-                <div class="tree-item indent-1" data-target="experience"><span class="ico">📁</span><span>experience\</span></div>
+                <div class="tree-item indent-1" data-target="experience"><span class="ico ico-folder"></span><span>experience\</span></div>
               </li>
               <li>
-                <div class="tree-item indent-1" data-target="education"><span class="ico">📁</span><span>education\</span></div>
+                <div class="tree-item indent-1" data-target="education"><span class="ico ico-folder"></span><span>education\</span></div>
                 <ul>
-                  <li><div class="tree-item indent-2" data-target="edu-nure"><span class="ico">📜</span><span>nure.txt</span></div></li>
-                  <li><div class="tree-item indent-2" data-target="edu-collegium"><span class="ico">📜</span><span>collegium.txt</span></div></li>
+                  <li><div class="tree-item indent-2" data-target="edu-nure"><span class="ico ico-doc"></span><span>nure.txt</span></div></li>
+                  <li><div class="tree-item indent-2" data-target="edu-collegium"><span class="ico ico-doc"></span><span>collegium.txt</span></div></li>
                 </ul>
               </li>
               <li>
-                <div class="tree-item indent-1" data-target="skills"><span class="ico">🔧</span><span>skills.ini</span></div>
+                <div class="tree-item indent-1" data-target="skills"><span class="ico ico-doc"></span><span>skills.ini</span></div>
               </li>
               <li>
-                <div class="tree-item indent-1" data-target="projects"><span class="ico">💼</span><span>projects\</span></div>
+                <div class="tree-item indent-1" data-target="projects"><span class="ico ico-folder"></span><span>projects\</span></div>
               </li>
               <li>
-                <div class="tree-item indent-1" data-target="languages"><span class="ico">🌐</span><span>languages.cfg</span></div>
+                <div class="tree-item indent-1" data-target="languages"><span class="ico ico-doc"></span><span>languages.cfg</span></div>
               </li>
             </ul>
           </li>
@@ -839,7 +878,7 @@
         </div>
 
         <section class="section" id="readme" data-name="readme.txt" data-path="C:\Mykola Riabets\CV\readme.txt">
-          <div class="section-header"><span class="ico">📋</span><h2>readme.txt</h2></div>
+          <div class="section-header"><span class="ico ico-doc"></span><h2>readme.txt</h2></div>
           <div class="section-body">
             <p><strong>This document is being assembled in public.</strong></p>
             <p>Last updated: <time datetime="2026-05-18">18 May 2026</time>. The <a href="https://github.com/rialai/riabets-com/commits/main" target="_blank" rel="noopener">git history</a> is part of the document — each commit is an iteration on how I think about my own work.</p>
@@ -848,21 +887,21 @@
         </section>
 
         <section class="section" id="about" data-name="about.txt" data-path="C:\Mykola Riabets\CV\about.txt">
-          <div class="section-header"><span class="ico">📄</span><h2>About</h2></div>
+          <div class="section-header"><span class="ico ico-doc"></span><h2>About</h2></div>
           <div class="section-body">
             <p class="placeholder">This section will be assembled last — it summarises the rest.</p>
           </div>
         </section>
 
         <section class="section" id="right-now" data-name="right-now.log" data-path="C:\Mykola Riabets\CV\right-now.log">
-          <div class="section-header"><span class="ico">⏰</span><h2>Right now</h2></div>
+          <div class="section-header"><span class="ico ico-doc"></span><h2>Right now</h2></div>
           <div class="section-body">
             <p class="placeholder">Current role narrative being drafted from a working interview. Will land here as a process-observation case study.</p>
           </div>
         </section>
 
         <section class="section" id="building" data-name="building.md" data-path="C:\Mykola Riabets\CV\building.md">
-          <div class="section-header"><span class="ico">🔨</span><h2>Currently building</h2></div>
+          <div class="section-header"><span class="ico ico-doc"></span><h2>Currently building</h2></div>
           <div class="section-body">
             <article>
               <h3>JobSearch.exe — my own job-search infrastructure, built in public</h3>
@@ -895,24 +934,24 @@
         </section>
 
         <section class="section" id="experience" data-name="experience\" data-path="C:\Mykola Riabets\CV\experience\">
-          <div class="section-header"><span class="ico">📁</span><h2>Experience</h2></div>
+          <div class="section-header"><span class="ico ico-folder"></span><h2>Experience</h2></div>
           <div class="section-body">
             <p class="placeholder">Career history being collected, role by role, with measurable outcomes.</p>
           </div>
         </section>
 
         <section class="section" id="education" data-name="education\" data-path="C:\Mykola Riabets\CV\education\">
-          <div class="section-header"><span class="ico">📁</span><h2>education\</h2></div>
+          <div class="section-header"><span class="ico ico-folder"></span><h2>education\</h2></div>
           <div class="section-body">
             <p>This folder contains 2 file(s):</p>
             <ul class="dir-listing">
               <li>
-                <span class="ico">📜</span>
+                <span class="ico ico-doc"></span>
                 <button class="dir-link" data-target="edu-nure">nure.txt</button>
                 <span class="role-meta">— Higher education, NURE Kharkiv (2010–2012, incomplete)</span>
               </li>
               <li>
-                <span class="ico">📜</span>
+                <span class="ico ico-doc"></span>
                 <button class="dir-link" data-target="edu-collegium">collegium.txt</button>
                 <span class="role-meta">— Secondary education, Solonytsivka Collegium (graduated 2010)</span>
               </li>
@@ -921,7 +960,7 @@
         </section>
 
         <section class="section" id="edu-nure" data-name="nure.txt" data-path="C:\Mykola Riabets\CV\education\nure.txt">
-          <div class="section-header"><span class="ico">📜</span><h2>nure.txt</h2></div>
+          <div class="section-header"><span class="ico ico-doc"></span><h2>nure.txt</h2></div>
           <div class="section-body">
             <h3>Kharkiv National University of Radio Electronics (NURE)</h3>
             <p class="role-meta">
@@ -981,7 +1020,7 @@
         </section>
 
         <section class="section" id="edu-collegium" data-name="collegium.txt" data-path="C:\Mykola Riabets\CV\education\collegium.txt">
-          <div class="section-header"><span class="ico">📜</span><h2>collegium.txt</h2></div>
+          <div class="section-header"><span class="ico ico-doc"></span><h2>collegium.txt</h2></div>
           <div class="section-body">
             <h3>Solonytsivka Collegium of Derhachi District Council, Kharkiv Oblast</h3>
             <p class="role-meta">
@@ -1023,7 +1062,7 @@
         </section>
 
         <section class="section" id="skills" data-name="skills.ini" data-path="C:\Mykola Riabets\CV\skills.ini">
-          <div class="section-header"><span class="ico">🔧</span><h2>skills.ini</h2></div>
+          <div class="section-header"><span class="ico ico-doc"></span><h2>skills.ini</h2></div>
           <div class="section-body">
             <p class="role-meta">Skill manifest, work in progress. Drafted from active projects and verified background — being expanded as the CV interview continues.</p>
 <pre class="ini-file"><span class="ini-comment">; Mykola Riabets — skill configuration</span>
@@ -1089,14 +1128,14 @@
         </section>
 
         <section class="section" id="projects" data-name="projects\" data-path="C:\Mykola Riabets\CV\projects\">
-          <div class="section-header"><span class="ico">💼</span><h2>Projects</h2></div>
+          <div class="section-header"><span class="ico ico-folder"></span><h2>Projects</h2></div>
           <div class="section-body">
             <p class="placeholder">Being collected — pet projects illustrating the same systems-thinking applied outside the workplace.</p>
           </div>
         </section>
 
         <section class="section" id="languages" data-name="languages.cfg" data-path="C:\Mykola Riabets\CV\languages.cfg">
-          <div class="section-header"><span class="ico">🌐</span><h2>Languages</h2></div>
+          <div class="section-header"><span class="ico ico-doc"></span><h2>Languages</h2></div>
           <div class="section-body">
             <p class="placeholder">Being collected.</p>
           </div>
