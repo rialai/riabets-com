@@ -15,14 +15,10 @@
       font-family: Tahoma, "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
       image-rendering: pixelated;
     }
-
-    body {
-      padding: 16px;
-      box-sizing: border-box;
-    }
+    body { padding: 16px; box-sizing: border-box; }
 
     .window {
-      max-width: 860px;
+      max-width: 1080px;
       margin: 0 auto;
       background: #c0c0c0;
       border-top: 2px solid #ffffff;
@@ -31,19 +27,17 @@
       border-bottom: 2px solid #3f3f3f;
       box-shadow: 2px 2px 0 #000000;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 32px);
     }
-
-    .window.maximized {
-      max-width: none;
-      margin: -16px;
-      min-height: calc(100vh - 0px);
-    }
-
+    .window.maximized { max-width: none; margin: -16px; }
     .window.minimized .menu-bar,
-    .window.minimized .content,
-    .window.minimized .window-footer {
-      display: none;
-    }
+    .window.minimized .toolbar,
+    .window.minimized .address-bar,
+    .window.minimized .split,
+    .window.minimized .status-bar,
+    .window.minimized .window-footer { display: none; }
 
     .title-bar {
       background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
@@ -56,36 +50,21 @@
       font-size: 0.92rem;
       user-select: none;
     }
-    .title-bar.error {
-      background: linear-gradient(90deg, #7a0000 0%, #c04040 100%);
-    }
+    .title-bar.error { background: linear-gradient(90deg, #7a0000 0%, #c04040 100%); }
 
-    .title-bar-buttons {
-      display: inline-flex;
-      gap: 2px;
-    }
-
+    .title-bar-buttons { display: inline-flex; gap: 2px; }
     .title-bar-button {
-      width: 20px;
-      height: 18px;
-      background: #c0c0c0;
-      color: #000000;
+      width: 20px; height: 18px;
+      background: #c0c0c0; color: #000000;
       border-top: 1px solid #ffffff;
       border-left: 1px solid #ffffff;
       border-right: 1px solid #3f3f3f;
       border-bottom: 1px solid #3f3f3f;
-      font-family: inherit;
-      font-size: 0.72rem;
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      padding: 0;
+      font-family: inherit; font-size: 0.72rem; line-height: 1;
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; padding: 0;
     }
-
     .title-bar-button:hover { background: #d4d0c8; }
-
     .title-bar-button:active {
       border-top: 1px solid #3f3f3f;
       border-left: 1px solid #3f3f3f;
@@ -94,6 +73,7 @@
       padding: 1px 0 0 1px;
     }
 
+    /* Menu bar */
     .menu-bar {
       background: #c0c0c0;
       padding: 2px 6px;
@@ -110,17 +90,12 @@
       position: relative;
     }
     .menu-bar > .menu-item:hover,
-    .menu-bar > .menu-item.open {
-      background: #000080;
-      color: #ffffff;
-    }
+    .menu-bar > .menu-item.open { background: #000080; color: #ffffff; }
     .menu-bar > .menu-item u { text-decoration: underline; }
 
     .dropdown {
       display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
+      position: absolute; top: 100%; left: 0;
       min-width: 220px;
       background: #c0c0c0;
       border-top: 2px solid #ffffff;
@@ -133,108 +108,260 @@
       font-size: 0.88rem;
     }
     .menu-bar > .menu-item.open .dropdown { display: block; }
-
     .dropdown button {
-      display: block;
-      width: 100%;
-      text-align: left;
-      background: transparent;
-      border: none;
+      display: block; width: 100%; text-align: left;
+      background: transparent; border: none;
       padding: 4px 12px;
-      font-family: inherit;
-      font-size: inherit;
-      color: #000000;
-      cursor: pointer;
+      font-family: inherit; font-size: inherit;
+      color: #000000; cursor: pointer;
     }
     .dropdown button:hover { background: #000080; color: #ffffff; }
     .dropdown hr {
-      margin: 3px 1px;
-      border: 0;
+      margin: 3px 1px; border: 0;
       border-top: 1px solid #7f7f7f;
       border-bottom: 1px solid #ffffff;
     }
 
-    .content {
-      padding: 14px;
+    /* Toolbar */
+    .toolbar {
       background: #c0c0c0;
+      padding: 4px 6px;
+      border-bottom: 1px solid #7f7f7f;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .tb-btn {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+      min-width: 50px;
+      padding: 4px 6px 2px;
+      background: #c0c0c0;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.72rem;
+      color: #000000;
+    }
+    .tb-btn:hover {
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-right: 1px solid #3f3f3f;
+      border-bottom: 1px solid #3f3f3f;
+    }
+    .tb-btn:active {
+      border-top: 1px solid #3f3f3f;
+      border-left: 1px solid #3f3f3f;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+    }
+    .tb-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .tb-icon { font-size: 1.25rem; line-height: 1; }
+    .tb-sep {
+      width: 1px; align-self: stretch;
+      background: #7f7f7f;
+      border-right: 1px solid #ffffff;
+      margin: 2px 4px;
     }
 
-    .panel {
+    /* Address bar */
+    .address-bar {
+      background: #c0c0c0;
+      padding: 4px 6px;
+      border-bottom: 1px solid #7f7f7f;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.84rem;
+    }
+    .address-bar label {
+      font-weight: 700;
+      padding: 0 4px;
+    }
+    .address-input-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
       background: #ffffff;
-      border-top: 2px solid #7f7f7f;
-      border-left: 2px solid #7f7f7f;
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
       border-right: 2px solid #ffffff;
       border-bottom: 2px solid #ffffff;
-      padding: 16px 18px;
-      margin-bottom: 12px;
+      padding: 2px 4px;
+      min-height: 18px;
+      cursor: text;
+    }
+    .address-icon { margin-right: 6px; }
+    .address-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: inherit;
+      background: transparent;
+      color: #000000;
+    }
+    .address-go {
+      padding: 2px 12px;
+      background: #c0c0c0;
+      border-top: 1px solid #ffffff;
+      border-left: 1px solid #ffffff;
+      border-right: 1px solid #3f3f3f;
+      border-bottom: 1px solid #3f3f3f;
+      font-family: inherit;
+      font-size: inherit;
+      cursor: pointer;
+    }
+    .address-go:active {
+      border-top: 1px solid #3f3f3f;
+      border-left: 1px solid #3f3f3f;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
     }
 
-    .panel:last-child { margin-bottom: 0; }
+    /* Split layout: tree | content */
+    .split {
+      display: flex;
+      flex: 1 1 auto;
+      min-height: 540px;
+      background: #c0c0c0;
+      padding: 4px;
+      gap: 4px;
+    }
+    .pane {
+      background: #ffffff;
+      border-top: 2px solid #3f3f3f;
+      border-left: 2px solid #3f3f3f;
+      border-right: 2px solid #ffffff;
+      border-bottom: 2px solid #ffffff;
+      overflow: auto;
+    }
+    .pane.tree-pane {
+      width: 240px;
+      flex-shrink: 0;
+      padding: 6px 4px;
+      font-size: 0.86rem;
+    }
+    .pane.content-pane {
+      flex: 1 1 auto;
+      padding: 12px 14px;
+    }
 
-    .cv-header h1 {
-      margin: 0 0 6px;
-      font-size: 1.6rem;
-      letter-spacing: 0.5px;
+    /* Tree */
+    .tree { list-style: none; padding: 0; margin: 0; }
+    .tree li { line-height: 1.4; }
+    .tree-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      user-select: none;
     }
-    .cv-header .meta {
-      margin: 0;
-      font-size: 0.92rem;
-      line-height: 1.5;
-    }
-    .cv-header .meta a { color: #000080; }
-    .cv-header .badge {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 2px 8px;
-      background: #008000;
+    .tree-item:hover { background: #ece9d8; }
+    .tree-item.active {
+      background: #000080;
       color: #ffffff;
-      font-weight: 700;
-      font-size: 0.82rem;
-      letter-spacing: 0.02em;
     }
+    .tree-item .ico { width: 16px; text-align: center; }
+    .tree .group { font-weight: 700; }
+    .tree .indent-1 { padding-left: 18px; }
+    .tree .indent-2 { padding-left: 36px; }
 
-    .notice {
-      background: #ffffcc;
-      border: 1px dashed #808000;
-      padding: 10px 12px;
-      font-size: 0.9rem;
+    /* Content sections */
+    .section {
+      margin-bottom: 18px;
+      scroll-margin-top: 8px;
     }
-    .notice a { color: #000080; }
-
-    nav.toc { font-size: 0.92rem; }
-    nav.toc h2 { margin: 0 0 8px; font-size: 1rem; }
-    nav.toc ol { margin: 0; padding-left: 22px; }
-    nav.toc a { color: #000080; }
-
-    section.cv h2 {
-      margin: 0 0 10px;
-      font-size: 1.15rem;
+    .section:last-child { margin-bottom: 0; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
       padding-bottom: 4px;
       border-bottom: 1px solid #7f7f7f;
     }
-    section.cv article { margin-bottom: 14px; }
-    section.cv article:last-child { margin-bottom: 0; }
-    section.cv h3 { margin: 0 0 2px; font-size: 1rem; }
-    section.cv .role-meta {
-      margin: 0 0 6px;
-      font-size: 0.86rem;
+    .section-header h2 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+    .section-header .ico { font-size: 1.4rem; line-height: 1; }
+    .section-body { font-size: 0.93rem; line-height: 1.55; }
+    .section-body p, .section-body ul, .section-body ol { margin: 0 0 8px; }
+    .section-body ul, .section-body ol { padding-left: 22px; }
+    .section-body article { margin-bottom: 14px; }
+    .section-body article:last-child { margin-bottom: 0; }
+    .section-body h3 { margin: 0 0 2px; font-size: 1rem; }
+    .role-meta {
+      font-size: 0.84rem;
       color: #444444;
-    }
-    section.cv p, section.cv ul {
       margin: 0 0 6px;
-      font-size: 0.92rem;
-      line-height: 1.5;
     }
-    section.cv ul { padding-left: 20px; }
-
     .placeholder {
       color: #707070;
       font-style: italic;
       font-size: 0.88rem;
     }
+    a { color: #000080; }
 
-    .collapsed { display: none; }
+    /* Header card (inside content pane) */
+    .cv-header {
+      background: #ffffcc;
+      border: 1px dashed #808000;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .cv-header h1 {
+      margin: 0 0 6px;
+      font-size: 1.5rem;
+      letter-spacing: 0.5px;
+    }
+    .cv-header .meta { margin: 0; font-size: 0.92rem; line-height: 1.5; }
+    .cv-header .badge {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 2px 8px;
+      background: #008000;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
 
+    .notice {
+      background: #eef5ff;
+      border: 1px solid #6699cc;
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      margin-bottom: 14px;
+    }
+
+    /* Status bar */
+    .status-bar {
+      background: #c0c0c0;
+      padding: 3px 4px;
+      border-top: 1px solid #ffffff;
+      display: flex;
+      gap: 2px;
+      font-size: 0.78rem;
+      align-items: stretch;
+    }
+    .status-cell {
+      padding: 2px 8px;
+      border-top: 1px solid #7f7f7f;
+      border-left: 1px solid #7f7f7f;
+      border-right: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+      background: #c0c0c0;
+      flex: 0 0 auto;
+    }
+    .status-cell.grow { flex: 1 1 auto; }
+
+    /* Footer */
     footer.window-footer {
       background: #c0c0c0;
       padding: 6px 12px;
@@ -247,64 +374,45 @@
     }
     footer.window-footer a { color: #000080; }
 
-    /* Modal dialog (Win-98 style) */
+    /* Modal */
     .modal-backdrop {
       display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.0);
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0);
       z-index: 100;
-      align-items: center;
-      justify-content: center;
+      align-items: center; justify-content: center;
       padding: 16px;
     }
     .modal-backdrop.open { display: flex; }
-
     .modal {
-      max-width: 460px;
-      width: 100%;
+      max-width: 460px; width: 100%;
       background: #c0c0c0;
       border-top: 2px solid #ffffff;
       border-left: 2px solid #ffffff;
       border-right: 2px solid #3f3f3f;
       border-bottom: 2px solid #3f3f3f;
-      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.6);
     }
     .modal .title-bar { padding: 3px 6px; }
     .modal-body {
       padding: 16px 14px 12px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      font-size: 0.92rem;
-      line-height: 1.5;
+      display: flex; gap: 12px; align-items: flex-start;
+      font-size: 0.92rem; line-height: 1.5;
     }
     .modal-icon {
-      width: 32px;
-      height: 32px;
-      flex-shrink: 0;
+      width: 32px; height: 32px; flex-shrink: 0;
       border: 2px solid #000000;
       border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: 1.3rem;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.3rem;
     }
     .modal-icon.info {
-      background: #ffffff;
-      color: #000080;
-      font-style: italic;
-      font-family: "Times New Roman", serif;
+      background: #ffffff; color: #000080;
+      font-style: italic; font-family: "Times New Roman", serif;
     }
-    .modal-icon.warning {
-      background: #ffff00;
-      color: #000000;
-    }
+    .modal-icon.warning { background: #ffff00; color: #000000; }
     .modal-icon.error {
-      background: #ffffff;
-      color: #cc0000;
-      border-color: #cc0000;
+      background: #ffffff; color: #cc0000; border-color: #cc0000;
     }
     .modal-error-code {
       margin-top: 10px;
@@ -314,20 +422,16 @@
     }
     .modal-buttons {
       padding: 4px 14px 14px;
-      display: flex;
-      gap: 6px;
-      justify-content: flex-end;
+      display: flex; gap: 6px; justify-content: flex-end;
     }
     .modal-button {
-      min-width: 84px;
-      padding: 4px 12px;
+      min-width: 84px; padding: 4px 12px;
       background: #c0c0c0;
       border-top: 2px solid #ffffff;
       border-left: 2px solid #ffffff;
       border-right: 2px solid #3f3f3f;
       border-bottom: 2px solid #3f3f3f;
-      font-family: inherit;
-      font-size: 0.88rem;
+      font-family: inherit; font-size: 0.88rem;
       cursor: pointer;
     }
     .modal-button:active {
@@ -337,11 +441,9 @@
       border-bottom: 2px solid #ffffff;
     }
 
-    /* Toast (status feedback) */
+    /* Toast */
     .toast {
-      position: fixed;
-      bottom: 16px;
-      left: 50%;
+      position: fixed; bottom: 16px; left: 50%;
       transform: translateX(-50%);
       background: #c0c0c0;
       border-top: 2px solid #ffffff;
@@ -353,24 +455,39 @@
       box-shadow: 2px 2px 0 rgba(0,0,0,0.4);
       opacity: 0;
       transition: opacity 0.2s ease;
-      z-index: 200;
-      pointer-events: none;
+      z-index: 200; pointer-events: none;
     }
     .toast.show { opacity: 1; }
 
-    @media (max-width: 640px) {
+    /* Mobile */
+    @media (max-width: 720px) {
       body { padding: 8px; }
-      .content { padding: 10px; }
-      .panel { padding: 12px; }
-      .cv-header h1 { font-size: 1.3rem; }
+      .window { min-height: calc(100vh - 16px); }
       .window.maximized { margin: -8px; }
+      .split {
+        flex-direction: column;
+        min-height: auto;
+      }
+      .pane.tree-pane {
+        width: auto;
+        max-height: 200px;
+      }
+      .toolbar { overflow-x: auto; flex-wrap: nowrap; }
+      .address-bar { flex-wrap: wrap; }
+      .address-input-wrap { width: 100%; order: 3; }
+      .status-bar { flex-wrap: wrap; }
+      .status-cell { flex: 1 1 auto; }
     }
 
     @media print {
       body { background: #ffffff; padding: 0; }
-      .window { box-shadow: none; border: none; }
-      .title-bar, .menu-bar, footer.window-footer, .notice, .modal-backdrop, .toast { display: none; }
-      .panel { border: none; padding: 8px 0; }
+      .window { box-shadow: none; border: none; display: block; }
+      .title-bar, .menu-bar, .toolbar, .address-bar,
+      footer.window-footer, .modal-backdrop, .toast,
+      .status-bar, .pane.tree-pane { display: none; }
+      .split { display: block; padding: 0; }
+      .pane.content-pane { border: none; padding: 0; overflow: visible; }
+      .section { page-break-inside: avoid; }
     }
   </style>
 </head>
@@ -384,6 +501,7 @@
         <button class="title-bar-button" id="btnClose" type="button" title="Close" aria-label="Close">×</button>
       </span>
     </div>
+
     <div class="menu-bar" id="menuBar">
       <span class="menu-item" data-menu="file"><u>F</u>ile
         <div class="dropdown">
@@ -400,142 +518,204 @@
         </div>
       </span><span class="menu-item" data-menu="view"><u>V</u>iew
         <div class="dropdown">
-          <button data-action="expand-all">Expand all sections</button>
-          <button data-action="collapse-all">Collapse all sections</button>
+          <button data-action="expand-tree">Expand all folders</button>
+          <button data-action="collapse-tree">Collapse all folders</button>
+        </div>
+      </span><span class="menu-item" data-menu="go"><u>G</u>o
+        <div class="dropdown">
+          <button data-go="about">About</button>
+          <button data-go="right-now">Right now</button>
+          <button data-go="building">Currently building</button>
+          <button data-go="experience">Experience</button>
+          <button data-go="education">Education</button>
+          <button data-go="skills">Skills</button>
+          <button data-go="projects">Projects</button>
+          <button data-go="languages">Languages</button>
         </div>
       </span><span class="menu-item" data-menu="help"><u>H</u>elp
         <div class="dropdown">
-          <button data-action="about">About this page</button>
+          <button data-action="about-page">About this page</button>
           <button data-action="about-win98">Why Windows 98?</button>
         </div>
       </span>
     </div>
 
-    <div class="content">
-      <!-- Header -->
-      <section class="panel cv-header">
-        <h1>Mykola Riabets</h1>
-        <p class="meta">
-          Dublin, Ireland<br>
-          <a href="mailto:nikolai@riabets.com">nikolai@riabets.com</a>
-        </p>
-        <span class="badge">Right to work: Stamp 4 — no sponsorship required</span>
-        <p class="meta" style="margin-top:8px;">Open to relocation across Ireland.</p>
-      </section>
+    <div class="toolbar">
+      <button class="tb-btn" id="tbBack" title="Back"><span class="tb-icon">◂</span>Back</button>
+      <button class="tb-btn" id="tbFwd" title="Forward"><span class="tb-icon">▸</span>Forward</button>
+      <button class="tb-btn" id="tbUp" title="Up — riabets.com"><span class="tb-icon">▴</span>Up</button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn" data-action="print"><span class="tb-icon">🖨</span>Print</button>
+      <button class="tb-btn" data-action="email"><span class="tb-icon">✉</span>Email</button>
+      <button class="tb-btn" data-action="github"><span class="tb-icon">⌥</span>Source</button>
+      <div class="tb-sep"></div>
+      <a class="tb-btn" href="/job-search/" style="text-decoration:none;"><span class="tb-icon">⚙</span>Bot</a>
+    </div>
 
-      <!-- Build-in-public notice -->
-      <section class="panel notice">
-        <strong>📋 This document is being assembled in public.</strong><br>
-        Last updated: <time datetime="2026-05-18">18 May 2026</time>.
-        The <a href="https://github.com/rialai/riabets-com/commits/main">git history</a>
-        is part of the document — each commit is an iteration on how I think about my own work.
-      </section>
+    <div class="address-bar">
+      <label for="addressInput">Address</label>
+      <div class="address-input-wrap" id="addressWrap">
+        <span class="address-icon">📁</span>
+        <input class="address-input" id="addressInput" value="C:\Mykola Riabets\CV\" readonly>
+      </div>
+      <button class="address-go" id="addressGo" type="button">Go</button>
+    </div>
 
-      <!-- Table of contents -->
-      <section class="panel">
-        <nav class="toc">
-          <h2>Contents</h2>
-          <ol>
-            <li><a href="#about">About</a></li>
-            <li><a href="#right-now">Right now</a></li>
-            <li><a href="#building">Currently building</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#education">Education</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#languages">Languages</a></li>
-          </ol>
-        </nav>
-      </section>
-
-      <section class="panel cv collapsible" id="about">
-        <h2>About</h2>
-        <div class="section-body">
-          <p class="placeholder">This section will be assembled last — it summarises the rest.</p>
-        </div>
-      </section>
-
-      <section class="panel cv collapsible" id="right-now">
-        <h2>Right now</h2>
-        <div class="section-body">
-          <p class="placeholder">Current role narrative being drafted from a working interview. Will land here as a process-observation case study.</p>
-        </div>
-      </section>
-
-      <section class="panel cv collapsible" id="building">
-        <h2>Currently building</h2>
-        <div class="section-body">
-          <article>
-            <h3>JobSearch.exe — my own job-search infrastructure, built in public</h3>
-            <p class="role-meta">Self-initiated · live · source: <a href="https://github.com/rialai/riabets-com" target="_blank" rel="noopener">github.com/rialai/riabets-com</a></p>
-            <p>
-              While looking for an ERP / Business Analyst role in Dublin I’m building the search tooling itself, in the open, as a working demonstration of how I think about problems end-to-end.
-            </p>
+    <div class="split">
+      <div class="pane tree-pane" id="treePane">
+        <ul class="tree" id="tree">
+          <li>
+            <div class="tree-item group"><span class="ico">📁</span><span>Mykola Riabets</span></div>
             <ul>
               <li>
-                <strong>This page</strong> is a CV-in-progress — every section lands as a public git commit. The
-                <a href="https://github.com/rialai/riabets-com/commits/main" target="_blank" rel="noopener">commit log</a>
-                is part of the document; it shows the iteration, not just the result.
+                <div class="tree-item indent-1" data-target="header"><span class="ico">📇</span><span>card.vcf</span></div>
               </li>
               <li>
-                <strong><a href="/job-search/">JobSearch.exe — Bot dashboard</a></strong> is the operations view of the companion bot: discovered postings, relevance scores, draft cover letters, run logs, status LED.
+                <div class="tree-item indent-1" data-target="about"><span class="ico">📄</span><span>about.txt</span></div>
               </li>
               <li>
-                <strong>Discovery bot</strong> (<code>~/job-bot</code>) — Python + Playwright over CDP — crawls Irish job sources (IrishJobs, Jobs.ie, Indeed.ie, vendor partner careers, Big 4), scores each posting against my profile via Claude, drafts a personalised cover letter for high-scoring matches and forwards each one to Telegram for one-tap human approval. <strong>It never auto-applies.</strong>
+                <div class="tree-item indent-1" data-target="right-now"><span class="ico">⏰</span><span>right-now.log</span></div>
               </li>
               <li>
-                <strong>Sister project</strong>: a daft.ie auto-enquiry bot, built earlier in 2026 to find a room in Dublin. Decommissioned May 2026 once it found the room. Handover bundle archived for a friend.
+                <div class="tree-item indent-1" data-target="building"><span class="ico">🔨</span><span>building.md</span></div>
+              </li>
+              <li>
+                <div class="tree-item indent-1" data-target="experience"><span class="ico">📁</span><span>experience\</span></div>
+              </li>
+              <li>
+                <div class="tree-item indent-1" data-target="education"><span class="ico">📁</span><span>education\</span></div>
+                <ul>
+                  <li><div class="tree-item indent-2" data-target="edu-nure"><span class="ico">📜</span><span>nure.txt</span></div></li>
+                  <li><div class="tree-item indent-2" data-target="edu-collegium"><span class="ico">📜</span><span>collegium.txt</span></div></li>
+                </ul>
+              </li>
+              <li>
+                <div class="tree-item indent-1" data-target="skills"><span class="ico">🔧</span><span>skills.ini</span></div>
+              </li>
+              <li>
+                <div class="tree-item indent-1" data-target="projects"><span class="ico">💼</span><span>projects\</span></div>
+              </li>
+              <li>
+                <div class="tree-item indent-1" data-target="languages"><span class="ico">🌐</span><span>languages.cfg</span></div>
               </li>
             </ul>
-            <p class="role-meta" style="margin-top:8px;">
-              <strong>Stack:</strong> HTML / CSS / vanilla JS, Python, Playwright (CDP), Anthropic API (Claude), Telegram Bot API, GitHub Pages with Jekyll, launchd.
-              <strong>Anti-bot care</strong> inherited from the daft.ie project: human pacing, key-by-key typing with React-native setter fallback, pre-click mouse arc, Cloudflare DOM + network detection, daily caps and Dublin quiet hours, exponential supervisor backoff. Isolated Chrome profile on a dedicated CDP port (9223), never colliding with the daft-bot profile.
-            </p>
-          </article>
-        </div>
-      </section>
+          </li>
+        </ul>
+      </div>
 
-      <section class="panel cv collapsible" id="experience">
-        <h2>Experience</h2>
-        <div class="section-body">
-          <p class="placeholder">Career history being collected, role by role, with measurable outcomes.</p>
+      <div class="pane content-pane" id="contentPane">
+        <!-- Header card -->
+        <div class="cv-header section" id="header" data-name="card.vcf" data-path="C:\Mykola Riabets\CV\card.vcf">
+          <h1>Mykola Riabets</h1>
+          <p class="meta">
+            Dublin, Ireland · <a href="mailto:nikolai@riabets.com">nikolai@riabets.com</a>
+          </p>
+          <span class="badge">Right to work: Stamp 4 — no sponsorship required</span>
+          <p class="meta" style="margin-top:6px;">Open to relocation across Ireland.</p>
         </div>
-      </section>
 
-      <section class="panel cv collapsible" id="education">
-        <h2>Education</h2>
-        <div class="section-body">
-          <article>
-            <h3>Kharkiv National University of Radio Electronics (NURE)</h3>
-            <p class="role-meta">Bachelor's programme · Electronic Engineering — Information Security Systems · 2010–2012 (incomplete) · Kharkiv, Ukraine</p>
-          </article>
-          <article>
-            <h3>Solonytsivka Collegium</h3>
-            <p class="role-meta">Specialised secondary education · advanced mathematics and physics · graduated 2010 · Kharkiv region, Ukraine</p>
-          </article>
+        <div class="notice">
+          <strong>📋 Document assembled in public.</strong>
+          Last updated: <time datetime="2026-05-18">18 May 2026</time>.
+          The <a href="https://github.com/rialai/riabets-com/commits/main" target="_blank" rel="noopener">git history</a> is part of the document — each commit is an iteration.
         </div>
-      </section>
 
-      <section class="panel cv collapsible" id="skills">
-        <h2>Skills</h2>
-        <div class="section-body">
-          <p class="placeholder">Being collected — covering process analysis, business automation, data wrangling and the technical surface used to deliver it.</p>
-        </div>
-      </section>
+        <section class="section" id="about" data-name="about.txt" data-path="C:\Mykola Riabets\CV\about.txt">
+          <div class="section-header"><span class="ico">📄</span><h2>About</h2></div>
+          <div class="section-body">
+            <p class="placeholder">This section will be assembled last — it summarises the rest.</p>
+          </div>
+        </section>
 
-      <section class="panel cv collapsible" id="projects">
-        <h2>Projects</h2>
-        <div class="section-body">
-          <p class="placeholder">Being collected — pet projects illustrating the same systems-thinking applied outside the workplace.</p>
-        </div>
-      </section>
+        <section class="section" id="right-now" data-name="right-now.log" data-path="C:\Mykola Riabets\CV\right-now.log">
+          <div class="section-header"><span class="ico">⏰</span><h2>Right now</h2></div>
+          <div class="section-body">
+            <p class="placeholder">Current role narrative being drafted from a working interview. Will land here as a process-observation case study.</p>
+          </div>
+        </section>
 
-      <section class="panel cv collapsible" id="languages">
-        <h2>Languages</h2>
-        <div class="section-body">
-          <p class="placeholder">Being collected.</p>
-        </div>
-      </section>
+        <section class="section" id="building" data-name="building.md" data-path="C:\Mykola Riabets\CV\building.md">
+          <div class="section-header"><span class="ico">🔨</span><h2>Currently building</h2></div>
+          <div class="section-body">
+            <article>
+              <h3>JobSearch.exe — my own job-search infrastructure, built in public</h3>
+              <p class="role-meta">Self-initiated · live · source: <a href="https://github.com/rialai/riabets-com" target="_blank" rel="noopener">github.com/rialai/riabets-com</a></p>
+              <p>
+                While looking for an ERP / Business Analyst role in Dublin I’m building the search tooling itself, in the open, as a working demonstration of how I think about problems end-to-end.
+              </p>
+              <ul>
+                <li>
+                  <strong>This page</strong> is a CV-in-progress — every section lands as a public git commit. The
+                  <a href="https://github.com/rialai/riabets-com/commits/main" target="_blank" rel="noopener">commit log</a>
+                  is part of the document; it shows the iteration, not just the result.
+                </li>
+                <li>
+                  <strong><a href="/job-search/">JobSearch.exe — Bot dashboard</a></strong> is the operations view of the companion bot: discovered postings, relevance scores, draft cover letters, run logs, status LED.
+                </li>
+                <li>
+                  <strong>Discovery bot</strong> (<code>~/job-bot</code>) — Python + Playwright over CDP — crawls Irish job sources (IrishJobs, Jobs.ie, Indeed.ie, vendor partner careers, Big 4), scores each posting against my profile via Claude, drafts a personalised cover letter for high-scoring matches and forwards each one to Telegram for one-tap human approval. <strong>It never auto-applies.</strong>
+                </li>
+                <li>
+                  <strong>Sister project</strong>: a daft.ie auto-enquiry bot, built earlier in 2026 to find a room in Dublin. Decommissioned May 2026 once it found the room. Handover bundle archived for a friend.
+                </li>
+              </ul>
+              <p class="role-meta" style="margin-top:8px;">
+                <strong>Stack:</strong> HTML / CSS / vanilla JS, Python, Playwright (CDP), Anthropic API (Claude), Telegram Bot API, GitHub Pages with Jekyll, launchd.
+                <strong>Anti-bot care</strong> inherited from the daft.ie project: human pacing, key-by-key typing with React-native setter fallback, pre-click mouse arc, Cloudflare DOM + network detection, daily caps and Dublin quiet hours, exponential supervisor backoff. Isolated Chrome profile on a dedicated CDP port (9223), never colliding with the daft-bot profile.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="experience" data-name="experience\" data-path="C:\Mykola Riabets\CV\experience\">
+          <div class="section-header"><span class="ico">📁</span><h2>Experience</h2></div>
+          <div class="section-body">
+            <p class="placeholder">Career history being collected, role by role, with measurable outcomes.</p>
+          </div>
+        </section>
+
+        <section class="section" id="education" data-name="education\" data-path="C:\Mykola Riabets\CV\education\">
+          <div class="section-header"><span class="ico">📁</span><h2>Education</h2></div>
+          <div class="section-body">
+            <article id="edu-nure" data-name="nure.txt" data-path="C:\Mykola Riabets\CV\education\nure.txt">
+              <h3>Kharkiv National University of Radio Electronics (NURE)</h3>
+              <p class="role-meta">Bachelor's programme · Electronic Engineering — Information Security Systems · 2010–2012 (incomplete) · Kharkiv, Ukraine</p>
+            </article>
+            <article id="edu-collegium" data-name="collegium.txt" data-path="C:\Mykola Riabets\CV\education\collegium.txt">
+              <h3>Solonytsivka Collegium</h3>
+              <p class="role-meta">Specialised secondary education · advanced mathematics and physics · graduated 2010 · Kharkiv region, Ukraine</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="skills" data-name="skills.ini" data-path="C:\Mykola Riabets\CV\skills.ini">
+          <div class="section-header"><span class="ico">🔧</span><h2>Skills</h2></div>
+          <div class="section-body">
+            <p class="placeholder">Being collected — covering process analysis, business automation, data wrangling and the technical surface used to deliver it.</p>
+          </div>
+        </section>
+
+        <section class="section" id="projects" data-name="projects\" data-path="C:\Mykola Riabets\CV\projects\">
+          <div class="section-header"><span class="ico">💼</span><h2>Projects</h2></div>
+          <div class="section-body">
+            <p class="placeholder">Being collected — pet projects illustrating the same systems-thinking applied outside the workplace.</p>
+          </div>
+        </section>
+
+        <section class="section" id="languages" data-name="languages.cfg" data-path="C:\Mykola Riabets\CV\languages.cfg">
+          <div class="section-header"><span class="ico">🌐</span><h2>Languages</h2></div>
+          <div class="section-body">
+            <p class="placeholder">Being collected.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <div class="status-cell" id="statusObjects">9 object(s)</div>
+      <div class="status-cell" id="statusSelected">No selection</div>
+      <div class="status-cell grow"></div>
+      <div class="status-cell"><span id="clock">--:--:--</span></div>
     </div>
 
     <footer class="window-footer">
@@ -545,7 +725,7 @@
     </footer>
   </div>
 
-  <!-- Modal dialog -->
+  <!-- Modal -->
   <div class="modal-backdrop" id="modalBackdrop">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="title-bar" id="modalTitleBar">
@@ -567,7 +747,6 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
@@ -582,8 +761,6 @@
       var toast = document.getElementById('toast');
       var toastTimer = null;
 
-      // showModal(title, textHtml, opts)
-      // opts: { type: 'info'|'warning'|'error', errorCode: string }
       function showModal(title, text, opts) {
         opts = opts || {};
         var type = opts.type || 'info';
@@ -602,20 +779,14 @@
         modal.classList.add('open');
       }
       function closeModal() { modal.classList.remove('open'); }
-
       function showToast(text) {
         toast.textContent = text;
         toast.classList.add('show');
         if (toastTimer) clearTimeout(toastTimer);
-        toastTimer = setTimeout(function () {
-          toast.classList.remove('show');
-        }, 1800);
+        toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1800);
       }
-
-      // Modal close handlers
       modal.addEventListener('click', function (e) {
-        if (e.target === modal) closeModal();
-        if (e.target.matches('[data-modal-close]')) closeModal();
+        if (e.target === modal || e.target.matches('[data-modal-close]')) closeModal();
       });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeModal();
@@ -632,18 +803,15 @@
         );
       }
 
-      // Title bar buttons
       document.getElementById('btnClose').addEventListener('click', showAccessDenied);
-
       document.getElementById('btnMax').addEventListener('click', function () {
         mainWindow.classList.toggle('maximized');
       });
-
       document.getElementById('btnMin').addEventListener('click', function () {
         mainWindow.classList.toggle('minimized');
       });
 
-      // Menu bar dropdowns
+      // Menu bar
       var menuBar = document.getElementById('menuBar');
       menuBar.addEventListener('click', function (e) {
         var item = e.target.closest('.menu-item');
@@ -654,23 +822,36 @@
           e.stopPropagation();
         }
       });
-
       document.addEventListener('click', function (e) {
         if (!e.target.closest('.menu-bar')) closeAllMenus();
       });
-
       function closeAllMenus() {
         var open = document.querySelectorAll('.menu-item.open');
         for (var i = 0; i < open.length; i++) open[i].classList.remove('open');
       }
 
-      // Menu actions
-      menuBar.addEventListener('click', function (e) {
+      // Action delegation
+      document.addEventListener('click', function (e) {
         var btn = e.target.closest('[data-action]');
         if (!btn) return;
         var action = btn.dataset.action;
         closeAllMenus();
         handleAction(action);
+      });
+
+      // Go-to delegation (menu)
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-go]');
+        if (!btn) return;
+        closeAllMenus();
+        navigateTo(btn.dataset.go);
+      });
+
+      // Tree-item navigation
+      document.querySelectorAll('.tree-item[data-target]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          navigateTo(el.dataset.target);
+        });
       });
 
       function handleAction(action) {
@@ -693,15 +874,13 @@
           case 'copy-link':
             copyText(window.location.href, 'Link copied to clipboard');
             break;
-          case 'expand-all':
-            toggleSections(false);
-            showToast('All sections expanded');
+          case 'expand-tree':
+            showToast('All folders expanded (always expanded in this view)');
             break;
-          case 'collapse-all':
-            toggleSections(true);
-            showToast('All sections collapsed');
+          case 'collapse-tree':
+            showToast('Folder collapsing not implemented — use the table of contents');
             break;
-          case 'about':
+          case 'about-page':
             showModal(
               'About this page',
               'This is Mykola Riabets’s public CV-in-progress. Each section is added as it gets drafted, and every change is a public git commit at <a href="https://github.com/rialai/riabets-com/commits/main" target="_blank" rel="noopener">github.com/rialai/riabets-com</a>.<br><br>' +
@@ -732,36 +911,94 @@
           ta.style.opacity = '0';
           document.body.appendChild(ta);
           ta.select();
-          try {
-            document.execCommand('copy');
-            showToast(successMsg);
-          } catch (err) {
-            showToast('Copy failed');
-          }
+          try { document.execCommand('copy'); showToast(successMsg); }
+          catch (err) { showToast('Copy failed'); }
           document.body.removeChild(ta);
         }
       }
 
-      function toggleSections(collapse) {
-        var bodies = document.querySelectorAll('.collapsible .section-body');
-        for (var i = 0; i < bodies.length; i++) {
-          if (collapse) bodies[i].classList.add('collapsed');
-          else bodies[i].classList.remove('collapsed');
-        }
+      // Navigation: scroll to section + update address + status + tree highlight
+      var addressInput = document.getElementById('addressInput');
+      var statusSelected = document.getElementById('statusSelected');
+
+      function navigateTo(targetId) {
+        var el = document.getElementById(targetId);
+        if (!el) return;
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setActive(targetId, true);
       }
 
-      document.querySelectorAll('.collapsible h2').forEach(function (h) {
-        h.style.cursor = 'pointer';
-        h.title = 'Click to collapse/expand';
-        h.addEventListener('click', function () {
-          var body = h.nextElementSibling;
-          if (body && body.classList.contains('section-body')) {
-            body.classList.toggle('collapsed');
-          }
+      function setActive(targetId, fromClick) {
+        var el = document.getElementById(targetId);
+        if (!el) return;
+        var path = el.dataset.path || '';
+        var name = el.dataset.name || targetId;
+        if (path) addressInput.value = path;
+        statusSelected.textContent = name + ' selected';
+
+        document.querySelectorAll('.tree-item.active').forEach(function (n) {
+          n.classList.remove('active');
         });
+        var treeEl = document.querySelector('.tree-item[data-target="' + targetId + '"]');
+        if (treeEl) treeEl.classList.add('active');
+      }
+
+      // Track scroll position to highlight current section in tree (intersection observer)
+      var sections = document.querySelectorAll('.section, .cv-header.section');
+      var visible = new Map();
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) visible.set(entry.target.id, entry.intersectionRatio);
+          else visible.delete(entry.target.id);
+        });
+        // Pick the most-visible
+        var best = null, bestRatio = 0;
+        visible.forEach(function (ratio, id) {
+          if (ratio > bestRatio) { best = id; bestRatio = ratio; }
+        });
+        if (best) setActive(best, false);
+      }, {
+        root: document.getElementById('contentPane'),
+        threshold: [0.1, 0.5, 0.9]
+      });
+      sections.forEach(function (s) { observer.observe(s); });
+
+      // Address bar "Go" — try to find a section whose path matches
+      document.getElementById('addressGo').addEventListener('click', function () {
+        var val = addressInput.value.trim();
+        var found = null;
+        sections.forEach(function (s) {
+          if (s.dataset.path === val) found = s.id;
+        });
+        if (found) navigateTo(found);
+        else showToast('Path not found: ' + val);
+      });
+      addressInput.addEventListener('focus', function () { this.removeAttribute('readonly'); });
+      addressInput.addEventListener('blur', function () {
+        // Re-derive from current section on blur to keep it tidy
+        this.setAttribute('readonly', '');
       });
 
-      // Visit tracking via hits.sh beacons (carried over from previous landing)
+      // Back/Forward/Up (browser-history backed)
+      document.getElementById('tbBack').addEventListener('click', function () { history.back(); });
+      document.getElementById('tbFwd').addEventListener('click', function () { history.forward(); });
+      document.getElementById('tbUp').addEventListener('click', function () { window.location.href = '/'; });
+
+      // Status bar object count
+      document.getElementById('statusObjects').textContent =
+        document.querySelectorAll('.tree-item[data-target]').length + ' object(s)';
+
+      // Clock
+      var clockEl = document.getElementById('clock');
+      function tick() {
+        var d = new Date();
+        var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+        clockEl.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+      }
+      tick();
+      setInterval(tick, 1000);
+
+      // Visit tracking
       function hitCounter(url) {
         var beacon = new Image();
         beacon.referrerPolicy = 'no-referrer';
