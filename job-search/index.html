@@ -9,7 +9,8 @@
     html, body {
       margin: 0;
       width: 100%;
-      min-height: 100%;
+      height: 100%;
+      overflow: hidden;
       background: #008080;
       color: #000000;
       font-family: Tahoma, "MS Sans Serif", "Microsoft Sans Serif", sans-serif;
@@ -27,13 +28,17 @@
       border-bottom: 2px solid #3f3f3f;
       box-shadow: 2px 2px 0 #000000;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
     }
     .window.maximized {
       position: fixed;
       inset: 0;
       max-width: none;
       margin: 0;
-      min-height: 100vh;
+      height: 100vh;
       box-shadow: none;
       z-index: 90;
     }
@@ -197,7 +202,53 @@
     .content {
       padding: 12px;
       background: #c0c0c0;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
+
+    /* Win-98-styled native scrollbar for .content (Webkit/Blink browsers).
+       iPadOS Safari ignores ::-webkit-scrollbar and shows its own thin overlay;
+       that's an acceptable trade-off here — the bot dashboard is desktop-first. */
+    .content::-webkit-scrollbar { width: 16px; height: 16px; }
+    .content::-webkit-scrollbar-track {
+      background-color: #c0c0c0;
+      background-image:
+        linear-gradient(45deg, #b0b0b0 25%, transparent 25%, transparent 75%, #b0b0b0 75%, #b0b0b0),
+        linear-gradient(45deg, #b0b0b0 25%, transparent 25%, transparent 75%, #b0b0b0 75%, #b0b0b0);
+      background-position: 0 0, 1px 1px;
+      background-size: 2px 2px;
+    }
+    .content::-webkit-scrollbar-thumb {
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+    }
+    .content::-webkit-scrollbar-button {
+      background: #c0c0c0;
+      border-top: 2px solid #ffffff;
+      border-left: 2px solid #ffffff;
+      border-right: 2px solid #3f3f3f;
+      border-bottom: 2px solid #3f3f3f;
+      display: block;
+      height: 16px; width: 16px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .content::-webkit-scrollbar-button:vertical:decrement {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><polygon points='4,2 7,6 1,6' fill='black'/></svg>");
+    }
+    .content::-webkit-scrollbar-button:vertical:increment {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><polygon points='1,2 7,2 4,6' fill='black'/></svg>");
+    }
+    .content::-webkit-scrollbar-button:single-button { display: block; }
+    .content::-webkit-scrollbar-button:vertical:start:increment,
+    .content::-webkit-scrollbar-button:vertical:end:decrement { display: none; }
+    .content::-webkit-scrollbar-corner { background: #c0c0c0; }
+    .content { scrollbar-width: auto; scrollbar-color: #c0c0c0 #a0a0a0; }
 
     .panel {
       background: #ffffff;
@@ -423,11 +474,13 @@
     }
     .toast.show { opacity: 1; }
 
-    @media (max-width: 640px) {
+    /* Tablet / narrow viewports — same 900px threshold as the main CV page
+       so iPad portrait (820 CSS px) gets the compact layout consistently. */
+    @media (max-width: 900px) {
       body { padding: 8px; }
       .content { padding: 10px; }
       .panel { padding: 12px; }
-      .toolbar { overflow-x: auto; }
+      .toolbar { overflow-x: auto; flex-wrap: nowrap; }
       .config-grid { grid-template-columns: 1fr; gap: 2px 0; }
       .config-grid dd { margin-bottom: 6px; }
       .status-bar { flex-wrap: wrap; }
